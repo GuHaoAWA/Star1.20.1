@@ -1,0 +1,151 @@
+{
+  "bong": {
+
+    "sounds": [
+      {
+        "name": "star:bong1",
+        "stream": true
+      },
+      {
+        "name": "star:bong2",
+        "stream": true
+      },
+      {
+        "name": "star:bong3",
+        "stream": true
+      }
+    ]
+  },
+  "bigbong": {
+
+    "sounds": [
+      {
+        "name": "star:bigbong1",
+        "stream": true
+      },
+      {
+        "name": "star:bigbong2",
+        "stream": true
+      },
+      {
+        "name": "star:bigbong3",
+        "stream": true
+      },
+      {
+        "name": "star:bigbong4",
+        "stream": true
+      }
+    ]
+  },
+  "danger": {
+
+    "sounds": [
+      {
+        "name": "star:danger",
+        "stream": true
+      }
+    ]
+  },
+  "duang1": {
+
+    "sounds": [
+      {
+        "name": "star:duang1",
+        "stream": true
+      }
+    ]
+  },
+  "duang2": {
+
+    "sounds": [
+      {
+        "name": "star:duang2",
+        "stream": true
+      }
+    ]
+  },
+  "foresight": {
+
+    "sounds": [
+      {
+        "name": "star:foresight",
+        "stream": true
+      }
+    ]
+  },
+  "yamato_step": {
+
+    "sounds": [
+      {
+        "name": "star:yamato_step",
+        "stream": true
+      }
+    ]
+  },
+  "sekiro": {
+
+    "sounds": [
+      {
+        "name": "star:sekiro",
+        "stream": true
+      }
+    ]
+  },
+  "chua": {
+
+    "sounds": [
+      {
+        "name": "star:chua",
+        "stream": true
+      }
+    ]
+  },
+  "peng": {
+
+    "sounds": [
+      {
+        "name": "star:peng",
+        "stream": true
+      }
+    ]
+  },
+  "yamato_in": {
+
+    "sounds": [
+      {
+        "name": "star:yamato_in",
+        "stream": true
+      },
+      {
+        "name": "star:yamato_in2",
+        "stream": true
+      }
+    ]
+  },
+  "yilianjieyvan": {
+    "sounds": [
+      {
+        "name": "star:yuzusoft",
+        "stream": false
+      }
+    ]
+  },
+  "ciallo": {
+
+    "sounds": [
+      {
+        "name": "star:ciallo",
+        "stream": false
+      }
+    ]
+  },
+  "ding": {
+
+    "sounds": [
+      {
+        "name": "star:ding",
+        "stream": true
+      }
+    ]
+  }
+}
