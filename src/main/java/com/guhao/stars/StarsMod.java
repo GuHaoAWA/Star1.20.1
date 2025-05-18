@@ -1,10 +1,15 @@
 package com.guhao.stars;
 
+import com.guhao.stars.efmex.StarSkillCategories;
+import com.guhao.stars.efmex.StarSkillDataKeys;
+import com.guhao.stars.efmex.StarSkillSlots;
 import com.guhao.stars.efmex.StarWeaponCapabilityPresets;
 import com.guhao.stars.entity.StarAttributes;
 import com.guhao.stars.regirster.Effect;
 import com.guhao.stars.regirster.ParticleType;
 import com.guhao.stars.regirster.Sounds;
+import com.p1nero.wukong.epicfight.WukongSkillCategories;
+import com.p1nero.wukong.epicfight.WukongSkillSlots;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
@@ -21,6 +26,8 @@ import net.minecraftforge.common.MinecraftForge;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.network.FriendlyByteBuf;
+import yesman.epicfight.skill.SkillCategory;
+import yesman.epicfight.skill.SkillSlot;
 
 import java.util.function.Supplier;
 import java.util.function.Function;
@@ -44,6 +51,9 @@ public class StarsMod {
         Sounds.REGISTRY.register(bus);
         StarAttributes.ATTRIBUTES.register(bus);
         bus.addListener(StarWeaponCapabilityPresets::register);
+        SkillCategory.ENUM_MANAGER.registerEnumCls("star", StarSkillCategories.class);
+        SkillSlot.ENUM_MANAGER.registerEnumCls("star", StarSkillSlots.class);
+        StarSkillDataKeys.DATA_KEYS.register(bus);
     }
 
     private static final String PROTOCOL_VERSION = "1";

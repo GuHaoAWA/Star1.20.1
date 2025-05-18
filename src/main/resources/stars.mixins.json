@@ -10,6 +10,7 @@
     "blue_sky.NatureArcItemMixin",
     "blue_sky.PoisonArcItemMixin",
     "epicfight.DodgeSkillMixin",
+    "epicfight.GuardSkillMixin",
     "epicfight.KnockdownWakeupSkillMixin",
     "epicfight.ParryingSkillMixin",
     "epicfight.PlayerPatchMixin"
