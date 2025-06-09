@@ -9,11 +9,16 @@
     "blue_sky.LifeArcItemMixin",
     "blue_sky.NatureArcItemMixin",
     "blue_sky.PoisonArcItemMixin",
+    "epicfight.CapabilityStateMixin",
+    "epicfight.DodgeAnimationMixin",
     "epicfight.DodgeSkillMixin",
     "epicfight.GuardSkillMixin",
     "epicfight.KnockdownWakeupSkillMixin",
+    "epicfight.LivingEntityPatchMixin",
     "epicfight.ParryingSkillMixin",
-    "epicfight.PlayerPatchMixin"
+    "epicfight.PlayerPatchMixin",
+
+    "epicfight.WeaponInnateSkillMixin"
   ],
   "client": [
   ],

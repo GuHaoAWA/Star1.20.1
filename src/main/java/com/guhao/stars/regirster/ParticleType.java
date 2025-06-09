@@ -23,6 +23,7 @@ public class ParticleType {
     public static final RegistryObject<SimpleParticleType> DANGER_RED;
     public static final RegistryObject<SimpleParticleType> DANGER_BLACK;
     public static final RegistryObject<SimpleParticleType> DANGER_BLUE;
+    public static final RegistryObject<SimpleParticleType> DANGER_PURPLE;
     public static final RegistryObject<SimpleParticleType> DING;
     public static final RegistryObject<SimpleParticleType> FIRE_BALL;
     public static final RegistryObject<SimpleParticleType> CAI;
@@ -37,6 +38,7 @@ public class ParticleType {
         event.registerSpriteSet(DANGER_RED.get(), Dangers_Red.Dangers_RedParticleProvider::new);
         event.registerSpriteSet(DANGER_BLACK.get(), Dangers_Black.Dangers_BlackParticleProvider::new);
         event.registerSpriteSet(DANGER_BLUE.get(), Dangers_Blue.Dangers_BlueParticleProvider::new);
+        event.registerSpriteSet(DANGER_PURPLE.get(), Dangers_Purple.Dangers_PurpleProvider::new);
         event.registerSpriteSet(DING.get(), Ding.DangerParticleProvider::new);
         event.registerSpriteSet(CAI.get(), Cai.CaiParticleProvider::new);
         event.registerSpriteSet(FIRE_BALL.get(), Fire_Ball.Provider::new);
@@ -51,6 +53,7 @@ public class ParticleType {
         DANGER_RED = PARTICLES.register("dangers_red", () -> new SimpleParticleType(true));
         DANGER_BLACK = PARTICLES.register("dangers_black", () -> new SimpleParticleType(true));
         DANGER_BLUE = PARTICLES.register("dangers_blue", () -> new SimpleParticleType(true));
+        DANGER_PURPLE = PARTICLES.register("dangers_purple", () -> new SimpleParticleType(true));
         FIRE_BALL = PARTICLES.register("fire_ball", () -> new SimpleParticleType(true));
         DING = PARTICLES.register("ding", () -> new SimpleParticleType(true));
         CAI = PARTICLES.register("cai", () -> new SimpleParticleType(true));

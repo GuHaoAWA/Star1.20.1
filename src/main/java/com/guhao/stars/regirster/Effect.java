@@ -17,4 +17,5 @@ public class Effect {
     public static final RegistryObject<MobEffect> SLOW_TIME = REGISTRY.register("slowtime", Slow_Time::new);
     public static final RegistryObject<MobEffect> STA = REGISTRY.register("parry_stamina_lose", StaminaReduce::new);
     public static final RegistryObject<MobEffect> TOUGHNESS = REGISTRY.register("toughness", Toughness::new);
+    public static final RegistryObject<MobEffect> IMPACT_ENHANCE = REGISTRY.register("impact_enhance", ImpactEnhance::new);
 }

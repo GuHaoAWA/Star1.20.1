@@ -1,16 +1,13 @@
 package com.guhao.stars.efmex.skills;
 
+import com.dfdyz.epicacg.registry.MySkillDataKeys;
 import com.guhao.stars.efmex.StarSkillDataKeys;
 import com.guhao.stars.entity.StarAttributes;
 import com.guhao.stars.regirster.Effect;
 import com.guhao.stars.regirster.StarSkill;
 import com.guhao.stars.units.StarArrayUnit;
-import com.mojang.blaze3d.platform.Window;
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.nameless.indestructible.world.capability.AdvancedCustomHumanoidMobPatch;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -21,15 +18,10 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import yesman.epicfight.api.utils.AttackResult;
-import yesman.epicfight.api.utils.math.Vec2i;
 import yesman.epicfight.client.gui.BattleModeGui;
-import yesman.epicfight.config.EpicFightOptions;
 import yesman.epicfight.gameasset.Animations;
-import yesman.epicfight.gameasset.EpicFightSkills;
 import yesman.epicfight.gameasset.EpicFightSounds;
-import yesman.epicfight.main.EpicFightMod;
 import yesman.epicfight.skill.*;
-import yesman.epicfight.skill.passive.PassiveSkill;
 import yesman.epicfight.world.capabilities.EpicFightCapabilities;
 import yesman.epicfight.world.damagesource.EpicFightDamageSource;
 import yesman.epicfight.world.damagesource.StunType;
@@ -54,14 +46,7 @@ public class DOTEPassive extends Skill {
         container.getExecuter().getEventListener().addEventListener(PlayerEventListener.EventType.HURT_EVENT_PRE, EVENT_UUID, (e) -> {
             EpicFightDamageSource efd = StarArrayUnit.getEpicFightDamageSources(e.getDamageSource());
             if (e.getResult() == AttackResult.ResultType.BLOCKED && e.isParried()) {
-                if (container.getDataManager().getDataValue(StarSkillDataKeys.WEAKNESS.get()) > 0f && container.getExecuter().getOriginal() instanceof ServerPlayer) { container.getDataManager().setDataSync(StarSkillDataKeys.WEAKNESS.get(), container.getDataManager().getDataValue(StarSkillDataKeys.WEAKNESS.get()) - 20.0f, (ServerPlayer) container.getExecuter().getOriginal());}
-                AdvancedCustomHumanoidMobPatch<?> longpatch = EpicFightCapabilities.getEntityPatch(e.getDamageSource().getDirectEntity(), AdvancedCustomHumanoidMobPatch.class);
-                if (longpatch != null) {
-                    longpatch.setStamina((float) (longpatch.getStamina() - Objects.requireNonNull(longpatch.getOriginal().getAttribute(StarAttributes.PARRY_STAMINA_LOSE.get())).getValue()));
-                    if (longpatch.getOriginal().hasEffect(Effect.STA.get())) {
-                        longpatch.setStamina(longpatch.getStamina() - Objects.requireNonNull(longpatch.getOriginal().getEffect(Effect.STA.get())).getAmplifier() - 1);
-                    }
-                }
+                if (container.getDataManager().getDataValue(StarSkillDataKeys.WEAKNESS.get()) > 0.0f && container.getExecuter().getOriginal() instanceof ServerPlayer) { container.getDataManager().setDataSync(StarSkillDataKeys.WEAKNESS.get(), container.getDataManager().getDataValue(StarSkillDataKeys.WEAKNESS.get()) - 20.0f, (ServerPlayer) container.getExecuter().getOriginal());}
             }
 
             float impact = 0.0f;
@@ -108,6 +93,14 @@ public class DOTEPassive extends Skill {
     }
     @Override
     public void updateContainer(SkillContainer container) {
+        if(!container.getDataManager().hasData(StarSkillDataKeys.WEAKNESS.get())){
+            container.getDataManager().registerData(StarSkillDataKeys.WEAKNESS.get());
+        }
+        if(!container.getDataManager().hasData(StarSkillDataKeys.WEAKNESS_COUNT_2.get())){
+            container.getDataManager().registerData(StarSkillDataKeys.WEAKNESS_COUNT_2.get());
+        }
+
+
         if (container.getDataManager().getDataValue(StarSkillDataKeys.WEAKNESS.get()) > 0 && container.getExecuter().getOriginal() instanceof ServerPlayer) {
             container.getDataManager().setDataSync(StarSkillDataKeys.WEAKNESS.get(), container.getDataManager().getDataValue(StarSkillDataKeys.WEAKNESS.get()) - 1.0f, (ServerPlayer) container.getExecuter().getOriginal());
         }

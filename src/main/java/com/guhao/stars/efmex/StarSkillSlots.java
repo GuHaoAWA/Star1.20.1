@@ -4,7 +4,8 @@ import yesman.epicfight.skill.SkillCategory;
 import yesman.epicfight.skill.SkillSlot;
 
 public enum StarSkillSlots implements SkillSlot {
-    DOTE(StarSkillCategories.DOTE);
+    DOTE(StarSkillCategories.DOTE),
+    COUNTER(StarSkillCategories.COUNTER);
 
     final SkillCategory category;
     final int id;

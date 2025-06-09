@@ -3,7 +3,11 @@ package com.guhao.stars.efmex;
 import yesman.epicfight.skill.SkillCategory;
 
 public enum StarSkillCategories implements SkillCategory {
-    DOTE(true, true, true);
+    DOTE(true, true, true),
+    COUNTER(true, true, true);
+
+
+
     final boolean save;
     final boolean sync;
     final boolean modifiable;

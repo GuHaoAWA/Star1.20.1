@@ -1,5 +1,6 @@
 package com.guhao.stars;
 
+import com.guhao.client.ClientHandler;
 import com.guhao.stars.efmex.StarSkillCategories;
 import com.guhao.stars.efmex.StarSkillDataKeys;
 import com.guhao.stars.efmex.StarSkillSlots;
@@ -8,8 +9,7 @@ import com.guhao.stars.entity.StarAttributes;
 import com.guhao.stars.regirster.Effect;
 import com.guhao.stars.regirster.ParticleType;
 import com.guhao.stars.regirster.Sounds;
-import com.p1nero.wukong.epicfight.WukongSkillCategories;
-import com.p1nero.wukong.epicfight.WukongSkillSlots;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
@@ -44,7 +44,6 @@ public class StarsMod {
     public static final String MODID = "star";
 
     public StarsMod() {
-        MinecraftForge.EVENT_BUS.register(this);
         IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
         Effect.REGISTRY.register(bus);
         ParticleType.PARTICLES.register(bus);
@@ -54,6 +53,7 @@ public class StarsMod {
         SkillCategory.ENUM_MANAGER.registerEnumCls("star", StarSkillCategories.class);
         SkillSlot.ENUM_MANAGER.registerEnumCls("star", StarSkillSlots.class);
         StarSkillDataKeys.DATA_KEYS.register(bus);
+        MinecraftForge.EVENT_BUS.register(this);
     }
 
     private static final String PROTOCOL_VERSION = "1";
@@ -84,5 +84,10 @@ public class StarsMod {
             actions.forEach(e -> e.getKey().run());
             workQueue.removeAll(actions);
         }
+    }
+    @SubscribeEvent
+    public static void clientSetup(FMLClientSetupEvent event) {
+        // 注册客户端事件
+
     }
 }

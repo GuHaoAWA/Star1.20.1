@@ -1,6 +1,10 @@
 package com.guhao.stars.mixins.epicfight;
 
 import com.guhao.stars.efmex.skills.DOTEPassive;
+import com.guhao.stars.entity.StarAttributes;
+import com.guhao.stars.regirster.Effect;
+import com.guhao.stars.units.StarArrayUnit;
+import com.nameless.indestructible.world.capability.AdvancedCustomHumanoidMobPatch;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.injection.At;
@@ -12,7 +16,9 @@ import yesman.epicfight.gameasset.Animations;
 import yesman.epicfight.skill.SkillContainer;
 import yesman.epicfight.skill.guard.GuardSkill;
 import yesman.epicfight.skill.guard.ParryingSkill;
+import yesman.epicfight.world.capabilities.EpicFightCapabilities;
 import yesman.epicfight.world.capabilities.item.CapabilityItem;
+import yesman.epicfight.world.damagesource.EpicFightDamageSource;
 import yesman.epicfight.world.entity.eventlistener.HurtEvent;
 
 @Mixin(value = ParryingSkill.class,remap = false,priority = 500)
@@ -44,5 +50,38 @@ public class ParryingSkillMixin extends GuardSkill {
     )
     public void star$guard(SkillContainer container, CapabilityItem itemCapability, HurtEvent.Pre event, float knockback, float impact, boolean advanced, CallbackInfo ci) {
         DOTEPassive.breakdown(container);
+    }
+    // 在if块开头注入
+    @Inject(
+            method = "guard",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lyesman/epicfight/world/entity/eventlistener/HurtEvent$Pre;setParried(Z)V",
+                    ordinal = 0
+            )
+    )
+    private void onSuccessfulParry(SkillContainer container, CapabilityItem itemCapability, HurtEvent.Pre event, float knockback, float impact, boolean advanced, CallbackInfo ci) {
+        AdvancedCustomHumanoidMobPatch<?> longpatch = EpicFightCapabilities.getEntityPatch(event.getDamageSource().getEntity(), AdvancedCustomHumanoidMobPatch.class);
+        if (longpatch != null) {
+            longpatch.setStamina((float) (longpatch.getStamina() - longpatch.getOriginal().getAttribute(StarAttributes.PARRY_STAMINA_LOSE.get()).getValue()));
+            if (longpatch.getOriginal().hasEffect(Effect.STA.get())) {
+                longpatch.setStamina(longpatch.getStamina() - longpatch.getOriginal().getEffect(Effect.STA.get()).getAmplifier() +1);
+            }
+        }
+    }
+    @Inject(
+            method = "guard",
+            at = @At(
+                    value = "HEAD"
+            ),
+            cancellable = true)
+    public void star$head_guard(SkillContainer container, CapabilityItem itemCapability, HurtEvent.Pre event, float knockback, float impact, boolean advanced, CallbackInfo ci) {
+        EpicFightDamageSource damageSource = StarArrayUnit.getEpicFightDamageSources(event.getDamageSource());
+        if (damageSource != null && StarArrayUnit.isNoGuard(damageSource.getAnimation())) {
+            ci.cancel();
+        }
+        if (damageSource != null && StarArrayUnit.isNoDodge(damageSource.getAnimation())) {
+            ci.cancel();
+        }
     }
 }

@@ -1,14 +1,15 @@
 package com.guhao.stars.event;
 
-import com.guhao.stars.entity.StarAttributes;
+import com.guhao.stars.efmex.StarSkillSlots;
+import com.guhao.stars.regirster.StarSkill;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.attributes.AttributeInstance;
-import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.eventbus.api.Event;
+import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import yesman.epicfight.world.capabilities.EpicFightCapabilities;
+import yesman.epicfight.world.capabilities.entitypatch.player.PlayerPatch;
 
 import javax.annotation.Nullable;
 
@@ -17,7 +18,7 @@ import javax.annotation.Nullable;
 @Mod.EventBusSubscriber
 
 public class EntityJoinWorldEvent {
-    @SubscribeEvent
+    @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void onEntityJoin(EntityJoinLevelEvent event) {
         execute(event,event.getEntity());
     }
@@ -27,7 +28,11 @@ public class EntityJoinWorldEvent {
     }
 
     private static void execute(@Nullable Event event, Entity entity) {
-
+        PlayerPatch<?> pp = EpicFightCapabilities.getEntityPatch(entity, PlayerPatch.class);
+        if (pp == null) return;
+        if (!pp.getSkill(StarSkillSlots.DOTE).hasSkill(StarSkill.DOTE)) {
+            pp.getSkill(StarSkillSlots.DOTE).setSkill(StarSkill.DOTE);
+        }
     }
 }
 
