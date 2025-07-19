@@ -1,12 +1,12 @@
 package com.guhao.stars;
 
-import com.guhao.client.ClientHandler;
 import com.guhao.stars.efmex.StarSkillCategories;
 import com.guhao.stars.efmex.StarSkillDataKeys;
 import com.guhao.stars.efmex.StarSkillSlots;
 import com.guhao.stars.efmex.StarWeaponCapabilityPresets;
 import com.guhao.stars.entity.StarAttributes;
 import com.guhao.stars.regirster.Effect;
+import com.guhao.stars.regirster.Items;
 import com.guhao.stars.regirster.ParticleType;
 import com.guhao.stars.regirster.Sounds;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
@@ -48,6 +48,7 @@ public class StarsMod {
         Effect.REGISTRY.register(bus);
         ParticleType.PARTICLES.register(bus);
         Sounds.REGISTRY.register(bus);
+        Items.ITEMS.register(bus);
         StarAttributes.ATTRIBUTES.register(bus);
         bus.addListener(StarWeaponCapabilityPresets::register);
         SkillCategory.ENUM_MANAGER.registerEnumCls("star", StarSkillCategories.class);
@@ -88,6 +89,7 @@ public class StarsMod {
     @SubscribeEvent
     public static void clientSetup(FMLClientSetupEvent event) {
         // 注册客户端事件
+
 
     }
 }

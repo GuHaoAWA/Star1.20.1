@@ -24,8 +24,6 @@ public class ShadowPassive extends Skill {
                 container.getExecuter().getOriginal().hurtMarked = true;
                 Vec3 viewVec = target.getViewVector(1.0F);
                 container.getExecuter().getOriginal().teleportTo(target.getX() + viewVec.x() * 4.5f, target.getY(), target.getZ() + viewVec.z() * 4.5f);
-//                Vec3 newTargetPos = target.position();
-//                container.getExecuter().getOriginal().lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3(newTargetPos.x, newTargetPos.y + target.getEyeHeight(), newTargetPos.z));
                 container.getExecuter().playAnimationSynchronized(Animations.BATTOJUTSU_DASH,-0.60F);
                 container.getExecuter().playSound(EpicFightSounds.EVISCERATE.get(),0f,0f);
             }

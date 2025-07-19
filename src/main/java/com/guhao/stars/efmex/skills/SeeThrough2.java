@@ -6,8 +6,10 @@ import com.guhao.stars.efmex.StarSkillDataKeys;
 import com.guhao.stars.regirster.Effect;
 import com.guhao.stars.regirster.StarSkill;
 import com.guhao.stars.units.StarArrayUnit;
+import com.guhao.utils.BattleUtils;
 import com.nameless.indestructible.world.capability.AdvancedCustomHumanoidMobPatch;
 import net.corruptdog.cdm.gameasset.CorruptAnimations;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageSource;
@@ -38,10 +40,11 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.function.BiFunction;
 
+import static com.guhao.stars.StarsMod.LOGGER;
 import static yesman.epicfight.world.entity.eventlistener.PlayerEventListener.EventType.BASIC_ATTACK_EVENT;
 
 public class SeeThrough2 extends Skill {
-    private static final UUID EVENT_UUID = UUID.fromString("550e8400-e29b-41d4-a716-446655440000");
+    private static final UUID EVENT_UUID = UUID.fromString("550e8490-e29b-41d4-a716-446655440000");
 
     public SeeThrough2(Builder builder) {
         super(builder);
@@ -50,18 +53,18 @@ public class SeeThrough2 extends Skill {
         protected final Map<WeaponCategory, BiFunction<CapabilityItem, PlayerPatch<?>, StaticAnimation>> motions = Maps.newHashMap();
 
 
-        public SeeThrough2.Builder setActivateType(ActivateType activateType) {
+        public Builder setActivateType(ActivateType activateType) {
             this.activateType = activateType;
             return this;
         }
 
-        public SeeThrough2.Builder setResource(Resource resource) {
+        public Builder setResource(Resource resource) {
             this.resource = resource;
             return this;
         }
 
     }
-    public static SeeThrough2.Builder createSeeThroughSkillBuilder() {
+    public static Builder createSeeThroughSkillBuilder() {
         return (Builder) (new Builder())
                 .setCategory(StarSkillCategories.COUNTER)
                 .setActivateType(ActivateType.DURATION)
@@ -79,16 +82,18 @@ public class SeeThrough2 extends Skill {
     }
     @Override
     public void updateContainer(SkillContainer container) {
-        if (container.getDataManager().getDataValue(StarSkillDataKeys.COUNTER_TICK.get()) > 0 && container.getExecuter().getOriginal() instanceof ServerPlayer) {
-            container.getDataManager().setDataSync(StarSkillDataKeys.COUNTER_TICK.get(), container.getDataManager().getDataValue(StarSkillDataKeys.COUNTER_TICK.get()) - 1.0f, (ServerPlayer) container.getExecuter().getOriginal());
+        if (container.getDataManager().getDataValue(StarSkillDataKeys.COUNTER_TICK3.get()) > 0 && container.getExecuter().getOriginal() instanceof ServerPlayer) {
+            container.getDataManager().setDataSync(StarSkillDataKeys.COUNTER_TICK3.get(), container.getDataManager().getDataValue(StarSkillDataKeys.COUNTER_TICK3.get()) - 1.0f, (ServerPlayer) container.getExecuter().getOriginal());
         }
         if (container.getDataManager().getDataValue(StarSkillDataKeys.COUNTER_TICK2.get()) > 0 && container.getExecuter().getOriginal() instanceof ServerPlayer) {
             container.getDataManager().setDataSync(StarSkillDataKeys.COUNTER_TICK2.get(), container.getDataManager().getDataValue(StarSkillDataKeys.COUNTER_TICK2.get()) - 1.0f, (ServerPlayer) container.getExecuter().getOriginal());
         }
+
     }
     @Override
     public void onInitiate(SkillContainer container) {
         PlayerEventListener listener = container.getExecuter().getEventListener();
+
         listener.addEventListener(PlayerEventListener.EventType.TARGET_INDICATOR_ALERT_CHECK_EVENT, EVENT_UUID, (event) -> {
             int animationId = event.getPlayerPatch().getAnimator().getPlayerFor(null).getAnimation().getId();
             PlayerPatch<?> playerPatch = container.getExecuter();
@@ -99,41 +104,53 @@ public class SeeThrough2 extends Skill {
         });
         listener.addEventListener(PlayerEventListener.EventType.DODGE_SUCCESS_EVENT, EVENT_UUID, (event) -> {
             EpicFightDamageSource epicFightDamageSource = StarArrayUnit.getEpicFightDamageSources(event.getDamageSource());
-            if ((StarArrayUnit.isNoGuard(epicFightDamageSource.getAnimation()) || (StarArrayUnit.isNoParry(epicFightDamageSource.getAnimation()) && !StarArrayUnit.canCaiDAO(epicFightDamageSource.getAnimation())))) {
-                container.getDataManager().setDataSync(StarSkillDataKeys.COUNTER_TICK2.get(), 60.0f, (ServerPlayer) container.getExecuter().getOriginal());
-                container.getExecuter().getOriginal().addEffect(new MobEffectInstance(MobEffects.GLOWING,60,60));
+            if ((epicFightDamageSource!=null) && (StarArrayUnit.isNoGuard(epicFightDamageSource.getAnimation()) || (StarArrayUnit.isNoParry(epicFightDamageSource.getAnimation()) && !StarArrayUnit.canCaiDAO(epicFightDamageSource.getAnimation())))) {
+                container.getDataManager().setDataSync(StarSkillDataKeys.COUNTER_TICK2.get(), 60.0f, event.getPlayerPatch().getOriginal());
+                event.getPlayerPatch().getOriginal().addEffect(new MobEffectInstance(Effect.ORANGE_GLOW.get(), 60, 60, true, true));
             }
         });
         listener.addEventListener(PlayerEventListener.EventType.SKILL_EXECUTE_EVENT, EVENT_UUID, (event) -> {
-            if (container.getDataManager().getDataValue(StarSkillDataKeys.COUNTER_TICK.get()) > 0.0f) {
+            if (event.getSkillContainer() != event.getPlayerPatch().getSkill(SkillSlots.WEAPON_INNATE)) {
+                return;
+            }
+            if (container.getDataManager().getDataValue(StarSkillDataKeys.COUNTER_TICK3.get()) > 0.0f) {
                 event.setCanceled(true);
-                container.getDataManager().setDataSync(StarSkillDataKeys.COUNTER_TICK.get(), 0.0f, (ServerPlayer) container.getExecuter().getOriginal());
+                if (container.getExecuter().getOriginal() instanceof LocalPlayer serverPlayer) {
+                    container.getDataManager().setDataSync(StarSkillDataKeys.COUNTER_TICK3.get(), 0.0f, serverPlayer);
+                }
                 container.getExecuter().setStamina(container.getExecuter().getStamina() + 1.0f);
-                StaticAnimation a1 = Animations.RUSHING_TEMPO3;
-                StaticAnimation a2 = Animations.RUSHING_TEMPO3;
+                StaticAnimation a1 = Animations.RUSHING_TEMPO2.get();
+                StaticAnimation a2 = Animations.RUSHING_TEMPO3.get();
                 if (a1 instanceof AttackAnimation combo1 && a2 instanceof AttackAnimation combo2) {
-                    combo2.addProperty(AnimationProperty.AttackPhaseProperty.STUN_TYPE, StunType.KNOCKDOWN)
-                            .addProperty(AnimationProperty.AttackPhaseProperty.DAMAGE_MODIFIER, ValueModifier.multiplier(1.8F));
+
                     combo1.addProperty(AnimationProperty.AttackPhaseProperty.STUN_TYPE, StunType.HOLD)
                             .addProperty(AnimationProperty.AttackPhaseProperty.IMPACT_MODIFIER, ValueModifier.multiplier(1.8F))
                             .addProperty(AnimationProperty.AttackPhaseProperty.DAMAGE_MODIFIER, ValueModifier.multiplier(1.2F))
-                            .addEvents(AnimationProperty.StaticAnimationProperty.ON_END_EVENTS, AnimationEvent.create((entitypatch, animation, params) -> {
-                                container.getExecuter().playAnimationSynchronized(combo2,0.0f);
-                            }, AnimationEvent.Side.SERVER));
+                            .addProperty(AnimationProperty.StaticAnimationProperty.TIME_STAMPED_EVENTS, new AnimationEvent.TimeStampedEvent[]{
+                                    AnimationEvent.TimeStampedEvent.create(0.35F, (ep, anim, objs) -> {
+                                        container.getExecuter().playAnimationSynchronized(combo2,0.0f);
+                                    }, AnimationEvent.Side.SERVER)});
+
+                    combo2.addProperty(AnimationProperty.AttackPhaseProperty.STUN_TYPE, StunType.KNOCKDOWN)
+                            .addProperty(AnimationProperty.AttackPhaseProperty.DAMAGE_MODIFIER, ValueModifier.multiplier(1.8F));
                 container.getExecuter().playAnimationSynchronized(combo1,0.0f);
+
             }
 
             }
             if (container.getDataManager().getDataValue(StarSkillDataKeys.COUNTER_TICK2.get()) > 0.0f) {
                 event.setCanceled(true);
-                container.getDataManager().setDataSync(StarSkillDataKeys.COUNTER_TICK2.get(), 0.0f, (ServerPlayer) container.getExecuter().getOriginal());
+
+                if (container.getExecuter().getOriginal() instanceof LocalPlayer serverPlayer) {
+                    container.getDataManager().setDataSync(StarSkillDataKeys.COUNTER_TICK2.get(), 0.0f, serverPlayer);
+                }
                 container.getExecuter().setStamina(container.getExecuter().getStamina() + 1.5f);
                 container.getExecuter().playAnimationSynchronized(WOMAnimations.STRONG_KICK,0.0f);
                 container.getExecuter().getOriginal().addEffect(new MobEffectInstance(Effect.IMPACT_ENHANCE.get(),1,400));
 
 
             }
-        });
+        }, -10);
         listener.addEventListener(BASIC_ATTACK_EVENT, EVENT_UUID, (event) -> {
             float stamina = event.getPlayerPatch().getStamina();
             int costStamina = 3;
@@ -159,8 +176,8 @@ public class SeeThrough2 extends Skill {
             AdvancedCustomHumanoidMobPatch<?> longpatch = EpicFightCapabilities.getEntityPatch(event.getDamageSource().getDirectEntity(), AdvancedCustomHumanoidMobPatch.class);
             EpicFightDamageSource epicFightDamageSource = StarArrayUnit.getEpicFightDamageSources(event.getDamageSource());
             if (epicFightDamageSource != null && StarArrayUnit.isNoParry(epicFightDamageSource.getAnimation()) && event.isParried()) {
-                container.getDataManager().setDataSync(StarSkillDataKeys.COUNTER_TICK.get(), 60.0f, (ServerPlayer) container.getExecuter().getOriginal());
-                container.getExecuter().getOriginal().addEffect(new MobEffectInstance(MobEffects.GLOWING,60,60));
+                container.getDataManager().setDataSync(StarSkillDataKeys.COUNTER_TICK3.get(), 60.0f, event.getPlayerPatch().getOriginal());
+                event.getPlayerPatch().getOriginal().addEffect(new MobEffectInstance(Effect.ORANGE_GLOW.get(), 60, 60, true, true));
             }
 
 

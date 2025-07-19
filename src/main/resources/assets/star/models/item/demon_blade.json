@@ -1,6 +1,0 @@
-{
-  "parent": "star:displaysettings/bb_blade",
-  "textures": {
-    "layer0": "star:items/bb"
-  }
-}

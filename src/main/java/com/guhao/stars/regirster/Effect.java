@@ -18,4 +18,6 @@ public class Effect {
     public static final RegistryObject<MobEffect> STA = REGISTRY.register("parry_stamina_lose", StaminaReduce::new);
     public static final RegistryObject<MobEffect> TOUGHNESS = REGISTRY.register("toughness", Toughness::new);
     public static final RegistryObject<MobEffect> IMPACT_ENHANCE = REGISTRY.register("impact_enhance", ImpactEnhance::new);
+    public static final RegistryObject<MobEffect> ORANGE_GLOW = REGISTRY.register("orange_glow", Orange_Glow::new);
+    public static final RegistryObject<MobEffect> RED_GLOW = REGISTRY.register("red_glow", Red_Glow::new);
 }

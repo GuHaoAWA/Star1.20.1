@@ -122,11 +122,12 @@
       }
     ]
   },
-  "yilianjieyvan": {
+  "yuzusoft": {
+    "category": "record",
     "sounds": [
       {
         "name": "star:yuzusoft",
-        "stream": false
+        "stream": true
       }
     ]
   },

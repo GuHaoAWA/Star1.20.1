@@ -1,13 +1,9 @@
 package com.guhao.stars.efmex.skills;
 
-import com.dfdyz.epicacg.registry.MySkillDataKeys;
 import com.guhao.stars.efmex.StarSkillDataKeys;
-import com.guhao.stars.entity.StarAttributes;
-import com.guhao.stars.regirster.Effect;
 import com.guhao.stars.regirster.StarSkill;
 import com.guhao.stars.units.StarArrayUnit;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.nameless.indestructible.world.capability.AdvancedCustomHumanoidMobPatch;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -22,14 +18,12 @@ import yesman.epicfight.client.gui.BattleModeGui;
 import yesman.epicfight.gameasset.Animations;
 import yesman.epicfight.gameasset.EpicFightSounds;
 import yesman.epicfight.skill.*;
-import yesman.epicfight.world.capabilities.EpicFightCapabilities;
 import yesman.epicfight.world.damagesource.EpicFightDamageSource;
 import yesman.epicfight.world.damagesource.StunType;
 import yesman.epicfight.world.effect.EpicFightMobEffects;
 import yesman.epicfight.world.entity.ai.attribute.EpicFightAttributes;
 import yesman.epicfight.world.entity.eventlistener.PlayerEventListener;
 
-import java.util.Objects;
 import java.util.UUID;
 
 public class DOTEPassive extends Skill {

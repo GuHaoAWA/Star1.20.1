@@ -43,17 +43,14 @@ public abstract class GuardSkillMixin extends Skill {
             ),
             cancellable = true)
     public void star$head_guard(SkillContainer container, CapabilityItem itemCapability, HurtEvent.Pre event, float knockback, float impact, boolean advanced, CallbackInfo ci) {
-        ServerPlayer playerentity = event.getPlayerPatch().getOriginal();
-        boolean successParrying = playerentity.tickCount - container.getDataManager().getDataValue(SkillDataKeys.LAST_ACTIVE.get()) < 8;
-        EpicFightDamageSource damageSource = StarArrayUnit.getEpicFightDamageSources(event.getDamageSource());
-        if (damageSource != null && !successParrying && StarArrayUnit.isNoParry(damageSource.getAnimation())) {
-            ci.cancel();
-        }
 
-        if (damageSource != null && StarArrayUnit.isNoGuard(damageSource.getAnimation())) {
+        EpicFightDamageSource damageSource = StarArrayUnit.getEpicFightDamageSources(event.getDamageSource());
+
+
+        if (damageSource != null && (StarArrayUnit.isNoGuard(damageSource.getAnimation()) || StarArrayUnit.isNoDodge(damageSource.getAnimation()))) {
             ci.cancel();
         }
-        if (damageSource != null && StarArrayUnit.isNoDodge(damageSource.getAnimation())) {
+        if (damageSource != null && (StarArrayUnit.isNoDodge(damageSource.getAnimation()) || StarArrayUnit.isNoDodge(damageSource.getAnimation()))) {
             ci.cancel();
         }
     }

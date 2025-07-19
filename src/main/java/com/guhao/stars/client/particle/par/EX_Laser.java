@@ -30,7 +30,7 @@ public class EX_Laser extends CustomModelParticle<RawMesh> {
     private final float yRot;
 
     public EX_Laser(ClientLevel level, double x, double y, double z, double toX, double toY, double toZ) {
-        super(level, x, y, z, 0.0, 0.0, 0.0, Meshes.LASER);
+        super(level, x, y, z, 0.0, 0.0, 0.0, Meshes.AIR_BURST);
         this.lifetime = 30;
         this.speedUpWhenYMotionIsBlocked = true;
         Vec3 direction = new Vec3(toX - x, toY - y, toZ - z);

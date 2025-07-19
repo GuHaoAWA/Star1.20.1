@@ -26,7 +26,7 @@ public abstract class DodgeAnimationMixin extends ActionAnimation {
     @Unique
     private static final Function<DamageSource, AttackResult.ResultType> star$DODGEABLE_SOURCE_VALIDATOR = (damagesource) -> {
         if (StarArrayUnit.getEpicFightDamageSources(damagesource) != null) {
-            return damagesource.getEntity() != null && !damagesource.is(DamageTypeTags.IS_EXPLOSION) && StarArrayUnit.isNoDodge(StarArrayUnit.getEpicFightDamageSources(damagesource).getAnimation()) && !damagesource.is(DamageTypes.MAGIC) && !damagesource.is(DamageTypeTags.BYPASSES_ARMOR) && !damagesource.is(DamageTypeTags.BYPASSES_INVULNERABILITY) && !damagesource.is(EpicFightDamageType.BYPASS_DODGE) ? AttackResult.ResultType.MISSED : AttackResult.ResultType.SUCCESS;
+            return damagesource.getEntity() != null && !damagesource.is(DamageTypeTags.IS_EXPLOSION) && !StarArrayUnit.isNoDodge(StarArrayUnit.getEpicFightDamageSources(damagesource).getAnimation()) && !damagesource.is(DamageTypes.MAGIC) && !damagesource.is(DamageTypeTags.BYPASSES_ARMOR) && !damagesource.is(DamageTypeTags.BYPASSES_INVULNERABILITY) && !damagesource.is(EpicFightDamageType.BYPASS_DODGE) ? AttackResult.ResultType.MISSED : AttackResult.ResultType.SUCCESS;
         }
         return damagesource.getEntity() != null && !damagesource.is(DamageTypeTags.IS_EXPLOSION) && !damagesource.is(DamageTypes.MAGIC) && !damagesource.is(DamageTypeTags.BYPASSES_ARMOR) && !damagesource.is(DamageTypeTags.BYPASSES_INVULNERABILITY) && !damagesource.is(EpicFightDamageType.BYPASS_DODGE) ? AttackResult.ResultType.MISSED : AttackResult.ResultType.SUCCESS;
     };

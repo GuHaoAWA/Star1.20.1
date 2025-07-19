@@ -2,17 +2,24 @@ package com.guhao.stars.mixins.epicfight;
 
 import com.guhao.stars.entity.StarAttributes;
 import com.guhao.stars.regirster.Effect;
+import com.guhao.stars.units.StarArrayUnit;
 import com.nameless.indestructible.api.animation.types.LivingEntityPatchEvent;
 import com.nameless.indestructible.data.AdvancedMobpatchReloader;
 import com.nameless.indestructible.world.capability.Utils.CapabilityState;
 import com.nameless.indestructible.world.capability.Utils.IAdvancedCapability;
 import com.nameless.indestructible.world.capability.Utils.IAnimationEventCapability;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import org.spongepowered.asm.mixin.*;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import yesman.epicfight.api.utils.AttackResult;
 import yesman.epicfight.gameasset.EpicFightSounds;
 import yesman.epicfight.particle.EpicFightParticles;
 import yesman.epicfight.world.capabilities.entitypatch.MobPatch;
+import yesman.epicfight.world.damagesource.EpicFightDamageSource;
 import yesman.epicfight.world.damagesource.StunType;
 
 @Mixin(value = CapabilityState.class,remap = false)
@@ -83,5 +90,13 @@ public class CapabilityStateMixin<T extends MobPatch<?>, V extends AdvancedMobpa
     }
     @Shadow
     private void resetWhenStunned() {
+    }
+    @Inject(method = "tryProcess",at = @At("HEAD"), cancellable = true)
+    private void tryProcess(DamageSource damageSource, float amount, CallbackInfoReturnable<AttackResult> cir) {
+        EpicFightDamageSource epicFightDamageSource = StarArrayUnit.getEpicFightDamageSources(damageSource);
+        if (((MobPatch<?>) this.mobPatch instanceof IAdvancedCapability iac) && epicFightDamageSource != null && StarArrayUnit.isNoGuard(epicFightDamageSource.getAnimation())) {
+            cir.setReturnValue(new AttackResult(AttackResult.ResultType.SUCCESS, amount));
+            cir.cancel();
+        }
     }
 }

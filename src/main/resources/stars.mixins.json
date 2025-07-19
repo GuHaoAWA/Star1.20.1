@@ -4,20 +4,22 @@
   "compatibilityLevel": "JAVA_17",
   "refmap": "stars.refmap.json",
   "mixins": [
+    "EntityMixin",
     "blue_sky.AquaticArcItemMixin",
     "blue_sky.EtherealArcItemMixin",
     "blue_sky.LifeArcItemMixin",
     "blue_sky.NatureArcItemMixin",
     "blue_sky.PoisonArcItemMixin",
+    "epicfight.AdvancedCustomHumanoidMobPatchMixin",
     "epicfight.CapabilityStateMixin",
     "epicfight.DodgeAnimationMixin",
     "epicfight.DodgeSkillMixin",
+    "epicfight.EntityEvents",
     "epicfight.GuardSkillMixin",
     "epicfight.KnockdownWakeupSkillMixin",
     "epicfight.LivingEntityPatchMixin",
     "epicfight.ParryingSkillMixin",
     "epicfight.PlayerPatchMixin",
-
     "epicfight.WeaponInnateSkillMixin"
   ],
   "client": [

@@ -16,7 +16,7 @@
   "skill.star.see_through": "识破",
   "skill.star.see_through.tooltip": "若招架敌人的§c§l橙色危招§r(后续简称§c§l橙刀§r)，3秒内(附带发光buff提示)按下识破反击按键，触发§c§l强力斩击§r！若娴熟闪避敌人的§c§l红刀§r，§r3秒内可触发§c§l强力体术§r硬控敌人。§r期间受到硬直将自动取消识破反击。",
   "effect.star.slow_time": "子弹时间",
-  "item.star.hua": "以恋结缘",
+  "item.star.hua": "以恋结缘唱片",
   "subtitles.yilianjieyvan": "",
   "item.star.hua.desc": "Ciallo～(∠・ω＜)⌒☆",
   "item.star.persona": "人格面具",
@@ -26,5 +26,6 @@
   "skill.star.hyper_charge": "超级充能",
   "skill.star.hyper_charge.tooltip": "每1点幸运值属性，加快武器4%充能速度。 \n\n 技能只能用于剑，斧头，匕首，三叉戟，拳套，镰刀，与寻血者上。",
   "star.wusong.explain": "指挥官写一下",
-  "star.h": "終焉決斗場由凝星製作組傾情製作，由澳門京城等贊助，本整合包資源僅供學習交流，請勿用於其他用途徑"
+  "star.h": "終焉決斗場由凝星製作組傾情製作，由澳門京城等贊助，本整合包資源僅供學習交流，請勿用於其他用途徑",
+  "key.star.inspect": "检视"
 }

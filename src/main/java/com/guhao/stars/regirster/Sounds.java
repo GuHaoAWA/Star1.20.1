@@ -27,7 +27,7 @@ public class Sounds {
     public static final RegistryObject<SoundEvent> PENG = registerSoundEvent("peng");
     public static final RegistryObject<SoundEvent> YAMATO_IN = registerSoundEvent("yamato_in");
     public static final RegistryObject<SoundEvent> CAILLO = registerSoundEvent("ciallo");
-    public static final RegistryObject<SoundEvent> YILIANJIEYVAN = registerSoundEvent("yilianjieyvan");
+    public static final RegistryObject<SoundEvent> YUZUSOFT = registerSoundEvent("yuzusoft");
 
     public Sounds() {
     }
