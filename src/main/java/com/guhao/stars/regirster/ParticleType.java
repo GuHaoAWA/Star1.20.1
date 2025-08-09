@@ -3,6 +3,7 @@ package com.guhao.stars.regirster;
 
 import com.guhao.stars.client.particle.par.*;
 import net.minecraft.core.particles.SimpleParticleType;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -12,6 +13,8 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
+import org.joml.Vector3d;
+import yesman.epicfight.particle.HitParticleType;
 
 import static com.guhao.stars.StarsMod.MODID;
 
@@ -28,6 +31,8 @@ public class ParticleType {
     public static final RegistryObject<SimpleParticleType> FIRE_BALL;
     public static final RegistryObject<SimpleParticleType> CAI;
     public static final RegistryObject<SimpleParticleType> EX_LASER;
+    public static final RegistryObject<HitParticleType> AIR_PUNCH_BURST_PARTICLE;
+    public static final RegistryObject<SimpleParticleType> OLA;
 
     @OnlyIn(Dist.CLIENT)
     @SubscribeEvent
@@ -43,6 +48,8 @@ public class ParticleType {
         event.registerSpriteSet(CAI.get(), Cai.CaiParticleProvider::new);
         event.registerSpriteSet(FIRE_BALL.get(), Fire_Ball.Provider::new);
         event.registerSpriteSet(EX_LASER.get(), EX_Laser.Provider::new);
+        event.registerSpriteSet(AIR_PUNCH_BURST_PARTICLE.get(), AirPunchBurstParticle.Provider::new);
+        event.registerSpriteSet(OLA.get(), com.guhao.stars.client.particle.par.OLA.OLAParticleProvider::new);
     }
     public ParticleType() {
     }
@@ -58,5 +65,20 @@ public class ParticleType {
         DING = PARTICLES.register("ding", () -> new SimpleParticleType(true));
         CAI = PARTICLES.register("cai", () -> new SimpleParticleType(true));
         EX_LASER = PARTICLES.register("ex_laser", () -> new SimpleParticleType(true));
+        OLA = PARTICLES.register("ola", () -> new SimpleParticleType(true));
+        AIR_PUNCH_BURST_PARTICLE = PARTICLES.register("air_punch_burst",
+                        () -> new HitParticleType(
+                                true,
+                                HitParticleType.RANDOM_WITHIN_BOUNDING_BOX,
+                                (target, attacker) -> {
+                                    // 完全模仿ATTACKER_XY_ROTATION
+                                    return new Vector3d(
+                                            attacker.getXRot(),  // pitch
+                                            180.0F - attacker.getYRot(),  // yaw
+                                            -1.0  // 保留参数
+                                    );
+                                }
+                        ));
+
     }
 }

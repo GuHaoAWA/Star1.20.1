@@ -22,7 +22,6 @@ import yesman.epicfight.world.entity.eventlistener.PlayerEventListener.EventType
 
 import java.util.UUID;
 
-import static com.guhao.epicfight.GuHaoSkillDataKeys.SHEATH;
 import static com.guhao.stars.efmex.StarSkillDataKeys.*;
 
 

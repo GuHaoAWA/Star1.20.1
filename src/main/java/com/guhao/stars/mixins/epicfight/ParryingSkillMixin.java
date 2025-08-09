@@ -3,7 +3,7 @@ package com.guhao.stars.mixins.epicfight;
 import com.guhao.stars.efmex.skills.DOTEPassive;
 import com.guhao.stars.entity.StarAttributes;
 import com.guhao.stars.regirster.Effect;
-import com.guhao.stars.units.StarArrayUnit;
+import com.guhao.stars.units.StarDataUnit;
 import com.nameless.indestructible.world.capability.AdvancedCustomHumanoidMobPatch;
 import net.minecraft.server.level.ServerPlayer;
 import org.spongepowered.asm.mixin.Mixin;
@@ -11,7 +11,6 @@ import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 import yesman.epicfight.api.animation.types.StaticAnimation;
 import yesman.epicfight.gameasset.Animations;
 import yesman.epicfight.skill.SkillContainer;
@@ -78,16 +77,16 @@ public class ParryingSkillMixin extends GuardSkill {
             ),
             cancellable = true)
     public void star$head_guard(SkillContainer container, CapabilityItem itemCapability, HurtEvent.Pre event, float knockback, float impact, boolean advanced, CallbackInfo ci) {
-        EpicFightDamageSource damageSource = StarArrayUnit.getEpicFightDamageSources(event.getDamageSource());
+        EpicFightDamageSource damageSource = StarDataUnit.getEpicFightDamageSources(event.getDamageSource());
         ServerPlayer playerentity = event.getPlayerPatch().getOriginal();
         boolean successParrying = playerentity.tickCount - container.getDataManager().getDataValue(SkillDataKeys.LAST_ACTIVE.get()) < 8;
-        if (damageSource != null && !successParrying && StarArrayUnit.isNoParry(damageSource.getAnimation())) {
+        if (damageSource != null && !successParrying && StarDataUnit.isNoParry(damageSource.getAnimation())) {
             ci.cancel();
         }
-        if (damageSource != null && (StarArrayUnit.isNoGuard(damageSource.getAnimation()) || StarArrayUnit.isNoDodge(damageSource.getAnimation()))) {
+        if (damageSource != null && (StarDataUnit.isNoGuard(damageSource.getAnimation()) || StarDataUnit.isNoDodge(damageSource.getAnimation()))) {
             ci.cancel();
         }
-        if (damageSource != null && (StarArrayUnit.isNoDodge(damageSource.getAnimation()) || StarArrayUnit.isNoDodge(damageSource.getAnimation()))) {
+        if (damageSource != null && (StarDataUnit.isNoDodge(damageSource.getAnimation()) || StarDataUnit.isNoDodge(damageSource.getAnimation()))) {
             ci.cancel();
         }
     }

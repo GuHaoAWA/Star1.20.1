@@ -1,9 +1,6 @@
 package com.guhao.stars.regirster;
 
-import com.guhao.GuhaoMod;
-import com.guhao.network.BloodBurstMessage;
-import com.guhao.network.EnderMessage;
-import com.guhao.network.RedFistMessage;
+import com.guhao.stars.StarsMod;
 import com.guhao.stars.network.InspectMessage;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
@@ -13,8 +10,6 @@ import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import org.lwjgl.glfw.GLFW;
-
-import static com.guhao.GuhaoMod.PACKET_HANDLER;
 
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD, value = {Dist.CLIENT})
 public class Key {
@@ -26,7 +21,7 @@ public class Key {
         public void setDown(boolean isDown) {
             super.setDown(isDown);
             if (isDownOld != isDown && isDown) {
-                GuhaoMod.PACKET_HANDLER.sendToServer(new RedFistMessage(0, 0));
+                StarsMod.PACKET_HANDLER.sendToServer(new InspectMessage(0, 0));
                 if (Minecraft.getInstance().player != null) {
                     InspectMessage.pressAction(Minecraft.getInstance().player, 0, 0);
                 }

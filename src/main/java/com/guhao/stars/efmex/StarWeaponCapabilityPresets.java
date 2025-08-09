@@ -1,8 +1,9 @@
 package com.guhao.stars.efmex;
 
-import com.guhao.epicfight.GuHaoSkillDataKeys;
 import com.guhao.stars.StarsMod;
-import com.guhao.stars.efmex.skills.WuSongPassive;
+import com.guhao.stars.capability.TimeStopCapability;
+import com.guhao.stars.regirster.ParticleType;
+import com.guhao.stars.regirster.Sounds;
 import com.guhao.stars.regirster.StarSkill;
 import com.mojang.logging.LogUtils;
 import net.minecraft.resources.ResourceLocation;
@@ -101,14 +102,35 @@ public class StarWeaponCapabilityPresets {
                     .livingMotionModifier(Styles.SHEATH, LivingMotions.FLOAT, Animations.BIPED_HOLD_UCHIGATANA_SHEATHING)
                     .livingMotionModifier(Styles.SHEATH, LivingMotions.FALL, Animations.BIPED_HOLD_UCHIGATANA_SHEATHING)
                     .livingMotionModifier(Styles.TWO_HAND, LivingMotions.BLOCK, Animations.LONGSWORD_GUARD);
+
+
+    public static final Function<Item, CapabilityItem.Builder> THE_WORLD = (item) ->
+            WeaponCapability.builder()
+                    .newStyleCombo(Styles.ONE_HAND, StarAnimations.FIST_AUTO_1, StarAnimations.FIST_AUTO_2, StarAnimations.FIST_AUTO_3,StarAnimations.FIST_AUTO_4, Animations.FIST_DASH, Animations.FIST_AIR_SLASH)
+                    .innateSkill(Styles.ONE_HAND, (itemstack) -> StarSkill.THE_WORLD)
+                    .hitSound(Sounds.PUNCH.get())
+                    .passiveSkill(StarSkill.TIME_STOP_PASSIVE)
+                    .category(WeaponCategories.FIST)
+                    .constructor(TimeStopCapability::new);
+
+    public static final Function<Item, CapabilityItem.Builder> SUPER_PUNCH = (item) ->
+            WeaponCapability.builder()
+                    .newStyleCombo(Styles.ONE_HAND, StarAnimations.FIST_AUTO_1, StarAnimations.FIST_AUTO_2, StarAnimations.FIST_AUTO_3,StarAnimations.FIST_AUTO_4, Animations.FIST_DASH, Animations.FIST_AIR_SLASH)
+                    .innateSkill(Styles.ONE_HAND, (itemstack) -> StarSkill.SUPER_PUNCH)
+                    .hitSound(Sounds.PUNCH.get())
+                    .passiveSkill(StarSkill.SUPER_PUNCH_PASSIVE)
+                    .category(WeaponCategories.FIST)
+                    .hitParticle(ParticleType.AIR_PUNCH_BURST_PARTICLE.get())
+                    .constructor(TimeStopCapability::new);
     @SubscribeEvent
     public static void register(WeaponCapabilityPresetRegistryEvent event) {
         Logger LOGGER = LogUtils.getLogger();
         LOGGER.info("Loading WeaponCapability");
         event.getTypeEntry().put(new ResourceLocation(StarsMod.MODID, "shadow"), SHADOW);
         event.getTypeEntry().put(new ResourceLocation(StarsMod.MODID, "wusong"), WUSONG);
+        event.getTypeEntry().put(new ResourceLocation(StarsMod.MODID, "the_world"), THE_WORLD);
+        event.getTypeEntry().put(new ResourceLocation(StarsMod.MODID, "super_punch"), SUPER_PUNCH);
         LOGGER.info("WeaponCapability Loaded");
     }
-    ////
 
 }

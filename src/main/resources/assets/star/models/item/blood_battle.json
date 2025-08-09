@@ -1,0 +1,10 @@
+{
+  "parent": "item/handheld",
+  "textures": {
+    "layer0": "star:item/bloodbattle"
+  },
+  "loader": "star:cosmic",
+  "cosmic": {
+    "mask": "star:item/bloodbattle_mask"
+  }
+}

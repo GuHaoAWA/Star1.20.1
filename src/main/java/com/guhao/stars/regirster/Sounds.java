@@ -28,6 +28,14 @@ public class Sounds {
     public static final RegistryObject<SoundEvent> YAMATO_IN = registerSoundEvent("yamato_in");
     public static final RegistryObject<SoundEvent> CAILLO = registerSoundEvent("ciallo");
     public static final RegistryObject<SoundEvent> YUZUSOFT = registerSoundEvent("yuzusoft");
+    public static final RegistryObject<SoundEvent> TIME_S = registerSoundEvent("time_s");
+    public static final RegistryObject<SoundEvent> TIME_R = registerSoundEvent("time_r");
+    public static final RegistryObject<SoundEvent> SUPER_TIME = registerSoundEvent("super_time");
+    public static final RegistryObject<SoundEvent> PUNCH = registerSoundEvent("punch");
+    public static final RegistryObject<SoundEvent> PUNCH_HARD = registerSoundEvent("punch_hard");
+    public static final RegistryObject<SoundEvent> MUDA = registerSoundEvent("muda");
+    public static final RegistryObject<SoundEvent> THE_WORLD = registerSoundEvent("the_world");
+    public static final RegistryObject<SoundEvent> WRYYYYY = registerSoundEvent("wryyyyy");
 
     public Sounds() {
     }

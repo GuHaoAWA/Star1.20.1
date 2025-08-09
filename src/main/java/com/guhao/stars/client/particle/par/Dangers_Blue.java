@@ -47,7 +47,7 @@ public class Dangers_Blue extends TextureSheetParticle {
     }
 
     @Override
-    public ParticleRenderType getRenderType() {
+    public @NotNull ParticleRenderType getRenderType() {
         return ParticleRenderTypeN.PARTICLE_SHEET_LIT_NO_CULL;
     }
     @Override

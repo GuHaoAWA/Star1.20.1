@@ -5,11 +5,7 @@
   "refmap": "stars.refmap.json",
   "mixins": [
     "EntityMixin",
-    "blue_sky.AquaticArcItemMixin",
-    "blue_sky.EtherealArcItemMixin",
-    "blue_sky.LifeArcItemMixin",
-    "blue_sky.NatureArcItemMixin",
-    "blue_sky.PoisonArcItemMixin",
+    "EXLivingEntityMixin",
     "epicfight.AdvancedCustomHumanoidMobPatchMixin",
     "epicfight.CapabilityStateMixin",
     "epicfight.DodgeAnimationMixin",
@@ -20,9 +16,22 @@
     "epicfight.LivingEntityPatchMixin",
     "epicfight.ParryingSkillMixin",
     "epicfight.PlayerPatchMixin",
-    "epicfight.WeaponInnateSkillMixin"
+    "epicfight.WeaponInnateSkillMixin",
+    "time.LevelMixin",
+    "time.LivingEntityMixin",
+    "time.MixinProjectile",
+    "time.ServerLevelMixin"
   ],
   "client": [
+    "ItemRendererMixin",
+    "time.ClientLevelMixin",
+    "time.LevelRendererMixin",
+    "time.MusicManagerMixin",
+    "time.ParticleManagerMixin",
+    "time.SoundEngineMixin",
+    "time.SoundManagerMixin",
+    "time.TextureManagerMixin",
+    "time.TutorialMixin"
   ],
   "minVersion": "0.8"
 }

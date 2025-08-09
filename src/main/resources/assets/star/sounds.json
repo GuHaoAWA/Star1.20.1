@@ -148,5 +148,85 @@
         "stream": true
       }
     ]
+  },
+  "time_s": {
+
+    "sounds": [
+      {
+        "name": "star:time_s",
+        "stream": true
+      }
+    ]
+  },
+  "time_r": {
+
+    "sounds": [
+      {
+        "name": "star:time_r",
+        "stream": true
+      }
+    ]
+  },
+  "super_time": {
+
+    "sounds": [
+      {
+        "name": "star:super_time",
+        "stream": true
+      }
+    ]
+  },
+  "punch": {
+
+    "sounds": [
+      {
+        "name": "star:punch1",
+        "stream": false
+      },
+      {
+        "name": "star:punch2",
+        "stream": false
+      },
+      {
+        "name": "star:punch3",
+        "stream": false
+      }
+    ]
+  },
+  "punch_hard": {
+
+    "sounds": [
+      {
+        "name": "star:punch_hard",
+        "stream": true
+      }
+    ]
+  },
+  "muda": {
+
+    "sounds": [
+      {
+        "name": "star:muda",
+        "stream": false
+      }
+    ]
+  },
+  "the_world": {
+
+    "sounds": [
+      {
+        "name": "star:the_world",
+        "stream": false
+      }
+    ]
+  },
+  "wryyyyy": {
+
+    "sounds": [
+      {
+        "name": "star:wryyyyy",
+        "stream": false
+      }
+    ]
   }
 }

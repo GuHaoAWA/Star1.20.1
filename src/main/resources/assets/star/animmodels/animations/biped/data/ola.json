@@ -1,0 +1,22 @@
+{
+	"trail_effects": [
+		{
+			"start_time": 0.0,
+			"end_time": 2.35,
+			"lifetime": 3,
+			"interpolations": 12,
+			"joint": "Tool_L",
+			"particle_type": "guhao:trail_guhao_space",
+			"item_skin_hand": "off_hand"
+		},
+		{
+			"start_time": 0.0,
+			"end_time": 2.35,
+			"lifetime": 3,
+			"interpolations": 12,
+			"joint": "Tool_R",
+			"particle_type": "guhao:trail_guhao_space",
+			"item_skin_hand": "main_hand"
+		}
+	]
+}

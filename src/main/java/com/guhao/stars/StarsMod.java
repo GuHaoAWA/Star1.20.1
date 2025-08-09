@@ -1,5 +1,9 @@
 package com.guhao.stars;
 
+import com.guhao.stars.client.model.CosmicRenderProperties;
+import com.guhao.stars.client.model.CosmicRenderingRegistry;
+import com.guhao.stars.client.post.StarShaders;
+import com.guhao.stars.command.TimeStopCommand;
 import com.guhao.stars.efmex.StarSkillCategories;
 import com.guhao.stars.efmex.StarSkillDataKeys;
 import com.guhao.stars.efmex.StarSkillSlots;
@@ -9,6 +13,17 @@ import com.guhao.stars.regirster.Effect;
 import com.guhao.stars.regirster.Items;
 import com.guhao.stars.regirster.ParticleType;
 import com.guhao.stars.regirster.Sounds;
+import com.guhao.stars.units.StarDataUnit;
+import com.guhao.stars.units.TransformUtils;
+import com.guhao.stars.units.data.TimeContext;
+import net.minecraft.client.Minecraft;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.event.RegisterCommandsEvent;
+import net.minecraftforge.event.entity.living.LivingDeathEvent;
+import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
@@ -29,20 +44,19 @@ import net.minecraft.network.FriendlyByteBuf;
 import yesman.epicfight.skill.SkillCategory;
 import yesman.epicfight.skill.SkillSlot;
 
+import java.util.*;
 import java.util.function.Supplier;
 import java.util.function.Function;
 import java.util.function.BiConsumer;
 import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.List;
-import java.util.Collection;
-import java.util.ArrayList;
-import java.util.AbstractMap;
 
 @Mod(StarsMod.MODID)
 public class StarsMod {
     public static final Logger LOGGER = LogManager.getLogger(StarsMod.class);
     public static final String MODID = "star";
-
+    public static ResourceLocation path(String path) {
+        return new ResourceLocation(MODID, path);
+    }
     public StarsMod() {
         IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
         Effect.REGISTRY.register(bus);
@@ -55,6 +69,17 @@ public class StarsMod {
         SkillSlot.ENUM_MANAGER.registerEnumCls("star", StarSkillSlots.class);
         StarSkillDataKeys.DATA_KEYS.register(bus);
         MinecraftForge.EVENT_BUS.register(this);
+        DistExecutor.unsafeRunWhenOn(Dist.DEDICATED_SERVER, () -> () -> {
+            Timer timer = new Timer();
+            TimerTask task = new TimerTask() {
+                public void run() {
+                    if (!StarDataUnit.isTimeStopped()) {
+                        ++TimeContext.Both.timeStopModifyMillis;
+                    }
+                }
+            };
+            timer.scheduleAtFixedRate(task, 1L, 1L);
+        });
     }
 
     private static final String PROTOCOL_VERSION = "1";
@@ -86,10 +111,28 @@ public class StarsMod {
             workQueue.removeAll(actions);
         }
     }
+
     @SubscribeEvent
-    public static void clientSetup(FMLClientSetupEvent event) {
-        // 注册客户端事件
+    public void onServerStarting(RegisterCommandsEvent event) {
+        TimeStopCommand.register(event.getDispatcher());
+    }
+    @SubscribeEvent
+    public void onEntityDeath(LivingDeathEvent event) {
+        Entity entity = event.getEntity();
+        if (entity instanceof Monster monster) {
+            if (monster.getRandom().nextDouble() < 0.00001) {
+                ItemStack disc = new ItemStack(Items.HUA.get(), 1);
+                entity.spawnAtLocation(disc);
+            }
+        }
+    }
+    @SubscribeEvent
+    public void clientSetup(FMLClientSetupEvent evt) {
+        LOGGER.info("MINECRAFT NAME >> {}", Minecraft.getInstance().getUser().getName());
+        evt.enqueueWork(() -> {
+            CosmicRenderProperties item = new CosmicRenderProperties(TransformUtils.DEFAULT_TOOL, StarShaders.SKY_ITEM);
+            CosmicRenderingRegistry.registerRenderItem(Items.BLOOD_BATTLE.get(), item);
 
-
+        });
     }
 }

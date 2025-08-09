@@ -1,0 +1,11 @@
+{
+  "trail": {
+    "color": [255,255,255],
+    "begin_pos": [-0.2, -0.2, -0.2],
+    "end_pos": [0.2, 0.2, 0.2],
+    "lifetime": 4,
+    "interpolations": 24,
+    "texture_path": "guhao:textures/particle/qiliu.png",
+    "particle_type": "guhao:trail_guhao_space"
+  }
+}

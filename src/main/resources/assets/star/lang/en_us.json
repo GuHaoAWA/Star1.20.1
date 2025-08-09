@@ -27,5 +27,8 @@
   "skill.star.hyper_charge.tooltip": "每1点幸运值属性，加快武器4%充能速度",
   "star.wusong.explain": "指挥官写一下",
   "star.h": "終焉決斗場由凝星製作組傾情製作，由澳門京城等贊助，本整合包資源僅供學習交流，請勿用於其他用途徑",
-  "key.star.inspect": "Inspect"
+  "key.star.inspect": "Inspect",
+  "skill.star.the_world": "Condensation Time",
+  "skill.star.the_world.tooltip": "Unleash devastating combos! \n When the maximum stack count is 3, hold the Shift key and the skill key to release with a condensation time of 9 seconds. During this period, the stack count is fixed at 1, allowing you to strike the enemy hard!",
+  "item.star.blood_battle": "Starry Battle Seal"
 }

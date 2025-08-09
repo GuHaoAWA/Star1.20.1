@@ -2,7 +2,7 @@ package com.guhao.stars.efmex.skills;
 
 import com.guhao.stars.efmex.StarSkillDataKeys;
 import com.guhao.stars.regirster.StarSkill;
-import com.guhao.stars.units.StarArrayUnit;
+import com.guhao.stars.units.StarDataUnit;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.ResourceLocation;
@@ -38,7 +38,7 @@ public class DOTEPassive extends Skill {
         super.onInitiate(container);
 
         container.getExecuter().getEventListener().addEventListener(PlayerEventListener.EventType.HURT_EVENT_PRE, EVENT_UUID, (e) -> {
-            EpicFightDamageSource efd = StarArrayUnit.getEpicFightDamageSources(e.getDamageSource());
+            EpicFightDamageSource efd = StarDataUnit.getEpicFightDamageSources(e.getDamageSource());
             if (e.getResult() == AttackResult.ResultType.BLOCKED && e.isParried()) {
                 if (container.getDataManager().getDataValue(StarSkillDataKeys.WEAKNESS.get()) > 0.0f && container.getExecuter().getOriginal() instanceof ServerPlayer) { container.getDataManager().setDataSync(StarSkillDataKeys.WEAKNESS.get(), container.getDataManager().getDataValue(StarSkillDataKeys.WEAKNESS.get()) - 20.0f, (ServerPlayer) container.getExecuter().getOriginal());}
             }
@@ -51,7 +51,7 @@ public class DOTEPassive extends Skill {
             }
         },999);
         container.getExecuter().getEventListener().addEventListener(PlayerEventListener.EventType.HURT_EVENT_POST, EVENT_UUID, (e) -> {
-            EpicFightDamageSource efd = StarArrayUnit.getEpicFightDamageSources(e.getDamageSource());
+            EpicFightDamageSource efd = StarDataUnit.getEpicFightDamageSources(e.getDamageSource());
             float impact = 0.0f;
             if (efd != null) impact = efd.getImpact();
             if (container.getExecuter().getStamina() <= container.getExecuter().getMaxStamina()*0.25f) {
@@ -121,6 +121,7 @@ public class DOTEPassive extends Skill {
             poseStack.popPose();
         }
     }
+
     private void applyWeaknessEffects(SkillContainer container, float remainingTicks) {
         float remainingSeconds = remainingTicks / 20f;
 

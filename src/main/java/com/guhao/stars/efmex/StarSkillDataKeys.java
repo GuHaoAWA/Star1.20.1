@@ -26,5 +26,6 @@ public class StarSkillDataKeys {
     public static final RegistryObject<SkillDataKey<Integer>> CHECK1 = DATA_KEYS.register("check1", () -> SkillDataKey.createIntKey(0,true, WuSongPassive.class));
     public static final RegistryObject<SkillDataKey<Integer>> CHECK2 = DATA_KEYS.register("check2", () -> SkillDataKey.createIntKey(0,true, WuSongSkill.class, WuSongPassive.class));
     public static final RegistryObject<SkillDataKey<Integer>> CHECK3 = DATA_KEYS.register("check3", () -> SkillDataKey.createIntKey(0,true, WuSongSkill.class, WuSongPassive.class));
-//
+//THE WORLD
+public static final RegistryObject<SkillDataKey<Integer>> TIME_TICK = DATA_KEYS.register("time_tick", () -> SkillDataKey.createIntKey(900,true, TimeStopPassive.class, TimeStop.class));
 }

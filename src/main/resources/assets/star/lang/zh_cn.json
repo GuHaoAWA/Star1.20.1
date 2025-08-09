@@ -27,5 +27,8 @@
   "skill.star.hyper_charge.tooltip": "每1点幸运值属性，加快武器4%充能速度。 \n\n 技能只能用于剑，斧头，匕首，三叉戟，拳套，镰刀，与寻血者上。",
   "star.wusong.explain": "指挥官写一下",
   "star.h": "終焉決斗場由凝星製作組傾情製作，由澳門京城等贊助，本整合包資源僅供學習交流，請勿用於其他用途徑",
-  "key.star.inspect": "检视"
+  "key.star.inspect": "检视",
+  "skill.star.the_world": "凝结时间",
+  "skill.star.the_world.tooltip": "释放超绝的毁灭性的连击！§6最大层数为3层时，摁住Shift键+技能键，释放凝结时间9s，期间层数固定层数为1层，利用它狠狠痛击敌人！时停结束后层数归0，时序回溯：死亡时回溯时间，让生命值与饥饿值回复到最大状态，并清除所有debuff，每45s回复一次，武器一开始放在手上时需要先回复45s才可使用",
+  "item.star.blood_battle": "星陨战图章"
 }
