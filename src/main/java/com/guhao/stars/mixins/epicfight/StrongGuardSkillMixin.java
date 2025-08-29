@@ -1,57 +1,20 @@
 package com.guhao.stars.mixins.epicfight;
 
-import com.guhao.stars.efmex.skills.DOTEPassive;
 import com.guhao.stars.entity.StarAttributes;
-import com.guhao.stars.units.StarDataUnit;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import yesman.epicfight.skill.Skill;
 import yesman.epicfight.skill.SkillContainer;
-import yesman.epicfight.skill.guard.GuardSkill;
+import yesman.epicfight.skill.guard.ImpactGuardSkill;
 import yesman.epicfight.world.capabilities.item.CapabilityItem;
 import yesman.epicfight.world.damagesource.EpicFightDamageSource;
 import yesman.epicfight.world.entity.eventlistener.HurtEvent;
 
-@Mixin(value = GuardSkill.class, remap = false, priority = 500)
-public abstract class GuardSkillMixin extends Skill {
+@Mixin(value = ImpactGuardSkill.class,remap = false)
+public class StrongGuardSkillMixin {
     private HurtEvent.Pre event;
-    public GuardSkillMixin(Builder<? extends Skill> builder) {
-        super(builder);
-    }
-
-    @Inject(
-            method = "guard",
-            at = @At(
-                    value = "INVOKE",
-                    target = "Lyesman/epicfight/world/capabilities/entitypatch/player/ServerPlayerPatch;playSound(Lnet/minecraft/sounds/SoundEvent;FFF)V",
-                    shift = At.Shift.AFTER,
-                    ordinal = 0
-            )
-    )
-    public void star$guard(SkillContainer container, CapabilityItem itemCapability, HurtEvent.Pre event, float knockback, float impact, boolean advanced, CallbackInfo ci) {
-        DOTEPassive.breakdown(container);
-    }
-    @Inject(
-            method = "guard",
-            at = @At(
-                    value = "HEAD"
-            ),
-            cancellable = true)
-    public void star$head_guard(SkillContainer container, CapabilityItem itemCapability, HurtEvent.Pre event, float knockback, float impact, boolean advanced, CallbackInfo ci) {
-
-        EpicFightDamageSource damageSource = StarDataUnit.getEpicFightDamageSources(event.getDamageSource());
-
-
-        if (damageSource != null && (StarDataUnit.isNoGuard(damageSource.getAnimation()) || StarDataUnit.isNoDodge(damageSource.getAnimation()))) {
-            ci.cancel();
-        }
-        if (damageSource != null && (StarDataUnit.isNoDodge(damageSource.getAnimation()) || StarDataUnit.isNoDodge(damageSource.getAnimation()))) {
-            ci.cancel();
-        }
-    }
     @Inject(
             method = {"guard(Lyesman/epicfight/skill/SkillContainer;Lyesman/epicfight/world/capabilities/item/CapabilityItem;Lyesman/epicfight/world/entity/eventlistener/HurtEvent$Pre;FFZ)V"},
             at = {@At("HEAD")},

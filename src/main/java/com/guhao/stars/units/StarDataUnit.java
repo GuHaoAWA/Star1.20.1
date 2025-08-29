@@ -1,12 +1,21 @@
 package com.guhao.stars.units;
 
 import com.guhao.epicfight.GuHaoAnimations;
+import com.guhao.stars.StarsMod;
+import com.guhao.stars.client.particle.par.SparkParticle;
 import com.guhao.stars.efmex.StarAnimations;
+import com.guhao.stars.network.ParticlePacket;
 import com.guhao.stars.network.timestop.TimeStopSyncPacket;
+import com.guhao.stars.regirster.ParticleType;
 import net.corruptdog.cdm.gameasset.CorruptAnimations;
-import net.minecraft.network.chat.Component;
+import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.particles.SimpleParticleType;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.network.PacketDistributor;
@@ -27,25 +36,6 @@ public record StarDataUnit() {
         return timeStopped;
     }
 
-    // 客户端调用的设置方法
-    public static void setTimeStoppedClient(boolean stopped) {
-        if (FMLEnvironment.dist == Dist.CLIENT) {
-            timeStopped = stopped;
-            // 客户端不需要同步给其他玩家
-        }
-    }
-
-    // 服务端调用的设置方法（必须提供玩家）
-    public static void setTimeStoppedServer(boolean stopped, ServerPlayer triggeringPlayer) {
-        if (FMLEnvironment.dist == Dist.DEDICATED_SERVER) {
-            timeStopped = stopped;
-            syncTimeStopToAll(stopped);
-
-            // 给触发玩家反馈
-            triggeringPlayer.sendSystemMessage(Component.literal(
-                    "Time " + (stopped ? "stopped" : "resumed")));
-        }
-    }
     public static void setTimeStopped(boolean stopped) {
         // 只在服务端执行同步
         if (FMLEnvironment.dist == Dist.DEDICATED_SERVER) {
@@ -213,5 +203,45 @@ public record StarDataUnit() {
     }
     public static boolean isLockOff(StaticAnimation staticAnimation) {
         return Arrays.asList(LOCK_OFF).contains(staticAnimation);
+    }
+
+
+
+    public static void spawnBurst(Level level, Vec3 center, float radius, int count,
+                                  SparkParticle.PhysicsType type, LivingEntity source) {
+        // 确保只在服务端执行
+        if (level.isClientSide) return;
+
+        for (int i = 0; i < count; i++) {
+            Vec3 direction = new Vec3(
+                    (level.random.nextDouble() - 0.5) * 2.0,
+                    (level.random.nextDouble() - 0.5) * 2.0,
+                    (level.random.nextDouble() - 0.5) * 2.0
+            ).normalize();
+
+            Vec3 pos = center.add(direction.scale(radius * 0.2));
+            Vec3 velocity = direction.scale(
+                    0.05 + level.random.nextDouble() * 0.25 *
+                            (type == SparkParticle.PhysicsType.EXPANSIVE ? 3.0 : 1.0)
+            );
+
+            // 发送给所有追踪该实体的客户端
+            StarsMod.PACKET_HANDLER.send(
+                    PacketDistributor.TRACKING_ENTITY.with(() -> source),
+                    new ParticlePacket(
+                            getParticleType(type),
+                            pos.x, pos.y, pos.z,
+                            velocity.x, velocity.y, velocity.z
+                    )
+            );
+        }
+    }
+
+    private static ParticleOptions getParticleType(SparkParticle.PhysicsType type) {
+        return switch (type) {
+            case NORMAL -> ParticleType.NORMAL_SPARK.get();
+            case EXPANSIVE -> ParticleType.SPARK_EXPANSIVE.get();
+            case CONTRACTIVE -> ParticleType.SPARK_CONTRACTIVE.get();
+        };
     }
 }

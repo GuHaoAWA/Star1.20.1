@@ -1,6 +1,6 @@
 package com.guhao.stars.client.particle.par;
 
-import com.guhao.api.ParticleRenderTypeN;
+import com.guhao.stars.api.ParticleRenderTypeN;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.Camera;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -13,6 +13,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Random;
 
+@OnlyIn(Dist.CLIENT)
 public class OLA extends TextureSheetParticle {
     private final SpriteSet sprites;
 

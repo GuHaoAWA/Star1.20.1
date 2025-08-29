@@ -1,6 +1,8 @@
 package com.guhao.stars.network.timestop;
 
-import com.guhao.stars.units.StarDataUnit;
+import com.dfdyz.epicacg.client.screeneffect.HsvFilterEffect;
+import com.dfdyz.epicacg.event.ScreenEffectEngine;
+import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.network.NetworkEvent;
 
@@ -23,9 +25,12 @@ public class TimeStopSyncPacket {
 
     public static void handle(TimeStopSyncPacket packet, Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(() -> {
-            // 确保只在客户端处理
             if (ctx.get().getDirection().getReceptionSide().isClient()) {
                 com.guhao.stars.units.StarDataUnit.handleTimeStopSync(packet.timeStopped);
+                if (packet.timeStopped && Minecraft.getInstance().player != null) {
+                    HsvFilterEffect effect = new HsvFilterEffect(Minecraft.getInstance().player.position(),180);
+                    ScreenEffectEngine.PushScreenEffect(effect);
+                }
             }
         });
         ctx.get().setPacketHandled(true);

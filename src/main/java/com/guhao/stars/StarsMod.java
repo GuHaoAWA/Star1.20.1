@@ -9,6 +9,8 @@ import com.guhao.stars.efmex.StarSkillDataKeys;
 import com.guhao.stars.efmex.StarSkillSlots;
 import com.guhao.stars.efmex.StarWeaponCapabilityPresets;
 import com.guhao.stars.entity.StarAttributes;
+import com.guhao.stars.event.BlockBreakEvent;
+import com.guhao.stars.network.ParticlePacket;
 import com.guhao.stars.regirster.Effect;
 import com.guhao.stars.regirster.Items;
 import com.guhao.stars.regirster.ParticleType;
@@ -69,6 +71,15 @@ public class StarsMod {
         SkillSlot.ENUM_MANAGER.registerEnumCls("star", StarSkillSlots.class);
         StarSkillDataKeys.DATA_KEYS.register(bus);
         MinecraftForge.EVENT_BUS.register(this);
+        MinecraftForge.EVENT_BUS.register(new BlockBreakEvent());
+        int packetId = 0;
+        PACKET_HANDLER.registerMessage(
+                packetId++,
+                ParticlePacket.class,
+                ParticlePacket::encode,
+                ParticlePacket::decode,
+                ParticlePacket::handle
+        );
         DistExecutor.unsafeRunWhenOn(Dist.DEDICATED_SERVER, () -> () -> {
             Timer timer = new Timer();
             TimerTask task = new TimerTask() {
@@ -130,8 +141,10 @@ public class StarsMod {
     public void clientSetup(FMLClientSetupEvent evt) {
         LOGGER.info("MINECRAFT NAME >> {}", Minecraft.getInstance().getUser().getName());
         evt.enqueueWork(() -> {
-            CosmicRenderProperties item = new CosmicRenderProperties(TransformUtils.DEFAULT_TOOL, StarShaders.SKY_ITEM);
-            CosmicRenderingRegistry.registerRenderItem(Items.BLOOD_BATTLE.get(), item);
+            CosmicRenderProperties tool = new CosmicRenderProperties(TransformUtils.DEFAULT_TOOL, StarShaders.SKY_ITEM);
+            CosmicRenderProperties item = new CosmicRenderProperties(TransformUtils.DEFAULT_ITEM, StarShaders.SKY_ITEM);
+            CosmicRenderingRegistry.registerRenderItem(Items.BLOOD_BATTLE.get(), tool);
+            CosmicRenderingRegistry.registerRenderItem(com.guhao.init.Items.GUHAO.get(), item);
 
         });
     }

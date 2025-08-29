@@ -46,9 +46,7 @@ public class EX_Laser extends CustomModelParticle<RawMesh> {
         this.xRot = (float)(Math.atan2(yLength, horizontalDistance) * (180D / Math.PI));
         int smokeCount = (int)this.length * 4;
 
-        for (int i = 0; i < smokeCount; i++) {
-            level.addParticle(ParticleTypes.EXPLOSION, x + xLength / smokeCount * i, y + yLength / smokeCount * i, z + zLength / smokeCount * i, 0, 0, 0);
-        }
+
 
         this.setBoundingBox(new AABB(x, y, z, toX, toY, toZ));
     }
@@ -59,7 +57,7 @@ public class EX_Laser extends CustomModelParticle<RawMesh> {
         poseStack.mulPose(QuaternionUtils.XP.rotationDegrees(this.xRot));
         float progression = ((float)this.age + partialTicks) / (float)(this.lifetime + 1);
         float scale = Mth.sin(progression * 3.1415927F);
-        float zScale = progression > 0.5F ? 1.0F : Mth.sin(progression * 3.1415927F);
+        float zScale = progression > 0.1F ? 1.0F : Mth.sin(progression * 3.1415927F);
         float sc = 38.5f;
         poseStack.scale(scale* sc, scale* sc, (zScale * this.length)* sc);
     }

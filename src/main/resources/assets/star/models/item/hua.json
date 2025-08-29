@@ -2,5 +2,9 @@
   "parent": "item/generated",
   "textures": {
     "layer0": "star:item/hua"
+  },
+  "loader": "star:cosmic",
+  "cosmic": {
+    "mask": "star:item/hua_mask"
   }
 }

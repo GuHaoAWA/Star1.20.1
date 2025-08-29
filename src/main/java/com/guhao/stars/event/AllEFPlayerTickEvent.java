@@ -13,11 +13,12 @@ import yesman.epicfight.world.capabilities.EpicFightCapabilities;
 import yesman.epicfight.world.capabilities.entitypatch.player.PlayerPatch;
 
 import javax.annotation.Nullable;
+import java.util.UUID;
 
 @Mod.EventBusSubscriber
 
 public class AllEFPlayerTickEvent {
-
+    private static final UUID EVENT_UUID = UUID.fromString("36d394ea-0461-11ee-ee56-0292ac114514");
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
         if (event.phase == TickEvent.Phase.START) {
@@ -28,7 +29,7 @@ public class AllEFPlayerTickEvent {
         execute(null,player);
     }
     private static void execute(@Nullable Event event, Player player) {
-            PlayerPatch<?> pp = EpicFightCapabilities.getEntityPatch(player, PlayerPatch.class);
+        PlayerPatch<?> pp = EpicFightCapabilities.getEntityPatch(player, PlayerPatch.class);
         if (pp == null) return;
         if (!pp.getSkill(StarSkillSlots.DOTE).hasSkill(StarSkill.DOTE)) {
             pp.getSkill(StarSkillSlots.DOTE).setSkill(StarSkill.DOTE);

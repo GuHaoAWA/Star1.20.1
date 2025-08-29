@@ -9,13 +9,17 @@ import net.minecraft.client.particle.ParticleRenderType;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureManager;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
 
+@OnlyIn(Dist.CLIENT)
 public interface ParticleRenderTypeN {
 
     ParticleRenderType PARTICLE_SHEET_LIT_NO_CULL = new ParticleRenderType() {
         public void begin(BufferBuilder p_107462_, @NotNull TextureManager p_107463_) {
             RenderSystem.enableBlend();
+            RenderSystem.defaultBlendFunc();
             RenderSystem.depthMask(true);
             RenderSystem.setShader(GameRenderer::getParticleShader);
             RenderSystem.setShaderTexture(0, TextureAtlas.LOCATION_PARTICLES);
@@ -26,6 +30,8 @@ public interface ParticleRenderTypeN {
 
         public void end(Tesselator p_107465_) {
             p_107465_.end();
+            RenderSystem.enableCull();
+            RenderSystem.disableBlend();
         }
 
         public String toString() {

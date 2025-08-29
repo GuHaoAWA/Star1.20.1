@@ -1,5 +1,6 @@
 package com.guhao.stars.efmex;
 
+import net.minecraft.resources.ResourceLocation;
 import yesman.epicfight.api.collider.Collider;
 import yesman.epicfight.api.collider.MultiOBBCollider;
 import yesman.epicfight.api.collider.OBBCollider;
@@ -22,4 +23,5 @@ public class StarNewColliderPreset {
     public static final Collider EXECUTE_SECOND = new MultiOBBCollider(2, 0.8, 0.8, 2.0, 0.0, 1.0D, -1.0D);
     public static final Collider EXECUTE_SECOND_GREATSWORD = new MultiOBBCollider(2, 0.8, 1.0, 3.0, 0.0, 1.0D, 2.0D);
 
+    public static final Collider SUPER_FIST = new MultiOBBCollider(4, 0.8, 0.8, 0.8, 0.0, 0.0, 0.0);
 }

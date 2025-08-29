@@ -16,6 +16,7 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
+import yesman.epicfight.api.animation.types.DynamicAnimation;
 import yesman.epicfight.api.animation.types.StaticAnimation;
 import yesman.epicfight.api.utils.AttackResult;
 import yesman.epicfight.gameasset.Animations;
@@ -83,10 +84,9 @@ public class SeeThrough1 extends Skill {
 
 
         listener.addEventListener(PlayerEventListener.EventType.TARGET_INDICATOR_ALERT_CHECK_EVENT, EVENT_UUID, (event) -> {
-            int animationId = event.getPlayerPatch().getAnimator().getPlayerFor(null).getAnimation().getId();
-            PlayerPatch<?> playerPatch = container.getExecuter();
-            LivingEntity target = playerPatch.getTarget();
-            if (animationId == CorruptAnimations.RECOGNITION.getId()  && target != null) {
+            DynamicAnimation animation = event.getPlayerPatch().getAnimator().getPlayerFor(null).getAnimation();
+            LivingEntity target = event.getPlayerPatch().getTarget();
+            if (animation instanceof StaticAnimation staticAnimation && staticAnimation == CorruptAnimations.RECOGNITION && target != null) {
                 event.setCanceled(false);
             }
         });
@@ -145,8 +145,8 @@ public class SeeThrough1 extends Skill {
 
 
 ////////////////////////////////////////////////
-            int animationId = event.getPlayerPatch().getAnimator().getPlayerFor(null).getAnimation().getId();
-            int targetanimationId = entitypatch.getAnimator().getPlayerFor(null).getAnimation().getId();
+            DynamicAnimation animation = event.getPlayerPatch().getAnimator().getPlayerFor(null).getAnimation();
+            DynamicAnimation targetanimation = entitypatch.getAnimator().getPlayerFor(null).getAnimation();
 
             DamageSource damagesource = event.getDamageSource();
             Vec3 sourceLocation = damagesource.getSourcePosition();
@@ -157,7 +157,7 @@ public class SeeThrough1 extends Skill {
                     CorruptAnimations.SSTEP_FORWARD
             };
             for (StaticAnimation attackAnim : attackAnimations) {
-                if (targetanimationId == attackAnim.getId()) {
+                if (targetanimation == attackAnim) {
                     if (sourceLocation != null) {
                         Vec3 playerPosition = event.getPlayerPatch().getOriginal().position();
                         Vec3 viewVector = event.getPlayerPatch().getOriginal().getViewVector(1.0F);
@@ -165,7 +165,7 @@ public class SeeThrough1 extends Skill {
                         double dotProduct = toSourceLocation.dot(viewVector);
                         if (dotProduct > Math.cos(Math.toRadians(120))) {
                             for (StaticAnimation dodgeAnim : dodgeAnimations) {
-                                if (animationId == dodgeAnim.getId()) {
+                                if (animation == dodgeAnim) {
                                     event.setCanceled(true);
                                     Player player = event.getPlayerPatch().getOriginal();
                                     Vec3 entityViewVector = entitypatch.getOriginal().getViewVector(1.0F);

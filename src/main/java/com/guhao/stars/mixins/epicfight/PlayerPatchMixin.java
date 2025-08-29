@@ -1,5 +1,6 @@
 package com.guhao.stars.mixins.epicfight;
 
+import com.guhao.stars.entity.StarAttributes;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
@@ -9,12 +10,23 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch;
 import yesman.epicfight.world.capabilities.entitypatch.player.PlayerPatch;
+import yesman.epicfight.world.capabilities.item.CapabilityItem;
 import yesman.epicfight.world.entity.ai.attribute.EpicFightAttributes;
+import yesman.epicfight.world.entity.eventlistener.AttackSpeedModifyEvent;
+import yesman.epicfight.world.entity.eventlistener.PlayerEventListener;
+import yesman.epicfight.world.gamerule.EpicFightGamerules;
 
 @Mixin(value = PlayerPatch.class ,remap = false)
 public abstract class PlayerPatchMixin<T extends Player> extends LivingEntityPatch<T> {
+    @Shadow(
+            remap = false
+    )
+    protected PlayerEventListener eventListeners;
     @Shadow
     protected int tickSinceLastAction;
     @Shadow
@@ -91,5 +103,40 @@ public abstract class PlayerPatchMixin<T extends Player> extends LivingEntityPat
         this.yo = this.original.getY();
         this.zo = this.original.getZ();
     }
+    @Inject(
+            method = {"getModifiedAttackSpeed(Lyesman/epicfight/world/capabilities/item/CapabilityItem;F)F"},
+            at = {@At("HEAD")},
+            remap = false,
+            cancellable = true
+    )
+    private void onGetAttackSpeedPenalty(CapabilityItem itemCapability, float baseSpeed, CallbackInfoReturnable<Float> cir) {
+        AttackSpeedModifyEvent event = new AttackSpeedModifyEvent((PlayerPatch<?>) (Object)this, itemCapability, baseSpeed);
+        this.eventListeners.triggerEvents(PlayerEventListener.EventType.MODIFY_ATTACK_SPEED_EVENT, event);
+        float weight = this.getWeight();
+        Player player = this.getOriginal();
+        double currentburden = player.getAttribute(StarAttributes.BURDEN.get()).getValue() + 40.0;
+        if ((double)weight > currentburden) {
+            float attenuation = (float)Mth.clamp(player.level.getGameRules().getInt(EpicFightGamerules.WEIGHT_PENALTY), 0, 100) / 100.0F;
+            cir.setReturnValue((float)((double)event.getAttackSpeed() + -0.17499999701976776 * ((double)weight / currentburden) * (double)(Math.max(event.getAttackSpeed() - 0.8F, 0.0F) * 1.5F) * (double)attenuation));
+        } else {
+            cir.setReturnValue(event.getAttackSpeed());
+        }
 
+        cir.cancel();
+    }
+
+    @Inject(
+            method = {"getModifiedStaminaConsume(F)F"},
+            at = {@At("HEAD")},
+            remap = false,
+            cancellable = true
+    )
+    private void getStaminarConsumePenalty(float amount, CallbackInfoReturnable<Float> cir) {
+        Player player = this.getOriginal();
+        double currentburden = player.getAttribute(StarAttributes.BURDEN.get()).getValue() + 40.0;
+        float weight = this.getWeight();
+        float attenuation = (float)Mth.clamp(player.level.getGameRules().getInt(EpicFightGamerules.WEIGHT_PENALTY), 0, 100) / 100.0F;
+        cir.setReturnValue((float)(Math.max((double)weight / currentburden - 1.0, 0.0) * (double)attenuation + 1.0) * amount);
+        cir.cancel();
+    }
 }

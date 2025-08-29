@@ -11,8 +11,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -62,6 +60,7 @@ public class TimeStopPassive extends Skill {
 		});
 
 		container.getExecuter().getEventListener().addEventListener(PlayerEventListener.EventType.HURT_EVENT_PRE, EVENT_UUID, (event) -> {
+			if (event.getResult() == AttackResult.ResultType.SUCCESS) return;
 			if (container.getDataManager().getDataValue(TIME_TICK.get()) >= 899 && event.getAmount() >= event.getPlayerPatch().getOriginal().getHealth()) {
 				container.getDataManager().setDataSync(TIME_TICK.get(),0,event.getPlayerPatch().getOriginal());
 				event.setResult(AttackResult.ResultType.MISSED);
@@ -80,9 +79,9 @@ public class TimeStopPassive extends Skill {
 				event.getPlayerPatch().getOriginal().setHealth(event.getPlayerPatch().getOriginal().getMaxHealth());
 				event.getPlayerPatch().getOriginal().getFoodData().setFoodLevel(20);
 				event.getPlayerPatch().getOriginal().getFoodData().setSaturation(20);
-				event.getPlayerPatch().getOriginal().getActiveEffects().stream()
-						.filter(effect -> !effect.getEffect().isBeneficial())
-						.forEach(effect -> event.getPlayerPatch().getOriginal().removeEffect(effect.getEffect()));
+				event.getPlayerPatch().getOriginal().getActiveEffects().removeIf(
+						effect -> !effect.getEffect().isBeneficial()
+				);
 				event.setCanceled(true);
 			}
 		});

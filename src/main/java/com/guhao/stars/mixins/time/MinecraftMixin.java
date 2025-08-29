@@ -26,6 +26,7 @@ import net.minecraft.client.tutorial.Tutorial;
 import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.HitResult;
+import net.minecraftforge.event.entity.living.LivingEvent;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -33,6 +34,12 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import yesman.epicfight.client.world.capabilites.entitypatch.player.LocalPlayerPatch;
+import yesman.epicfight.world.capabilities.EpicFightCapabilities;
+import yesman.epicfight.world.capabilities.entitypatch.EntityPatch;
+import yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch;
+import yesman.epicfight.world.capabilities.entitypatch.player.PlayerPatch;
+import yesman.epicfight.world.capabilities.entitypatch.player.ServerPlayerPatch;
 
 import javax.annotation.Nullable;
 
@@ -182,8 +189,14 @@ public abstract class MinecraftMixin {
                         if (level != null) {
                             level.tickingEntities.forEach((entity) -> {
                                 if (!entity.isRemoved() && !entity.isPassenger()) {
-                                    if (entity instanceof Player) {
+                                    if (entity instanceof Player player1) {
                                         level.guardEntityTick(level::tickNonPassenger, entity);
+                                        EpicFightCapabilities.getEntityPatch(entity, PlayerPatch.class).tick(new LivingEvent.LivingTickEvent(player1));
+                                        EpicFightCapabilities.getEntityPatch(entity, LivingEntityPatch.class).tick(new LivingEvent.LivingTickEvent(player1));
+                                        EpicFightCapabilities.getEntityPatch(entity, EntityPatch.class).tick(new LivingEvent.LivingTickEvent(player1));
+                                        EpicFightCapabilities.getEntityPatch(entity, LocalPlayerPatch.class).tick(new LivingEvent.LivingTickEvent(player1));
+                                        EpicFightCapabilities.getEntityPatch(entity, PlayerPatch.class).getAnimator().tick();
+                                        EpicFightCapabilities.getEntityPatch(entity, PlayerPatch.class).getClientAnimator().tick();
                                     }
                                 }
                             });

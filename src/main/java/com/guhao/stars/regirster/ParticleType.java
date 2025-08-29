@@ -33,6 +33,11 @@ public class ParticleType {
     public static final RegistryObject<SimpleParticleType> EX_LASER;
     public static final RegistryObject<HitParticleType> AIR_PUNCH_BURST_PARTICLE;
     public static final RegistryObject<SimpleParticleType> OLA;
+    public static final RegistryObject<SimpleParticleType> SPARK_EXPANSIVE;
+    public static final RegistryObject<SimpleParticleType> SPARK_CONTRACTIVE;
+    public static final RegistryObject<SimpleParticleType> NORMAL_SPARK;
+    public static final RegistryObject<SimpleParticleType> FLASH;
+    public static final RegistryObject<HitParticleType> ALL_SPARK;
 
     @OnlyIn(Dist.CLIENT)
     @SubscribeEvent
@@ -50,6 +55,11 @@ public class ParticleType {
         event.registerSpriteSet(EX_LASER.get(), EX_Laser.Provider::new);
         event.registerSpriteSet(AIR_PUNCH_BURST_PARTICLE.get(), AirPunchBurstParticle.Provider::new);
         event.registerSpriteSet(OLA.get(), com.guhao.stars.client.particle.par.OLA.OLAParticleProvider::new);
+        event.registerSpriteSet(NORMAL_SPARK.get(), SparkParticle.NormalDustProvider::new);
+        event.registerSpriteSet(SPARK_CONTRACTIVE.get(), SparkParticle.ContractiveDustProvider::new);
+        event.registerSpriteSet(SPARK_EXPANSIVE.get(), SparkParticle.ExpansiveDustProvider::new);
+        event.registerSpriteSet(FLASH.get(), Flash.FlashParticleProvider::new);
+        event.registerSpecial(ALL_SPARK.get(), new AllSpark.Provider());
     }
     public ParticleType() {
     }
@@ -66,19 +76,11 @@ public class ParticleType {
         CAI = PARTICLES.register("cai", () -> new SimpleParticleType(true));
         EX_LASER = PARTICLES.register("ex_laser", () -> new SimpleParticleType(true));
         OLA = PARTICLES.register("ola", () -> new SimpleParticleType(true));
-        AIR_PUNCH_BURST_PARTICLE = PARTICLES.register("air_punch_burst",
-                        () -> new HitParticleType(
-                                true,
-                                HitParticleType.RANDOM_WITHIN_BOUNDING_BOX,
-                                (target, attacker) -> {
-                                    // 完全模仿ATTACKER_XY_ROTATION
-                                    return new Vector3d(
-                                            attacker.getXRot(),  // pitch
-                                            180.0F - attacker.getYRot(),  // yaw
-                                            -1.0  // 保留参数
-                                    );
-                                }
-                        ));
-
+        AIR_PUNCH_BURST_PARTICLE = PARTICLES.register("air_punch_burst", () -> new HitParticleType(true, HitParticleType.RANDOM_WITHIN_BOUNDING_BOX,HitParticleType.ATTACKER_XY_ROTATION));
+        SPARK_EXPANSIVE = PARTICLES.register("spark_expansive", () -> new SimpleParticleType(true));
+        SPARK_CONTRACTIVE = PARTICLES.register("spark_contractive", () -> new SimpleParticleType(true));
+        NORMAL_SPARK = PARTICLES.register("spark_normal", () -> new SimpleParticleType(true));
+        FLASH = PARTICLES.register("flash", () -> new SimpleParticleType(true));
+        ALL_SPARK = PARTICLES.register("all_spark", () -> new HitParticleType(true, HitParticleType.RANDOM_WITHIN_BOUNDING_BOX, HitParticleType.ZERO));
     }
 }

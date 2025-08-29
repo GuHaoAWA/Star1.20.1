@@ -3,7 +3,7 @@
 		{
 			"start_time": 0.0,
 			"end_time": 2.35,
-			"lifetime": 3,
+			"lifetime": 4,
 			"interpolations": 12,
 			"joint": "Tool_L",
 			"particle_type": "guhao:trail_guhao_space",
@@ -12,7 +12,73 @@
 		{
 			"start_time": 0.0,
 			"end_time": 2.35,
-			"lifetime": 3,
+			"lifetime": 4,
+			"interpolations": 12,
+			"joint": "Tool_R",
+			"particle_type": "guhao:trail_guhao_space",
+			"item_skin_hand": "main_hand"
+		},
+		{
+			"begin_pos": [0.2, -0.2, -0.2],
+			"end_pos": [0.2, 0.2, 0.2],
+			"start_time": 0.0,
+			"end_time": 2.35,
+			"lifetime": 4,
+			"interpolations": 12,
+			"joint": "Tool_L",
+			"particle_type": "guhao:trail_guhao_space",
+			"item_skin_hand": "off_hand"
+		},
+		{
+			"begin_pos": [0.2, -0.2, -0.2],
+			"end_pos": [0.2, 0.2, 0.2],
+			"start_time": 0.0,
+			"end_time": 2.35,
+			"lifetime": 4,
+			"interpolations": 12,
+			"joint": "Tool_R",
+			"particle_type": "guhao:trail_guhao_space",
+			"item_skin_hand": "main_hand"
+		},
+		{
+			"begin_pos": [0.2, -0.2, 0.2],
+			"end_pos": [0.2, 0.2, 0.2],
+			"start_time": 0.0,
+			"end_time": 2.35,
+			"lifetime": 4,
+			"interpolations": 12,
+			"joint": "Tool_L",
+			"particle_type": "guhao:trail_guhao_space",
+			"item_skin_hand": "off_hand"
+		},
+		{
+			"begin_pos": [0.2, -0.2, 0.2],
+			"end_pos": [0.2, 0.2, 0.2],
+			"start_time": 0.0,
+			"end_time": 2.35,
+			"lifetime": 4,
+			"interpolations": 12,
+			"joint": "Tool_R",
+			"particle_type": "guhao:trail_guhao_space",
+			"item_skin_hand": "main_hand"
+		},
+		{
+			"begin_pos": [-0.2, -0.2, 0.2],
+			"end_pos": [0.2, 0.2, 0.2],
+			"start_time": 0.0,
+			"end_time": 2.35,
+			"lifetime": 4,
+			"interpolations": 12,
+			"joint": "Tool_L",
+			"particle_type": "guhao:trail_guhao_space",
+			"item_skin_hand": "off_hand"
+		},
+		{
+			"begin_pos": [-0.2, -0.2, 0.2],
+			"end_pos": [0.2, 0.2, 0.2],
+			"start_time": 0.0,
+			"end_time": 2.35,
+			"lifetime": 4,
 			"interpolations": 12,
 			"joint": "Tool_R",
 			"particle_type": "guhao:trail_guhao_space",

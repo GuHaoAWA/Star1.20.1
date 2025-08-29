@@ -21,6 +21,7 @@ import reascer.wom.gameasset.WOMAnimations;
 import yesman.epicfight.api.animation.property.AnimationEvent;
 import yesman.epicfight.api.animation.property.AnimationProperty;
 import yesman.epicfight.api.animation.types.AttackAnimation;
+import yesman.epicfight.api.animation.types.DynamicAnimation;
 import yesman.epicfight.api.animation.types.StaticAnimation;
 import yesman.epicfight.api.utils.AttackResult;
 import yesman.epicfight.api.utils.math.ValueModifier;
@@ -42,7 +43,7 @@ import java.util.function.BiFunction;
 import static yesman.epicfight.world.entity.eventlistener.PlayerEventListener.EventType.BASIC_ATTACK_EVENT;
 
 public class SeeThrough2 extends Skill {
-    private static final UUID EVENT_UUID = UUID.fromString("550e8490-e29b-41d4-a716-446655440000");
+    private static final UUID EVENT_UUID = UUID.fromString("570e8490-e29b-41d4-a716-446655440000");
 
     public SeeThrough2(Builder builder) {
         super(builder);
@@ -93,10 +94,9 @@ public class SeeThrough2 extends Skill {
         PlayerEventListener listener = container.getExecuter().getEventListener();
 
         listener.addEventListener(PlayerEventListener.EventType.TARGET_INDICATOR_ALERT_CHECK_EVENT, EVENT_UUID, (event) -> {
-            int animationId = event.getPlayerPatch().getAnimator().getPlayerFor(null).getAnimation().getId();
-            PlayerPatch<?> playerPatch = container.getExecuter();
-            LivingEntity target = playerPatch.getTarget();
-            if (animationId == CorruptAnimations.RECOGNITION.getId()  && target != null) {
+            DynamicAnimation animation = event.getPlayerPatch().getAnimator().getPlayerFor(null).getAnimation();
+            LivingEntity target = event.getPlayerPatch().getTarget();
+            if (animation instanceof StaticAnimation staticAnimation && staticAnimation == CorruptAnimations.RECOGNITION && target != null) {
                 event.setCanceled(false);
             }
         });
@@ -183,9 +183,8 @@ public class SeeThrough2 extends Skill {
 
 
 ////////////////////////////////////////////////
-
-            int animationId = event.getPlayerPatch().getAnimator().getPlayerFor(null).getAnimation().getId();
-            int targetanimationId = entitypatch.getAnimator().getPlayerFor(null).getAnimation().getId();
+            DynamicAnimation animation = event.getPlayerPatch().getAnimator().getPlayerFor(null).getAnimation();
+            DynamicAnimation targetanimation = entitypatch.getAnimator().getPlayerFor(null).getAnimation();
 
             DamageSource damagesource = event.getDamageSource();
             Vec3 sourceLocation = damagesource.getSourcePosition();
@@ -196,7 +195,7 @@ public class SeeThrough2 extends Skill {
                     CorruptAnimations.SSTEP_FORWARD
             };
             for (StaticAnimation attackAnim : attackAnimations) {
-                if (targetanimationId == attackAnim.getId()) {
+                if (targetanimation == attackAnim) {
                     if (sourceLocation != null) {
                         Vec3 playerPosition = event.getPlayerPatch().getOriginal().position();
                         Vec3 viewVector = event.getPlayerPatch().getOriginal().getViewVector(1.0F);
@@ -204,7 +203,7 @@ public class SeeThrough2 extends Skill {
                         double dotProduct = toSourceLocation.dot(viewVector);
                         if (dotProduct > Math.cos(Math.toRadians(120))) {
                             for (StaticAnimation dodgeAnim : dodgeAnimations) {
-                                if (animationId == dodgeAnim.getId()) {
+                                if (animation == dodgeAnim) {
                                     event.setCanceled(true);
                                     Player player = event.getPlayerPatch().getOriginal();
                                     Vec3 entityViewVector = entitypatch.getOriginal().getViewVector(1.0F);

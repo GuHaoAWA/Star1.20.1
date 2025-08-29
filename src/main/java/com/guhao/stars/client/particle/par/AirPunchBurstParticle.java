@@ -1,5 +1,6 @@
 package com.guhao.stars.client.particle.par;
 
+import com.guhao.stars.api.ParticleRenderTypeN;
 import com.guhao.stars.regirster.ParticleType;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -19,6 +20,7 @@ import org.joml.Quaternionf;
 import yesman.epicfight.api.client.model.MeshProvider;
 import yesman.epicfight.api.client.model.Meshes;
 import yesman.epicfight.api.client.model.RawMesh;
+import yesman.epicfight.api.utils.math.QuaternionUtils;
 import yesman.epicfight.client.particle.AirBurstParticle;
 import yesman.epicfight.client.particle.EpicFightParticleRenderTypes;
 import yesman.epicfight.client.particle.TexturedCustomModelParticle;
@@ -29,38 +31,32 @@ import java.util.Random;
 @OnlyIn(Dist.CLIENT)
 public class AirPunchBurstParticle extends TexturedCustomModelParticle {
 
-
-
     public AirPunchBurstParticle(ClientLevel level, double x, double y, double z,
                                  double xd, double yd, double zd,
                                  MeshProvider<RawMesh> particleMesh, ResourceLocation texture) {
         super(level, x, y, z, xd, yd, zd, particleMesh, texture);
         Random r = new Random();
-        this.scale = r.nextFloat(0.1F, 0.225F);
-        this.scaleO = this.scale;
+        this.scale = r.nextFloat(0.1F,0.225F);
+        this.scaleO = r.nextFloat(0.1F,0.225F);
         this.lifetime = zd < 0.0 ? 2 : (int)zd;
 
-        // 模仿ATTACKER_XY_ROTATION的计算方式
-        // xd = 攻击者的pitch (getXRot)
-        // yd = 180 - 攻击者的yaw (getYRot)
-        // zd = -1 (保留参数)
-        this.pitch = (float)xd;  // 直接使用传入的pitch
-        this.yaw = (float)yd;    // 已经处理为180-yaw
-        this.roll = (float)zd;   // 保留参数
-
-        // 应用90度X轴修正
-        this.pitch -= 90f;
-
-        this.pitchO = this.pitch;
+        // 移除初始-90度旋转，直接使用视线方向
+        Vec3 lookVec = new Vec3(xd, yd, zd).normalize();
+        this.yaw = (float)Math.toDegrees(Math.atan2(lookVec.x, lookVec.z));
         this.yawO = this.yaw;
-        this.oRoll = this.roll;
+
+        // 计算俯仰角（上下方向）
+        float horizontalDistance = Mth.sqrt((float)(lookVec.x * lookVec.x + lookVec.z * lookVec.z));
+        this.pitch = -(float)Math.toDegrees(Math.atan2(lookVec.y, horizontalDistance));
+        this.pitch -= 90f;
+        this.pitchO = this.pitch;
 
         // 添加随机子粒子
         level.addParticle(ParticleType.OLA.get(), true,
                 x + r.nextFloat(-2F, 2F),
                 y + 1.85f + r.nextFloat(-0.85F, 0.85F),
                 z + r.nextFloat(-2F, 2F),
-                r.nextFloat(), r.nextFloat(), r.nextFloat());
+                r.nextFloat() * 0.2f, r.nextFloat() * 0.2f, r.nextFloat() * 0.2f);
 
         level.addParticle(EpicFightParticles.HIT_BLUNT.get(),
                 x, y-0.1, z, 0.0, 0.0, 0);
@@ -72,23 +68,25 @@ public class AirPunchBurstParticle extends TexturedCustomModelParticle {
         super.tick();
 
     }
-
     @Override
     protected void setupPoseStack(PoseStack poseStack, Camera camera, float partialTicks) {
-        // 插值旋转角度
+        // 保持原有结构，仅调整旋转顺序
+        Quaternionf rotation = new Quaternionf(0.0F, 0.0F, 0.0F, 1.0F);
+
+        // 使用插值平滑过渡
+        float roll = Mth.lerp(partialTicks, this.oRoll, this.roll);
         float pitch = Mth.lerp(partialTicks, this.pitchO, this.pitch);
         float yaw = Mth.lerp(partialTicks, this.yawO, this.yaw);
-        float roll = Mth.lerp(partialTicks, this.oRoll, this.roll);
 
-        // 构建旋转四元数 (Y-X顺序)
-        Quaternionf rotation = new Quaternionf()
-                .rotateY((float)Math.toRadians(yaw))  // 先Y轴旋转
-                .rotateX((float)Math.toRadians(pitch)); // 再X轴旋转(已包含-90度修正)
+        // 修改旋转顺序为Y->X->Z
+        rotation.mul(QuaternionUtils.YP.rotationDegrees(yaw));
+        rotation.mul(QuaternionUtils.XP.rotationDegrees(pitch));
+        rotation.mul(QuaternionUtils.ZP.rotationDegrees(roll));
 
-        Vec3 cameraPos = camera.getPosition();
-        float x = (float)(Mth.lerp(partialTicks, this.xo, this.x) - cameraPos.x());
-        float y = (float)(Mth.lerp(partialTicks, this.yo, this.y) - cameraPos.y());
-        float z = (float)(Mth.lerp(partialTicks, this.zo, this.z) - cameraPos.z());
+        Vec3 vec3 = camera.getPosition();
+        float x = (float)(Mth.lerp(partialTicks, this.xo, this.x) - vec3.x());
+        float y = (float)(Mth.lerp(partialTicks, this.yo, this.y) - vec3.y());
+        float z = (float)(Mth.lerp(partialTicks, this.zo, this.z) - vec3.z());
         float scale = Mth.lerp(partialTicks, this.scaleO, this.scale);
 
         poseStack.translate(x, y, z);
@@ -96,17 +94,19 @@ public class AirPunchBurstParticle extends TexturedCustomModelParticle {
         poseStack.scale(scale, scale, scale);
     }
 
+
     @Override
     public @NotNull ParticleRenderType getRenderType() {
         return EpicFightParticleRenderTypes.PARTICLE_MODEL_NO_NORMAL;
     }
 
 
-
     @Override
     public void render(VertexConsumer vertexConsumer, Camera camera, float partialTicks) {
         super.render(vertexConsumer, camera, partialTicks);
-        this.scale += 0.056F;
+        PoseStack poseStack = new PoseStack();
+        this.setupPoseStack(poseStack, camera, partialTicks);
+        this.scale += 0.032F;
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -131,5 +131,8 @@ public class AirPunchBurstParticle extends TexturedCustomModelParticle {
     public boolean shouldCull() {
         return false;
     }
-
+    @Override
+    public int getLightColor(float partialTick) {
+        return 15728880;
+    }
 }
