@@ -66,6 +66,7 @@ public class StarsMod {
         Sounds.REGISTRY.register(bus);
         Items.ITEMS.register(bus);
         StarAttributes.ATTRIBUTES.register(bus);
+        bus.addListener(StarAttributes::onEntityAttributeModification);
         bus.addListener(StarWeaponCapabilityPresets::register);
         SkillCategory.ENUM_MANAGER.registerEnumCls("star", StarSkillCategories.class);
         SkillSlot.ENUM_MANAGER.registerEnumCls("star", StarSkillSlots.class);

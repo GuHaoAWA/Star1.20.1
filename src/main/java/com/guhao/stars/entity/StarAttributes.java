@@ -35,6 +35,7 @@ public class StarAttributes {
             event.add(entityType, LOOTING.get());
             event.add(entityType, FORTUNE.get());
             event.add(entityType, BLOCK_RATE.get());
+            event.add(entityType, BURDEN.get());
         }
     }
 }

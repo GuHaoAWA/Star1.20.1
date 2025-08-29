@@ -123,7 +123,7 @@ public class ParryingSkillMixin extends GuardSkill {
         Object var4 = this.event.getDamageSource();
         if (var4 instanceof EpicFightDamageSource epicdamagesource) {
             float k = epicdamagesource.getImpact();
-            return this.event.getAmount() * (1.0F + k / 10F) * blockrate;
+            return this.event.getAmount() * (1.0F + k / 5F) * blockrate;
         } else {
             return this.event.getAmount() / 3.0F * blockrate;
         }
