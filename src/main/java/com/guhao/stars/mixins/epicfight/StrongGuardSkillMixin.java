@@ -28,8 +28,8 @@ public class StrongGuardSkillMixin {
             method = {"guard(Lyesman/epicfight/skill/SkillContainer;Lyesman/epicfight/world/capabilities/item/CapabilityItem;Lyesman/epicfight/world/entity/eventlistener/HurtEvent$Pre;FFZ)V"},
             at = @At("HEAD"),
             ordinal = 1,
-            remap = false
-    )
+            remap = false,
+            argsOnly = true)
     private float setImpact(float impact) {
         float blockrate = 1.0F - Math.min((float) this.event.getPlayerPatch().getOriginal().getAttributeValue(StarAttributes.BLOCK_RATE.get()) / 100.0F, 0.9F);
         Object var4 = this.event.getDamageSource();

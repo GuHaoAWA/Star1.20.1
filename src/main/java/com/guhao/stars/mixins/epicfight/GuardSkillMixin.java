@@ -8,6 +8,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import yesman.epicfight.api.utils.AttackResult;
 import yesman.epicfight.skill.Skill;
 import yesman.epicfight.skill.SkillContainer;
 import yesman.epicfight.skill.guard.GuardSkill;
@@ -44,11 +45,14 @@ public abstract class GuardSkillMixin extends Skill {
 
         EpicFightDamageSource damageSource = StarDataUnit.getEpicFightDamageSources(event.getDamageSource());
 
-
-        if (damageSource != null && (StarDataUnit.isNoGuard(damageSource.getAnimation()) || StarDataUnit.isNoDodge(damageSource.getAnimation()))) {
+        if (damageSource != null && (StarDataUnit.isNoGuard(damageSource.getAnimation()))) {
+            event.setParried(false);
+            event.setResult(AttackResult.ResultType.SUCCESS);
             ci.cancel();
         }
-        if (damageSource != null && (StarDataUnit.isNoDodge(damageSource.getAnimation()) || StarDataUnit.isNoDodge(damageSource.getAnimation()))) {
+        if (damageSource != null && (StarDataUnit.isNoDodge(damageSource.getAnimation()))) {
+            event.setParried(false);
+            event.setResult(AttackResult.ResultType.SUCCESS);
             ci.cancel();
         }
     }
@@ -65,8 +69,8 @@ public abstract class GuardSkillMixin extends Skill {
             method = {"guard(Lyesman/epicfight/skill/SkillContainer;Lyesman/epicfight/world/capabilities/item/CapabilityItem;Lyesman/epicfight/world/entity/eventlistener/HurtEvent$Pre;FFZ)V"},
             at = @At("HEAD"),
             ordinal = 1,
-            remap = false
-    )
+            remap = false,
+            argsOnly = true)
     private float setImpact(float impact) {
         float blockrate = 1.0F - Math.min((float) this.event.getPlayerPatch().getOriginal().getAttributeValue(StarAttributes.BLOCK_RATE.get()) / 100.0F, 0.9F);
         Object var4 = this.event.getDamageSource();

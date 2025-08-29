@@ -94,12 +94,18 @@ public class ParryingSkillMixin extends GuardSkill {
         ServerPlayer playerentity = event.getPlayerPatch().getOriginal();
         boolean successParrying = playerentity.tickCount - container.getDataManager().getDataValue(SkillDataKeys.LAST_ACTIVE.get()) < 8;
         if (damageSource != null && !successParrying && StarDataUnit.isNoParry(damageSource.getAnimation())) {
+            event.setParried(false);
+            event.setResult(AttackResult.ResultType.SUCCESS);
             ci.cancel();
         }
-        if (damageSource != null && (StarDataUnit.isNoGuard(damageSource.getAnimation()) || StarDataUnit.isNoDodge(damageSource.getAnimation()))) {
+        if (damageSource != null && (StarDataUnit.isNoGuard(damageSource.getAnimation()))) {
+            event.setParried(false);
+            event.setResult(AttackResult.ResultType.SUCCESS);
             ci.cancel();
         }
-        if (damageSource != null && (StarDataUnit.isNoDodge(damageSource.getAnimation()) || StarDataUnit.isNoDodge(damageSource.getAnimation()))) {
+        if (damageSource != null && (StarDataUnit.isNoDodge(damageSource.getAnimation()))) {
+            event.setParried(false);
+            event.setResult(AttackResult.ResultType.SUCCESS);
             ci.cancel();
         }
     }
@@ -116,8 +122,8 @@ public class ParryingSkillMixin extends GuardSkill {
             method = {"guard(Lyesman/epicfight/skill/SkillContainer;Lyesman/epicfight/world/capabilities/item/CapabilityItem;Lyesman/epicfight/world/entity/eventlistener/HurtEvent$Pre;FFZ)V"},
             at = @At("HEAD"),
             ordinal = 1,
-            remap = false
-    )
+            remap = false,
+            argsOnly = true)
     private float setImpact(float impact) {
         float blockrate = 1.0F - Math.min((float) this.event.getPlayerPatch().getOriginal().getAttributeValue(StarAttributes.BLOCK_RATE.get()) / 100.0F, 0.9F);
         Object var4 = this.event.getDamageSource();
@@ -129,3 +135,4 @@ public class ParryingSkillMixin extends GuardSkill {
         }
     }
 }
+///indestructible f6927cba-de20-46eb-add0-26de68aaef7f play "cdmoveset:biped/new/dagger/skill/blade_rush_first_dawn" 0.1 1
