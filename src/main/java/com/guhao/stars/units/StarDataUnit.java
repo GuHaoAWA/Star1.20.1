@@ -67,30 +67,29 @@ public record StarDataUnit() {
     static final StaticAnimation[] LOCK_OFF;
     static {//无视格挡red
         GUARD = new StaticAnimation[]{
-                /*Animations.TSUNAMI_REINFORCED.get(),
+                Animations.TSUNAMI_REINFORCED.get(),
                 Animations.WRATHFUL_LIGHTING.get(),
-                Animations.REVELATION_TWOHAND.get(),*/
-/*                WOMAnimations.GESETZ_SPRENGKOPF,
+                Animations.REVELATION_TWOHAND.get(),
+               /* WOMAnimations.GESETZ_SPRENGKOPF,
                 WOMAnimations.SOLAR_BRASERO_CREMATORIO,
                 WOMAnimations.SOLAR_BRASERO_INFIERNO,
                 WOMAnimations.STRONG_KICK,*/
 ////////////////////////////////////////////////////////////////zi
 //                WOMAnimations.RUINE_CHATIMENT,
 //                WOMAnimations.SOLAR_QUEMADURA,
-/*                WOMAnimations.SOLAR_AUTO_2_POLVORA,*/
+                /*WOMAnimations.SOLAR_AUTO_2_POLVORA,*/
 //                WOMAnimations.ENDERBLASTER_ONEHAND_SHOOT_LAYED,
 //                WOMAnimations.ENDERBLASTER_TWOHAND_SHOOT_LAYED_LEFT,
 //                WOMAnimations.ENDERBLASTER_TWOHAND_SHOOT_LAYED_RIGHT,
 //                WOMAnimations.ENDERBLASTER_ONEHAND_SHOOT_DASH,
-//                CorruptAnimations.LETHAL_SLICING_ONCE1,
-//                CorruptAnimations.KATANA_SHEATHING_DASH_DAWN,
-//                CorruptAnimations.FATAL_DRAW_DAWN,
-//                CorruptAnimations.BLADE_RUSH1_DAWN,
-//                CorruptAnimations.BLADE_RUSH3_DAWN,
-//                CorruptAnimations.YAMATO_DAWN_DAWN,
-//                CorruptAnimations.YAMATO_POWER_DASH_DAWN,
+               CorruptAnimations.LETHAL_SLICING_ONCE1.get(),
+               CorruptAnimations.KATANA_SHEATHING_DASH_DAWN.get(),
+               CorruptAnimations.FATAL_DRAW_DAWN.get(),
+               CorruptAnimations.BLADE_RUSH1_DAWN.get(),
+               CorruptAnimations.BLADE_RUSH3_DAWN.get(),
+               CorruptAnimations.YAMATO_DAWN_DAWN.get(),
 ////////////////////////////////////////////////////////////////
-               /* StarAnimations.SCRATCH,
+/*                StarAnimations.SCRATCH,
                 StarAnimations.EVIL_BLADE,*/
 /*                GuHaoAnimations.NB_ATTACK,
                 GuHaoAnimations.GUHAO_BATTOJUTSU_DASH,
@@ -99,9 +98,9 @@ public record StarDataUnit() {
                 GuHaoAnimations.DENG_LONG,*/
         };//只能完美org
         PARRY = new StaticAnimation[]{
-               /* Animations.SPEAR_DASH.get(),
+                Animations.SPEAR_DASH.get(),
                 Animations.LONGSWORD_DASH.get(),
-                Animations.REVELATION_ONEHAND.get(),*/
+                Animations.REVELATION_ONEHAND.get(),
 /*                WOMAnimations.HERRSCHER_AUTO_2,
                 WOMAnimations.STAFF_KINKONG,
                 WOMAnimations.SOLAR_HORNO,
@@ -112,57 +111,56 @@ public record StarDataUnit() {
                 WOMAnimations.STRONG_PUNCH,
                 WOMAnimations.AGONY_AUTO_1,
                 WOMAnimations.ENDERBLASTER_TWOHAND_SHOOT_4,*/
-                /*CorruptAnimations.SSPEAR_DASH.get(),
-                CorruptAnimations.LONGSWORD_OLD_DASH.get(),
-                CorruptAnimations.UCHIGATANA_DASH.get(),
-                CorruptAnimations.UCHIGATANA_HEAVY1.get(),
-                CorruptAnimations.DUAL_TACHI_DASH.get(),
-                CorruptAnimations.BLADE_RUSH4.get(),
-                CorruptAnimations.BLADE_RUSH_FINISHER.get(),
-                CorruptAnimations.YAMATO_POWER3_FINISH.get(),*/
-        };//purple 无视格挡+闪避的下段紫危：
-        DODGE = new StaticAnimation[]{
-                /*StarAnimations.KILL,
-*//*                WOMAnimations.TORMENT_AUTO_1,
-                WOMAnimations.RUINE_CHATIMENT,
-                WOMAnimations.SOLAR_QUEMADURA,
-                WOMAnimations.SOLAR_AUTO_2_POLVORA,
-                WOMAnimations.ENDERBLASTER_ONEHAND_SHOOT_LAYED,
-                WOMAnimations.ENDERBLASTER_TWOHAND_SHOOT_LAYED_LEFT,
-                WOMAnimations.ENDERBLASTER_TWOHAND_SHOOT_LAYED_RIGHT,
-                WOMAnimations.ENDERBLASTER_ONEHAND_SHOOT_DASH,*//*
-                CorruptAnimations.LETHAL_SLICING_ONCE1.get(),
-                CorruptAnimations.KATANA_SHEATHING_DASH_DAWN.get(),
-                CorruptAnimations.FATAL_DRAW_DAWN.get(),
-                CorruptAnimations.BLADE_RUSH1_DAWN.get(),
-                CorruptAnimations.BLADE_RUSH3_DAWN.get(),
-                CorruptAnimations.YAMATO_DAWN_DAWN.get(),*/
-//                CorruptAnimations.YAMATO_POWER_DASH_DAWN,
-        };
-        CAIDAO = new StaticAnimation[]{
-               /* Animations.SPEAR_DASH.get(),
-                Animations.LONGSWORD_DASH.get(),
-*//*                WOMAnimations.HERRSCHER_AUTO_2,
-                WOMAnimations.STAFF_KINKONG,
-                WOMAnimations.ENDERBLASTER_ONEHAND_SHOOT_3,
-                WOMAnimations.RUINE_COMET,
-                WOMAnimations.AGONY_AUTO_1,
-                WOMAnimations.ENDERBLASTER_TWOHAND_SHOOT_4,*//*
                 CorruptAnimations.SSPEAR_DASH.get(),
                 CorruptAnimations.LONGSWORD_OLD_DASH.get(),
                 CorruptAnimations.UCHIGATANA_DASH.get(),
                 CorruptAnimations.UCHIGATANA_HEAVY1.get(),
                 CorruptAnimations.DUAL_TACHI_DASH.get(),
                 CorruptAnimations.BLADE_RUSH4.get(),
-                CorruptAnimations.BLADE_RUSH_FINISHER.get(),*/
+                CorruptAnimations.BLADE_RUSH_FINISHER.get(),
+                CorruptAnimations.YAMATO_POWER3_FINISH.get(),
+        };//purple 无视格挡+闪避的下段紫危：
+        DODGE = new StaticAnimation[]{
+/*                StarAnimations.KILL,
+                WOMAnimations.TORMENT_AUTO_1,
+                WOMAnimations.RUINE_CHATIMENT,
+                WOMAnimations.SOLAR_QUEMADURA,
+                WOMAnimations.SOLAR_AUTO_2_POLVORA,
+                WOMAnimations.ENDERBLASTER_ONEHAND_SHOOT_LAYED,
+                WOMAnimations.ENDERBLASTER_TWOHAND_SHOOT_LAYED_LEFT,
+                WOMAnimations.ENDERBLASTER_TWOHAND_SHOOT_LAYED_RIGHT,
+                WOMAnimations.ENDERBLASTER_ONEHAND_SHOOT_DASH,*/
+                CorruptAnimations.LETHAL_SLICING_ONCE1.get(),
+                CorruptAnimations.KATANA_SHEATHING_DASH_DAWN.get(),
+                CorruptAnimations.FATAL_DRAW_DAWN.get(),
+                CorruptAnimations.BLADE_RUSH1_DAWN.get(),
+                CorruptAnimations.BLADE_RUSH3_DAWN.get(),
+                CorruptAnimations.YAMATO_DAWN_DAWN.get(),
+        };
+        CAIDAO = new StaticAnimation[]{
+/*                Animations.SPEAR_DASH.get(),
+                Animations.LONGSWORD_DASH.get(),
+                WOMAnimations.HERRSCHER_AUTO_2,
+                WOMAnimations.STAFF_KINKONG,
+                WOMAnimations.ENDERBLASTER_ONEHAND_SHOOT_3,
+                WOMAnimations.RUINE_COMET,
+                WOMAnimations.AGONY_AUTO_1,
+                WOMAnimations.ENDERBLASTER_TWOHAND_SHOOT_4,*/
+                CorruptAnimations.SSPEAR_DASH.get(),
+                CorruptAnimations.LONGSWORD_OLD_DASH.get(),
+                CorruptAnimations.UCHIGATANA_DASH.get(),
+                CorruptAnimations.UCHIGATANA_HEAVY1.get(),
+                CorruptAnimations.DUAL_TACHI_DASH.get(),
+                CorruptAnimations.BLADE_RUSH4.get(),
+                CorruptAnimations.BLADE_RUSH_FINISHER.get(),
         };
         LOCK_OFF = new StaticAnimation[]{
-               /* StarAnimations.FIST_AUTO_1,
+/*                StarAnimations.FIST_AUTO_1,
                 StarAnimations.FIST_AUTO_2,
                 StarAnimations.FIST_AUTO_3,
                 StarAnimations.FIST_AUTO_4,
-                StarAnimations.THE_WORLD,*/
-/*                WOMAnimations.KATANA_AUTO_1,
+                StarAnimations.THE_WORLD,
+                WOMAnimations.KATANA_AUTO_1,
                 WOMAnimations.KATANA_AUTO_2,
                 WOMAnimations.KATANA_AUTO_3,*/
         };
