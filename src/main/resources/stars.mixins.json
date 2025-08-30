@@ -8,6 +8,7 @@
     "EXLivingEntityMixin",
     "epicfight.AdvancedCustomHumanoidMobPatchMixin",
     "epicfight.CapabilityStateMixin",
+    "epicfight.DodgeAnimationMixin",
     "epicfight.DodgeSkillMixin",
     "epicfight.EntityEvents",
     "epicfight.GuardSkillMixin",
