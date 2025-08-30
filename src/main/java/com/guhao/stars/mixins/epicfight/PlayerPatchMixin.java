@@ -2,7 +2,6 @@ package com.guhao.stars.mixins.epicfight;
 
 import com.guhao.stars.entity.StarAttributes;
 import net.minecraft.util.Mth;
-import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.event.entity.living.LivingEvent;
@@ -17,9 +16,9 @@ import yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch;
 import yesman.epicfight.world.capabilities.entitypatch.player.PlayerPatch;
 import yesman.epicfight.world.capabilities.item.CapabilityItem;
 import yesman.epicfight.world.entity.ai.attribute.EpicFightAttributes;
-import yesman.epicfight.world.entity.eventlistener.AttackSpeedModifyEvent;
+import yesman.epicfight.world.entity.eventlistener.ModifyAttackSpeedEvent;
 import yesman.epicfight.world.entity.eventlistener.PlayerEventListener;
-import yesman.epicfight.world.gamerule.EpicFightGamerules;
+import yesman.epicfight.world.gamerule.EpicFightGameRules;
 
 @Mixin(value = PlayerPatch.class ,remap = false)
 public abstract class PlayerPatchMixin<T extends Player> extends LivingEntityPatch<T> {
@@ -110,13 +109,13 @@ public abstract class PlayerPatchMixin<T extends Player> extends LivingEntityPat
             cancellable = true
     )
     private void onGetAttackSpeedPenalty(CapabilityItem itemCapability, float baseSpeed, CallbackInfoReturnable<Float> cir) {
-        AttackSpeedModifyEvent event = new AttackSpeedModifyEvent((PlayerPatch<?>) (Object)this, itemCapability, baseSpeed);
+        ModifyAttackSpeedEvent event = new ModifyAttackSpeedEvent((PlayerPatch<?>) (Object)this, itemCapability, baseSpeed);
         this.eventListeners.triggerEvents(PlayerEventListener.EventType.MODIFY_ATTACK_SPEED_EVENT, event);
         float weight = this.getWeight();
         Player player = this.getOriginal();
         double currentburden = player.getAttribute(StarAttributes.BURDEN.get()).getValue() + 40.0;
         if ((double)weight > currentburden) {
-            float attenuation = (float)Mth.clamp(player.level.getGameRules().getInt(EpicFightGamerules.WEIGHT_PENALTY), 0, 100) / 100.0F;
+            float attenuation = (float)Mth.clamp(player.level.getGameRules().getInt(EpicFightGameRules.WEIGHT_PENALTY.getRuleKey()), 0, 100) / 100.0F;
             cir.setReturnValue((float)((double)event.getAttackSpeed() + -0.17499999701976776 * ((double)weight / currentburden) * (double)(Math.max(event.getAttackSpeed() - 0.8F, 0.0F) * 1.5F) * (double)attenuation));
         } else {
             cir.setReturnValue(event.getAttackSpeed());
@@ -135,7 +134,7 @@ public abstract class PlayerPatchMixin<T extends Player> extends LivingEntityPat
         Player player = this.getOriginal();
         double currentburden = player.getAttribute(StarAttributes.BURDEN.get()).getValue() + 40.0;
         float weight = this.getWeight();
-        float attenuation = (float)Mth.clamp(player.level.getGameRules().getInt(EpicFightGamerules.WEIGHT_PENALTY), 0, 100) / 100.0F;
+        float attenuation = (float)Mth.clamp(player.level.getGameRules().getInt(EpicFightGameRules.WEIGHT_PENALTY.getRuleKey()), 0, 100) / 100.0F;
         cir.setReturnValue((float)(Math.max((double)weight / currentburden - 1.0, 0.0) * (double)attenuation + 1.0) * amount);
         cir.cancel();
     }

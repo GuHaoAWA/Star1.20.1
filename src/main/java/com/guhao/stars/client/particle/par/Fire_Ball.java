@@ -1,3 +1,4 @@
+/*
 package com.guhao.stars.client.particle.par;
 
 
@@ -60,3 +61,4 @@ public class Fire_Ball extends NoRenderParticle {
         }
     }
 }
+*/

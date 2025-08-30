@@ -1,6 +1,6 @@
+/*
 package com.guhao.stars.client.particle.par;
 
-import com.guhao.api.ParticleRenderTypeN;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.*;
 import net.minecraft.core.particles.SimpleParticleType;
@@ -66,4 +66,4 @@ public class Flash extends TextureSheetParticle {
                     this.spriteSet);
         }
     }
-}
+}*/

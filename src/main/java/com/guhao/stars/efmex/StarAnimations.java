@@ -1,37 +1,12 @@
 package com.guhao.stars.efmex;
 
-import com.guhao.GuHaoColliderPreset;
 import com.guhao.stars.StarsMod;
-import com.guhao.stars.api.SpecialMoveAttackAnimation;
-import com.guhao.stars.regirster.ParticleType;
-import com.guhao.stars.regirster.Sounds;
-import com.guhao.stars.units.ShakeUnit;
-import com.guhao.stars.units.StarBattleUnits;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.entity.ai.attributes.AttributeInstance;
-import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import reascer.wom.animation.attacks.SpecialAttackAnimation;
-import reascer.wom.animation.attacks.SpecialAttackNoRotAnimation;
-import reascer.wom.gameasset.WOMWeaponColliders;
-import yesman.epicfight.api.animation.property.AnimationEvent;
-import yesman.epicfight.api.animation.property.AnimationProperty;
-import yesman.epicfight.api.animation.property.MoveCoordFunctions;
-import yesman.epicfight.api.animation.types.*;
-import yesman.epicfight.api.forgeevent.AnimationRegistryEvent;
-import yesman.epicfight.api.utils.TimePairList;
-import yesman.epicfight.api.utils.math.ValueModifier;
+import yesman.epicfight.api.animation.AnimationManager;
+import yesman.epicfight.api.animation.types.StaticAnimation;
 import yesman.epicfight.gameasset.Armatures;
-import yesman.epicfight.gameasset.ColliderPreset;
-import yesman.epicfight.gameasset.EpicFightSounds;
 import yesman.epicfight.model.armature.HumanoidArmature;
-import yesman.epicfight.particle.EpicFightParticles;
-import yesman.epicfight.world.damagesource.EpicFightDamageType;
-import yesman.epicfight.world.damagesource.StunType;
-
-import java.util.Set;
-import java.util.UUID;
 
 @Mod.EventBusSubscriber(
         modid = StarsMod.MODID,
@@ -58,13 +33,13 @@ public class StarAnimations {
     public static StaticAnimation OLA;
 
     @SubscribeEvent
-    public static void registerAnimations(AnimationRegistryEvent event) {
-        event.getRegistryMap().put(StarsMod.MODID, StarAnimations::build);
+    public static void registerAnimations(AnimationManager.AnimationRegistryEvent event) {
+        event.newBuilder(StarsMod.MODID, StarAnimations::build);
     }
 
-    private static void build() {
-        HumanoidArmature biped = Armatures.BIPED;
-        HANGDANG = (new SpecialAttackAnimation(0.2F, 0.35F, 0.35F, 0.75F, 1.05F, WOMWeaponColliders.FATAL_DRAW_DASH, biped.rootJoint, "biped/hangdang", biped))
+    private static void build(AnimationManager.AnimationBuilder builder) {
+        HumanoidArmature biped = Armatures.BIPED.get();
+        /*HANGDANG = (new SpecialAttackAnimation(0.2F, 0.35F, 0.35F, 0.75F, 1.05F, WOMWeaponColliders.FATAL_DRAW_DASH, biped.rootJoint, "biped/hangdang", biped))
                 .addProperty(AnimationProperty.AttackPhaseProperty.SWING_SOUND, EpicFightSounds.WHOOSH_SHARP.get())
                 .addProperty(AnimationProperty.AttackPhaseProperty.IMPACT_MODIFIER, ValueModifier.multiplier(2.0F))
                 .addProperty(AnimationProperty.AttackPhaseProperty.STUN_TYPE, StunType.LONG)
@@ -192,6 +167,6 @@ public class StarAnimations {
                 .addStateRemoveOld(EntityState.MOVEMENT_LOCKED,false)
                 .newTimePair(2.00F,2.35F)
                 .addStateRemoveOld(EntityState.MOVEMENT_LOCKED,true);
-    }
+    }*/
 
-}
+}}

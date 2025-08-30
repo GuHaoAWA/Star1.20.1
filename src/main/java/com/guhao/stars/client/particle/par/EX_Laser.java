@@ -1,3 +1,4 @@
+/*
 package com.guhao.stars.client.particle.par;
 
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -88,3 +89,4 @@ public class EX_Laser extends CustomModelParticle<RawMesh> {
         }
     }
 }
+*/

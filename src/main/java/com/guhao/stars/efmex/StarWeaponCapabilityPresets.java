@@ -27,8 +27,8 @@ import yesman.epicfight.world.capabilities.item.WeaponCapability;
 
 import java.util.function.Function;
 
-import static com.guhao.stars.efmex.StarSkillDataKeys.WUSONG_SHEATH;
 
+@SuppressWarnings("removal")
 public class StarWeaponCapabilityPresets {
     public static final Function<Item, CapabilityItem.Builder> SHADOW = (item) ->
             WeaponCapability.builder()
@@ -58,11 +58,11 @@ public class StarWeaponCapabilityPresets {
     public static final Function<Item, CapabilityItem.Builder> WUSONG = (item) ->
             WeaponCapability.builder().category(WeaponCategories.TACHI)
                     .styleProvider((entitypatch) -> {
-                        if (entitypatch instanceof PlayerPatch<?> playerpatch) {
+                        /*if (entitypatch instanceof PlayerPatch<?> playerpatch) {
                             if (playerpatch.getSkill(SkillSlots.WEAPON_PASSIVE).getDataManager().hasData(WUSONG_SHEATH.get()) && playerpatch.getSkill(SkillSlots.WEAPON_PASSIVE).getDataManager().getDataValue(WUSONG_SHEATH.get())) {
                                 return CapabilityItem.Styles.SHEATH;
                             }
-                        }
+                        }*/
 
                         return CapabilityItem.Styles.TWO_HAND;
                     })
@@ -106,7 +106,7 @@ public class StarWeaponCapabilityPresets {
 
     public static final Function<Item, CapabilityItem.Builder> THE_WORLD = (item) ->
             WeaponCapability.builder()
-                    .newStyleCombo(Styles.ONE_HAND, StarAnimations.FIST_AUTO_1, StarAnimations.FIST_AUTO_2, StarAnimations.FIST_AUTO_3,StarAnimations.FIST_AUTO_4, Animations.FIST_DASH, Animations.FIST_AIR_SLASH)
+                    .newStyleCombo(Styles.ONE_HAND, StarAnimations.FIST_AUTO_1.getAccessor(), StarAnimations.FIST_AUTO_2.getAccessor(), StarAnimations.FIST_AUTO_3.getAccessor(),StarAnimations.FIST_AUTO_4.getAccessor(), Animations.FIST_DASH, Animations.FIST_AIR_SLASH)
                     .innateSkill(Styles.ONE_HAND, (itemstack) -> StarSkill.THE_WORLD)
                     .hitSound(Sounds.PUNCH.get())
                     .passiveSkill(StarSkill.TIME_STOP_PASSIVE)
@@ -115,7 +115,7 @@ public class StarWeaponCapabilityPresets {
 
     public static final Function<Item, CapabilityItem.Builder> SUPER_PUNCH = (item) ->
             WeaponCapability.builder()
-                    .newStyleCombo(Styles.ONE_HAND, StarAnimations.FIST_AUTO_1, StarAnimations.FIST_AUTO_2, StarAnimations.FIST_AUTO_3,StarAnimations.FIST_AUTO_4, Animations.FIST_DASH, Animations.FIST_AIR_SLASH)
+                    .newStyleCombo(Styles.ONE_HAND, StarAnimations.FIST_AUTO_1.getAccessor(), StarAnimations.FIST_AUTO_2.getAccessor(), StarAnimations.FIST_AUTO_3.getAccessor(),StarAnimations.FIST_AUTO_4.getAccessor(), Animations.FIST_DASH, Animations.FIST_AIR_SLASH)
                     .innateSkill(Styles.ONE_HAND, (itemstack) -> StarSkill.SUPER_PUNCH)
                     .hitSound(Sounds.PUNCH.get())
                     .passiveSkill(StarSkill.SUPER_PUNCH_PASSIVE)

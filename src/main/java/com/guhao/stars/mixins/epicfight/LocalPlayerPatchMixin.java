@@ -1,3 +1,4 @@
+/*
 package com.guhao.stars.mixins.epicfight;
 
 import com.teamderpy.shouldersurfing.client.ShoulderInstance;
@@ -29,3 +30,4 @@ public class LocalPlayerPatchMixin extends AbstractClientPlayerPatch<LocalPlayer
         }
     }
 }
+*/

@@ -1,3 +1,4 @@
+/*
 package com.guhao.stars.efmex.skills;
 
 import com.google.common.collect.Maps;
@@ -13,7 +14,6 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.phys.Vec3;
-import reascer.wom.gameasset.WOMAnimations;
 import yesman.epicfight.api.animation.property.AnimationEvent;
 import yesman.epicfight.api.animation.property.AnimationProperty;
 import yesman.epicfight.api.animation.types.AttackAnimation;
@@ -105,51 +105,51 @@ public class WuSongSkill extends WeaponInnateSkill {
 			return;
 		}
 		if (executer.getSkill(SkillSlots.WEAPON_PASSIVE).getDataManager().getDataValue(CHECK2.get()) > 0) {
-			executer.playAnimationSynchronized(StarAnimations.AOXUE2, 0.0F);
+			executer.playAnimationSynchronized(StarAnimations.AOXUE2.getAccessor(), 0.0F);
 			executer.getSkill(SkillSlots.WEAPON_PASSIVE).getDataManager().setDataSync(CHECK2.get(),0,executer.getOriginal());
-			super.executeOnServer(executer, args);
+			super.executeOnServer(executer.getSkill(SkillSlots.WEAPON_INNATE), args);
 			return;
 		}
 		if (executer.getSkill(SkillSlots.WEAPON_INNATE).getStack() == 11 && isSheathed && executer.getOriginal().isSprinting()) {
 			executer.playAnimationSynchronized(heidong, 0.0F);
-			skill.setStackSynchronize(executer,0);
-			super.executeOnServer(executer, args);
+			skill.setStackSynchronize(executer.getSkill(SkillSlots.WEAPON_INNATE),0);
+			super.executeOnServer(executer.getSkill(SkillSlots.WEAPON_INNATE), args);
 			return;
 		}
 		if (executer.getSkill(SkillSlots.WEAPON_INNATE).getStack() == 9 && !isSheathed && executer.getOriginal().isSprinting()) {
 			AttackAnimation c1 = (AttackAnimation) Animations.TACHI_AUTO3;
 			executer.playAnimationSynchronized(c1, 0.0F);
-			super.executeOnServer(executer, args);
+			super.executeOnServer(executer.getSkill(SkillSlots.WEAPON_INNATE), args);
 			return;
 		}
 		if (executer.getSkill(SkillSlots.WEAPON_INNATE).getStack() == 5 && !executer.getOriginal().onGround) {
-			executer.playAnimationSynchronized(StarAnimations.AOXUE, 0.0F);
-			skill.setStackSynchronize(executer,2);
-			super.executeOnServer(executer, args);
+			executer.playAnimationSynchronized(StarAnimations.AOXUE.getAccessor(), 0.0F);
+			skill.setStackSynchronize(executer.getSkill(SkillSlots.WEAPON_INNATE),2);
+			super.executeOnServer(executer.getSkill(SkillSlots.WEAPON_INNATE), args);
 			return;
 		}
 		if (executer.getSkill(SkillSlots.WEAPON_INNATE).getStack() == 2) {
-			executer.playAnimationSynchronized(StarAnimations.HANGDANG, 0.0F);
-			super.executeOnServer(executer, args);
+			executer.playAnimationSynchronized(StarAnimations.HANGDANG.getAccessor(), 0.0F);
+			super.executeOnServer(executer.getSkill(SkillSlots.WEAPON_INNATE), args);
 			return;
 		}
 		if (executer.getSkill(SkillSlots.WEAPON_PASSIVE).getDataManager().getDataValue(StarSkillDataKeys.CHECK3.get()) > 0) {
 			executer.playAnimationSynchronized(WOMAnimations.AGONY_AUTO_2, 0.0F);
 			executer.getSkill(SkillSlots.WEAPON_PASSIVE).getDataManager().setDataSync(StarSkillDataKeys.CHECK3.get(),0,executer.getOriginal());
-			super.executeOnServer(executer, args);
+			super.executeOnServer(executer.getSkill(SkillSlots.WEAPON_INNATE), args);
 			return;
 		}
-		if (this.comboAnimation.containsKey(executer.getAnimator().getPlayerFor(null).getAnimation())) {
-			executer.playAnimationSynchronized(this.comboAnimation.get(executer.getAnimator().getPlayerFor(null).getAnimation()), 0.0F);
-			super.executeOnServer(executer, args);
+		if (this.comboAnimation.containsKey(executer.getAnimator().getPlayerFor(null).getAnimation().get())) {
+			executer.playAnimationSynchronized(this.comboAnimation.get(executer.getAnimator().getPlayerFor(null).getAnimation().get()), 0.0F);
+			super.executeOnServer(executer.getSkill(SkillSlots.WEAPON_INNATE), args);
 			return;
 		}
 		if (isSheathed) {
 			executer.playAnimationSynchronized(Animations.BATTOJUTSU_DASH, -0.694F);
-			super.executeOnServer(executer, args);
+			super.executeOnServer(executer.getSkill(SkillSlots.WEAPON_INNATE), args);
         } else {
 			executer.playAnimationSynchronized(Animations.BATTOJUTSU_DASH, 0.0F);
-			super.executeOnServer(executer, args);
+			super.executeOnServer(executer.getSkill(SkillSlots.WEAPON_INNATE), args);
         }
     }
-}
+}*/

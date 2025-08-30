@@ -3,7 +3,6 @@ package com.guhao.stars;
 import com.guhao.stars.client.model.CosmicRenderProperties;
 import com.guhao.stars.client.model.CosmicRenderingRegistry;
 import com.guhao.stars.client.post.StarShaders;
-import com.guhao.stars.command.TimeStopCommand;
 import com.guhao.stars.efmex.StarSkillCategories;
 import com.guhao.stars.efmex.StarSkillDataKeys;
 import com.guhao.stars.efmex.StarSkillSlots;
@@ -19,40 +18,39 @@ import com.guhao.stars.units.StarDataUnit;
 import com.guhao.stars.units.TransformUtils;
 import com.guhao.stars.units.data.TimeContext;
 import net.minecraft.client.Minecraft;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.event.RegisterCommandsEvent;
-import net.minecraftforge.event.entity.living.LivingDeathEvent;
-import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;
-
-import net.minecraftforge.network.simple.SimpleChannel;
-import net.minecraftforge.network.NetworkRegistry;
-import net.minecraftforge.network.NetworkEvent;
-import net.minecraftforge.fml.util.thread.SidedThreadGroups;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.common.MinecraftForge;
-
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraftforge.event.RegisterCommandsEvent;
+import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.event.entity.living.LivingDeathEvent;
+import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.DistExecutor;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.fml.util.thread.SidedThreadGroups;
+import net.minecraftforge.network.NetworkEvent;
+import net.minecraftforge.network.NetworkRegistry;
+import net.minecraftforge.network.simple.SimpleChannel;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import yesman.epicfight.skill.SkillCategory;
 import yesman.epicfight.skill.SkillSlot;
 
 import java.util.*;
-import java.util.function.Supplier;
-import java.util.function.Function;
-import java.util.function.BiConsumer;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.function.BiConsumer;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
 @Mod(StarsMod.MODID)
+@SuppressWarnings("removal")
 public class StarsMod {
     public static final Logger LOGGER = LogManager.getLogger(StarsMod.class);
     public static final String MODID = "star";
@@ -124,10 +122,10 @@ public class StarsMod {
         }
     }
 
-    @SubscribeEvent
+    /*@SubscribeEvent
     public void onServerStarting(RegisterCommandsEvent event) {
         TimeStopCommand.register(event.getDispatcher());
-    }
+    }*/
     @SubscribeEvent
     public void onEntityDeath(LivingDeathEvent event) {
         Entity entity = event.getEntity();
@@ -145,7 +143,9 @@ public class StarsMod {
             CosmicRenderProperties tool = new CosmicRenderProperties(TransformUtils.DEFAULT_TOOL, StarShaders.SKY_ITEM);
             CosmicRenderProperties item = new CosmicRenderProperties(TransformUtils.DEFAULT_ITEM, StarShaders.SKY_ITEM);
             CosmicRenderingRegistry.registerRenderItem(Items.BLOOD_BATTLE.get(), tool);
+/*
             CosmicRenderingRegistry.registerRenderItem(com.guhao.init.Items.GUHAO.get(), item);
+*/
 
         });
     }

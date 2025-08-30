@@ -5,7 +5,7 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import yesman.epicfight.skill.Skill;
+import yesman.epicfight.skill.SkillBuilder;
 import yesman.epicfight.skill.SkillContainer;
 import yesman.epicfight.skill.SkillSlots;
 import yesman.epicfight.skill.passive.PassiveSkill;
@@ -19,20 +19,20 @@ import java.util.UUID;
         remap = false
 )
 public class TechnicianSkillMixin extends PassiveSkill {
-    public TechnicianSkillMixin(Builder<? extends Skill> builder) {
+    public TechnicianSkillMixin(SkillBuilder<? extends PassiveSkill> builder) {
         super(builder);
     }
     @Unique
     private static final UUID EVENT_UUID = UUID.fromString("99e5c782-fdaf-11pb-9a03-0242ac130003");
     @Inject(method = "onInitiate" ,at = @At("HEAD"))
     public void onInitiate(SkillContainer container, CallbackInfo ci) {
-        container.getExecuter().getEventListener().addEventListener(PlayerEventListener.EventType.DODGE_SUCCESS_EVENT, EVENT_UUID, (event) -> {
-            float consumption = container.getExecuter().getModifiedStaminaConsume(container.getExecuter().getSkill(SkillSlots.DODGE).getSkill().getConsumption());
-            container.getExecuter().setStamina(container.getExecuter().getStamina() + consumption * 0.08f);
+        container.getExecutor().getEventListener().addEventListener(PlayerEventListener.EventType.DODGE_SUCCESS_EVENT, EVENT_UUID, (event) -> {
+            float consumption = container.getExecutor().getModifiedStaminaConsume(container.getExecutor().getSkill(SkillSlots.DODGE).getSkill().getConsumption());
+            container.getExecutor().setStamina(container.getExecutor().getStamina() + consumption * 0.08f);
         });
     }
     @Inject(method = "onRemoved" ,at = @At("HEAD"))
     public void onRemoved(SkillContainer container, CallbackInfo ci) {
-        container.getExecuter().getEventListener().removeListener(PlayerEventListener.EventType.DODGE_SUCCESS_EVENT, EVENT_UUID);
+        container.getExecutor().getEventListener().removeListener(PlayerEventListener.EventType.DODGE_SUCCESS_EVENT, EVENT_UUID);
     }
 }

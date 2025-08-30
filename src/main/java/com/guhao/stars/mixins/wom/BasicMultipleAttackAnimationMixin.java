@@ -1,3 +1,4 @@
+/*
 package com.guhao.stars.mixins.wom;
 
 import com.guhao.stars.units.StarDataUnit;
@@ -23,10 +24,12 @@ public class BasicMultipleAttackAnimationMixin extends AttackAnimation {
         super(convertTime, antic, preDelay, contact, recovery, collider, colliderJoint, path, armature);
     }
 
-    /**
+    */
+/**
      * @author
      * @reason
-     */
+     *//*
+
     @Overwrite
     public Vec3 getCoordVector(LivingEntityPatch<?> entitypatch, DynamicAnimation dynamicAnimation) {
         Vec3 vec3 = super.getCoordVector(entitypatch, dynamicAnimation);
@@ -44,3 +47,4 @@ public class BasicMultipleAttackAnimationMixin extends AttackAnimation {
         return vec3;
     }
 }
+*/

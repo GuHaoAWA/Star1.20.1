@@ -1,3 +1,4 @@
+/*
 package com.guhao.stars.client.particle.par;
 
 import com.guhao.stars.api.ParticleRenderTypeN;
@@ -135,4 +136,4 @@ public class AirPunchBurstParticle extends TexturedCustomModelParticle {
     public int getLightColor(float partialTick) {
         return 15728880;
     }
-}
+}*/

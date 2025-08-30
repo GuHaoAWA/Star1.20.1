@@ -1,3 +1,4 @@
+/*
 package com.guhao.stars.efmex.skills;
 
 import com.guhao.stars.efmex.StarAnimations;
@@ -38,4 +39,4 @@ public class TimeStop extends WeaponInnateSkill {
 		EntityState playerState = executer.getEntityState();
 		return (playerState.canUseSkill() && playerState.getLevel() != 1 || playerState.canUseSkill() && playerState.getLevel() != 2 || playerState.getLevel() != 3 || !playerState.inaction());
 	}
-}
+}*/

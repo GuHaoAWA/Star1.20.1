@@ -1,3 +1,4 @@
+/*
 package com.guhao.stars.mixins.epicfight;
 
 import com.guhao.stars.units.StarDataUnit;
@@ -14,7 +15,7 @@ import yesman.epicfight.api.animation.types.DodgeAnimation;
 import yesman.epicfight.api.animation.types.EntityState;
 import yesman.epicfight.api.model.Armature;
 import yesman.epicfight.api.utils.AttackResult;
-import yesman.epicfight.world.damagesource.EpicFightDamageType;
+import yesman.epicfight.world.damagesource.EpicFightDamageTypeTags;
 
 import java.util.function.Function;
 
@@ -26,9 +27,9 @@ public abstract class DodgeAnimationMixin extends ActionAnimation {
     @Unique
     private static final Function<DamageSource, AttackResult.ResultType> star$DODGEABLE_SOURCE_VALIDATOR = (damagesource) -> {
         if (StarDataUnit.getEpicFightDamageSources(damagesource) != null) {
-            return damagesource.getEntity() != null && !damagesource.is(DamageTypeTags.IS_EXPLOSION) && !StarDataUnit.isNoDodge(StarDataUnit.getEpicFightDamageSources(damagesource).getAnimation()) && !damagesource.is(DamageTypes.MAGIC) && !damagesource.is(DamageTypeTags.BYPASSES_ARMOR) && !damagesource.is(DamageTypeTags.BYPASSES_INVULNERABILITY) && !damagesource.is(EpicFightDamageType.BYPASS_DODGE) ? AttackResult.ResultType.MISSED : AttackResult.ResultType.SUCCESS;
+            return damagesource.getEntity() != null && !damagesource.is(DamageTypeTags.IS_EXPLOSION) && !StarDataUnit.isNoDodge(StarDataUnit.getEpicFightDamageSources(damagesource).getAnimation().get()) && !damagesource.is(DamageTypes.MAGIC) && !damagesource.is(DamageTypeTags.BYPASSES_ARMOR) && !damagesource.is(DamageTypeTags.BYPASSES_INVULNERABILITY) && !damagesource.is(EpicFightDamageTypeTags.BYPASS_DODGE) ? AttackResult.ResultType.MISSED : AttackResult.ResultType.SUCCESS;
         }
-        return damagesource.getEntity() != null && !damagesource.is(DamageTypeTags.IS_EXPLOSION) && !damagesource.is(DamageTypes.MAGIC) && !damagesource.is(DamageTypeTags.BYPASSES_ARMOR) && !damagesource.is(DamageTypeTags.BYPASSES_INVULNERABILITY) && !damagesource.is(EpicFightDamageType.BYPASS_DODGE) ? AttackResult.ResultType.MISSED : AttackResult.ResultType.SUCCESS;
+        return damagesource.getEntity() != null && !damagesource.is(DamageTypeTags.IS_EXPLOSION) && !damagesource.is(DamageTypes.MAGIC) && !damagesource.is(DamageTypeTags.BYPASSES_ARMOR) && !damagesource.is(DamageTypeTags.BYPASSES_INVULNERABILITY) && !damagesource.is(EpicFightDamageTypeTags.BYPASS_DODGE) ? AttackResult.ResultType.MISSED : AttackResult.ResultType.SUCCESS;
     };
 
 
@@ -38,3 +39,4 @@ public abstract class DodgeAnimationMixin extends ActionAnimation {
         this.stateSpectrumBlueprint.clear().newTimePair(0.0F, delayTime).addState(EntityState.TURNING_LOCKED, true).addState(EntityState.MOVEMENT_LOCKED, true).addState(EntityState.UPDATE_LIVING_MOTION, false).addState(EntityState.CAN_BASIC_ATTACK, false).addState(EntityState.CAN_SKILL_EXECUTION, false).addState(EntityState.INACTION, true).newTimePair(0.0F, Float.MAX_VALUE).addState(EntityState.ATTACK_RESULT, star$DODGEABLE_SOURCE_VALIDATOR);
     }
 }
+*/
