@@ -1,3 +1,4 @@
+/*
 package com.guhao.stars.event.key_appear;
 
 import com.mafuyu404.smartkeyprompts.util.PromptUtils;
@@ -25,3 +26,4 @@ public class AvtiveKey {
         PromptUtils.show("epicfight", "key.epicfight.switch_mode");
     }
 }
+*/

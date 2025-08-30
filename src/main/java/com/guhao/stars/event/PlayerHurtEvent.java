@@ -1,3 +1,4 @@
+/*
 package com.guhao.stars.event;
 
 
@@ -55,4 +56,4 @@ public class PlayerHurtEvent {
             }
         }
     }
-}
+}*/

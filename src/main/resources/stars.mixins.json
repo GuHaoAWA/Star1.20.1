@@ -18,7 +18,6 @@
     "epicfight.StrongGuardSkillMixin",
     "epicfight.WeaponInnateSkillMixin",
     "minimap.HudRendererMixin",
-    "mowzie.EntityWroughtnautMixin",
     "time.LevelMixin",
     "time.LivingEntityMixin",
     "time.MixinProjectile",

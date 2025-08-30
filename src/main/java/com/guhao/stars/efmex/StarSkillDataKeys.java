@@ -18,15 +18,9 @@ import static com.guhao.stars.StarsMod.MODID;
 
 @SuppressWarnings("removal")
 public class StarSkillDataKeys {
-    // 使用正确的注册表构建器
-    private static final Supplier<RegistryBuilder<SkillDataKey<?>>> BUILDER =
-            () -> new RegistryBuilder<SkillDataKey<?>>().addCallback(SkillDataKey.getRegistryCallback());
-
     // 使用正确的资源位置和注册表
     public static final DeferredRegister<SkillDataKey<?>> DATA_KEYS =
             DeferredRegister.create(ResourceLocation.fromNamespaceAndPath("epicfight", "skill_data_keys"), MODID);
-
-    public static final Supplier<IForgeRegistry<SkillDataKey<?>>> REGISTRY = DATA_KEYS.makeRegistry(BUILDER);
 
     //dote
     public static final RegistryObject<SkillDataKey<Float>> WEAKNESS =

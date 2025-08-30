@@ -1,9 +1,9 @@
+/*
 package com.guhao.stars.mixins.mowzie;
 
 import com.bobmowzie.mowziesmobs.server.entity.MowzieLLibraryEntity;
 import com.bobmowzie.mowziesmobs.server.entity.wroughtnaut.EntityWroughtnaut;
 import com.bobmowzie.mowziesmobs.server.sound.MMSounds;
-import com.hanzo.duelcraft.init.DuelcraftSoundInit;
 import com.ilexiconn.llibrary.server.animation.Animation;
 import net.corruptdog.cdm.gameasset.CorruptAnimations;
 import net.minecraft.tags.DamageTypeTags;
@@ -43,10 +43,12 @@ public class EntityWroughtnautMixin  extends MowzieLLibraryEntity implements Ene
     @Unique
     public boolean vulnerable;
 
-    /**
+    */
+/**
      * @author
      * @reason
-     */
+     *//*
+
     @Overwrite
     public boolean hurt(DamageSource source, float amount) {
         Entity entitySource = source.getDirectEntity();
@@ -87,7 +89,9 @@ public class EntityWroughtnautMixin  extends MowzieLLibraryEntity implements Ene
                     return super.hurt(source, amount);
                 }
             } else {
-                playSound(DuelcraftSoundInit.ENTITY_WROUGHT_BLOCK.get(), 1F, 1);
+                */
+/*playSound(DuelcraftSoundInit.ENTITY_WROUGHT_BLOCK.get(), 1F, 1);*//*
+
                 EpicFightCapabilities.getEntityPatch(entitySource, LivingEntityPatch.class).playAnimationSynchronized(CorruptAnimations.PARRY_BREAK2,-0.1F, SPAnimatorControl::new);
             }
         }
@@ -97,7 +101,8 @@ public class EntityWroughtnautMixin  extends MowzieLLibraryEntity implements Ene
         return false;
     }
 
-    /*@Override
+    */
+/*@Override
     public boolean hurt(DamageSource source, float amount) {
         Entity entitySource = source.getEntity();
         if (entitySource != null) {
@@ -132,7 +137,8 @@ public class EntityWroughtnautMixin  extends MowzieLLibraryEntity implements Ene
             return super.hurt(source, amount);
         }
         return false;
-    }*/
+    }*//*
+
 
 
     @Override
@@ -161,3 +167,4 @@ public class EntityWroughtnautMixin  extends MowzieLLibraryEntity implements Ene
 
 }
 
+*/
