@@ -4,7 +4,8 @@ package com.guhao.stars.client;
 import com.guhao.stars.client.model.CosmicModelLoader;
 import com.guhao.stars.client.post.StarShaders;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.*;
+import net.minecraftforge.client.event.ModelEvent;
+import net.minecraftforge.client.event.RegisterShadersEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 

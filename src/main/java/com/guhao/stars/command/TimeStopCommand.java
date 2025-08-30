@@ -1,3 +1,4 @@
+/*
 package com.guhao.stars.command;
 
 import com.guhao.stars.units.StarDataUnit;
@@ -56,4 +57,4 @@ public class TimeStopCommand {    public static void register(CommandDispatcher<
                     }))
     );
 }
-}
+}*/

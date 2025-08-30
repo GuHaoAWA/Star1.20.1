@@ -39,7 +39,6 @@ import yesman.epicfight.world.capabilities.EpicFightCapabilities;
 import yesman.epicfight.world.capabilities.entitypatch.EntityPatch;
 import yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch;
 import yesman.epicfight.world.capabilities.entitypatch.player.PlayerPatch;
-import yesman.epicfight.world.capabilities.entitypatch.player.ServerPlayerPatch;
 
 import javax.annotation.Nullable;
 
@@ -193,7 +192,9 @@ public abstract class MinecraftMixin {
                                         level.guardEntityTick(level::tickNonPassenger, entity);
                                         EpicFightCapabilities.getEntityPatch(entity, PlayerPatch.class).tick(new LivingEvent.LivingTickEvent(player1));
                                         EpicFightCapabilities.getEntityPatch(entity, LivingEntityPatch.class).tick(new LivingEvent.LivingTickEvent(player1));
+/*
                                         EpicFightCapabilities.getEntityPatch(entity, EntityPatch.class).tick(new LivingEvent.LivingTickEvent(player1));
+*/
                                         EpicFightCapabilities.getEntityPatch(entity, LocalPlayerPatch.class).tick(new LivingEvent.LivingTickEvent(player1));
                                         EpicFightCapabilities.getEntityPatch(entity, PlayerPatch.class).getAnimator().tick();
                                         EpicFightCapabilities.getEntityPatch(entity, PlayerPatch.class).getClientAnimator().tick();

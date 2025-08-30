@@ -3,7 +3,6 @@ package com.guhao.stars.mixins.mowzie;
 import com.bobmowzie.mowziesmobs.server.entity.MowzieLLibraryEntity;
 import com.bobmowzie.mowziesmobs.server.entity.wroughtnaut.EntityWroughtnaut;
 import com.bobmowzie.mowziesmobs.server.sound.MMSounds;
-
 import com.hanzo.duelcraft.init.DuelcraftSoundInit;
 import com.ilexiconn.llibrary.server.animation.Animation;
 import net.corruptdog.cdm.gameasset.CorruptAnimations;
@@ -18,10 +17,9 @@ import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Unique;
-import yesman.epicfight.network.server.SPPlayAnimationInstant;
+import yesman.epicfight.network.server.SPAnimatorControl;
 import yesman.epicfight.world.capabilities.EpicFightCapabilities;
 import yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch;
-
 
 import static com.bobmowzie.mowziesmobs.server.entity.wroughtnaut.EntityWroughtnaut.*;
 
@@ -90,7 +88,7 @@ public class EntityWroughtnautMixin  extends MowzieLLibraryEntity implements Ene
                 }
             } else {
                 playSound(DuelcraftSoundInit.ENTITY_WROUGHT_BLOCK.get(), 1F, 1);
-                EpicFightCapabilities.getEntityPatch(entitySource, LivingEntityPatch.class).playAnimationSynchronized(CorruptAnimations.PARRY_BREAK2,-0.1F, SPPlayAnimationInstant::new);
+                EpicFightCapabilities.getEntityPatch(entitySource, LivingEntityPatch.class).playAnimationSynchronized(CorruptAnimations.PARRY_BREAK2,-0.1F, SPAnimatorControl::new);
             }
         }
         else if (source.is(DamageTypeTags.BYPASSES_INVULNERABILITY)) {

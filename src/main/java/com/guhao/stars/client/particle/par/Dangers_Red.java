@@ -7,15 +7,10 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.*;
 import net.minecraft.core.particles.SimpleParticleType;
-import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
-import org.joml.Vector3f;
-
-import java.util.concurrent.TimeUnit;
 
 @OnlyIn(Dist.CLIENT)
 public class Dangers_Red extends TextureSheetParticle {

@@ -1,3 +1,4 @@
+/*
 package com.guhao.stars.mixins.time;
 
 import com.dfdyz.epicacg.client.particle.BloomTrailParticle;
@@ -8,7 +9,10 @@ import com.guhao.client.particle.par.SpaceTrailParticle;
 import com.guhao.stars.client.particle.par.AirPunchBurstParticle;
 import com.guhao.stars.units.StarDataUnit;
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.particle.*;
+import net.minecraft.client.particle.Particle;
+import net.minecraft.client.particle.ParticleEngine;
+import net.minecraft.client.particle.ParticleRenderType;
+import net.minecraft.client.particle.TrackingEmitter;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -17,7 +21,10 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import yesman.epicfight.client.particle.TrailParticle;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.Queue;
 
 @Mixin(ParticleEngine.class)
 public class ParticleManagerMixin {
@@ -68,3 +75,4 @@ public class ParticleManagerMixin {
     }
 
 }
+*/

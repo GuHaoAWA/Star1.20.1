@@ -1,8 +1,8 @@
+/*
 package com.guhao.stars.network;
 
 import com.guhao.stars.StarsMod;
 import com.guhao.stars.network.timestop.TimeStopSyncPacket;
-import net.minecraft.world.entity.projectile.Arrow;
 import net.minecraftforge.network.simple.SimpleChannel;
 
 public class NetworkHandler {
@@ -17,4 +17,4 @@ public class NetworkHandler {
                 TimeStopSyncPacket::decode,
                 TimeStopSyncPacket::handle);
     }
-}
+}*/

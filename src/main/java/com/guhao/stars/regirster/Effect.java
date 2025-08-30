@@ -5,6 +5,7 @@ import net.minecraft.world.effect.MobEffect;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
+
 import static com.guhao.stars.StarsMod.MODID;
 
 public class Effect {

@@ -21,7 +21,7 @@ public class AvtiveKey {
         Player player = Minecraft.getInstance().player;
         PlayerPatch<?> pp = EpicFightCapabilities.getEntityPatch(player, PlayerPatch.class);
         if (Minecraft.getInstance().screen != null) return;
-        if (pp != null && pp.isBattleMode()) return;
+        if (pp != null && pp.isEpicFightMode()) return;
         PromptUtils.show("epicfight", "key.epicfight.switch_mode");
     }
 }

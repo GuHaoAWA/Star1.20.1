@@ -1,6 +1,6 @@
+/*
 package com.guhao.stars.event.key_appear;
 
-import com.guhao.init.Items;
 import com.guhao.stars.regirster.StarSkill;
 import com.mafuyu404.smartkeyprompts.util.KeyUtils;
 import com.mafuyu404.smartkeyprompts.util.PromptUtils;
@@ -40,7 +40,7 @@ public class EFKey {
         if (event.phase != TickEvent.Phase.END) return;
         Player player = Minecraft.getInstance().player;
         PlayerPatch<?> pp = EpicFightCapabilities.getEntityPatch(player, PlayerPatch.class);
-        if (pp == null || !pp.isBattleMode() || Minecraft.getInstance().screen != null) return;
+        if (pp == null || !pp.isEpicFightMode() || Minecraft.getInstance().screen != null) return;
 
         PromptUtils.show("epicfight", "key.epicfight.switch_mode");
         PromptUtils.show("epicfight", "key.epicfight.lock_on");
@@ -92,3 +92,4 @@ public class EFKey {
         return true;
     }
 }
+*/

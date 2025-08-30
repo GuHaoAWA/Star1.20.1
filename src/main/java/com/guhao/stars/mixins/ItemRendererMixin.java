@@ -3,7 +3,6 @@ package com.guhao.stars.mixins;
 import com.guhao.stars.api.PerspectiveModel;
 import com.guhao.stars.client.model.CosmicBakeModel;
 import com.mojang.blaze3d.vertex.PoseStack;
-
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.resources.model.BakedModel;

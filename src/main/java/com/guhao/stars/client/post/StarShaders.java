@@ -4,7 +4,8 @@ import com.guhao.stars.api.CCShaderInstance;
 import com.guhao.stars.api.CCUniform;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.*;
+import com.mojang.blaze3d.vertex.DefaultVertexFormat;
+import com.mojang.blaze3d.vertex.VertexFormat;
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GameRenderer;
@@ -25,7 +26,8 @@ import java.util.function.Function;
 import static com.guhao.stars.StarsMod.MODID;
 
 
-@SuppressWarnings("unused")
+
+@SuppressWarnings("removal")
 @Mod.EventBusSubscriber(modid = MODID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public final class StarShaders {
     private static class RenderStateShardAccess extends RenderStateShard {

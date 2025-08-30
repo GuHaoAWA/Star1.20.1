@@ -1,7 +1,6 @@
 package com.guhao.stars.event;
 
 import com.guhao.stars.StarsMod;
-import com.guhao.stars.command.TimeStopCommand;
 import com.guhao.stars.efmex.StarSkillSlots;
 import com.guhao.stars.regirster.StarSkill;
 import net.minecraft.world.entity.Entity;
@@ -15,8 +14,6 @@ import yesman.epicfight.world.capabilities.EpicFightCapabilities;
 import yesman.epicfight.world.capabilities.entitypatch.player.PlayerPatch;
 
 import javax.annotation.Nullable;
-
-import static com.guhao.stars.StarsMod.PACKET_HANDLER;
 
 
 @Mod.EventBusSubscriber(modid = StarsMod.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
@@ -38,10 +35,10 @@ public class EntityJoinWorldEvent {
             pp.getSkill(StarSkillSlots.DOTE).setSkill(StarSkill.DOTE);
         }
     }
-    @SubscribeEvent
+    /*@SubscribeEvent
     public static void onServerStarting(RegisterCommandsEvent event) {
         TimeStopCommand.register(event.getDispatcher());
-    }
+    }*/
 }
 
 

@@ -1,3 +1,4 @@
+/*
 package com.guhao.stars.network.timestop;
 
 import com.dfdyz.epicacg.client.screeneffect.HsvFilterEffect;
@@ -35,4 +36,4 @@ public class TimeStopSyncPacket {
         });
         ctx.get().setPacketHandled(true);
     }
-}
+}*/

@@ -3,17 +3,14 @@ package com.guhao.stars.regirster;
 
 import com.guhao.stars.client.particle.par.*;
 import net.minecraft.core.particles.SimpleParticleType;
-import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-
 import net.minecraftforge.client.event.RegisterParticleProvidersEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
-import org.joml.Vector3d;
 import yesman.epicfight.particle.HitParticleType;
 
 import static com.guhao.stars.StarsMod.MODID;
@@ -51,14 +48,14 @@ public class ParticleType {
         event.registerSpriteSet(DANGER_PURPLE.get(), Dangers_Purple.Dangers_PurpleProvider::new);
         event.registerSpriteSet(DING.get(), Ding.DangerParticleProvider::new);
         event.registerSpriteSet(CAI.get(), Cai.CaiParticleProvider::new);
-        event.registerSpriteSet(FIRE_BALL.get(), Fire_Ball.Provider::new);
+/*        event.registerSpriteSet(FIRE_BALL.get(), Fire_Ball.Provider::new);
         event.registerSpriteSet(EX_LASER.get(), EX_Laser.Provider::new);
-        event.registerSpriteSet(AIR_PUNCH_BURST_PARTICLE.get(), AirPunchBurstParticle.Provider::new);
+        event.registerSpriteSet(AIR_PUNCH_BURST_PARTICLE.get(), AirPunchBurstParticle.Provider::new);*/
         event.registerSpriteSet(OLA.get(), com.guhao.stars.client.particle.par.OLA.OLAParticleProvider::new);
         event.registerSpriteSet(NORMAL_SPARK.get(), SparkParticle.NormalDustProvider::new);
         event.registerSpriteSet(SPARK_CONTRACTIVE.get(), SparkParticle.ContractiveDustProvider::new);
         event.registerSpriteSet(SPARK_EXPANSIVE.get(), SparkParticle.ExpansiveDustProvider::new);
-        event.registerSpriteSet(FLASH.get(), Flash.FlashParticleProvider::new);
+/*        event.registerSpriteSet(FLASH.get(), Flash.FlashParticleProvider::new);*/
         event.registerSpecial(ALL_SPARK.get(), new AllSpark.Provider());
     }
     public ParticleType() {

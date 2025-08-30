@@ -2,10 +2,8 @@ package com.guhao.stars.mixins;
 
 import com.guhao.stars.effects.Orange_Glow;
 import com.guhao.stars.effects.Red_Glow;
-
 import com.guhao.stars.units.StarDataUnit;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MoverType;
@@ -60,7 +58,7 @@ public abstract class EntityMixin {
             ci.cancel();
         }
     }
-    @Inject(method = "setRemoved", at = @At("HEAD"), cancellable = true)
+    /*@Inject(method = "setRemoved", at = @At("HEAD"), cancellable = true)
     private void setRemoved(Entity.RemovalReason p_146876_, CallbackInfo ci) {
         if (StarDataUnit.isTimeStopped()) {
             if (((Object) this) instanceof LivingEntity living) {
@@ -71,7 +69,7 @@ public abstract class EntityMixin {
                 }
             }
         }
-    }
+    }*/
     @Inject(method = "tick", at = @At("HEAD"), cancellable = true)
     private void onTick(CallbackInfo ci) {
         Entity self = (Entity)(Object)this;

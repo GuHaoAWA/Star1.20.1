@@ -16,7 +16,7 @@ public class HudRendererMixin {
     @Inject(method = "render",at = @At("HEAD"), cancellable = true)
     public void render(Hud hud, GuiGraphics guiGraphics, float partialTicks, CallbackInfo ci) {
         LocalPlayerPatch pp = EpicFightCapabilities.getEntityPatch(Minecraft.instance.player, LocalPlayerPatch.class);
-        if (pp != null && pp.isBattleMode()) {
+        if (pp != null && pp.isEpicFightMode()) {
             ci.cancel();
         }
     }

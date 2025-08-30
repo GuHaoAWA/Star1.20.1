@@ -1,3 +1,4 @@
+/*
 package com.guhao.stars.regirster;
 
 import com.guhao.stars.network.NetworkHandler;
@@ -12,4 +13,4 @@ public class CommonSetup {
         event.enqueueWork(NetworkHandler::register);
     }
 
-}
+}*/

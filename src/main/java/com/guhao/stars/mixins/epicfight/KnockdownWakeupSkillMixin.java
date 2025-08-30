@@ -1,9 +1,7 @@
 package com.guhao.stars.mixins.epicfight;
 
-import net.minecraft.world.entity.player.Player;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
-import yesman.epicfight.api.animation.types.DynamicAnimation;
 import yesman.epicfight.api.animation.types.EntityState;
 import yesman.epicfight.skill.dodge.KnockdownWakeupSkill;
 import yesman.epicfight.world.capabilities.entitypatch.player.PlayerPatch;

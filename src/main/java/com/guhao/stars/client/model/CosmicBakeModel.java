@@ -9,8 +9,6 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import com.mojang.math.Transformation;
-
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -33,7 +31,6 @@ import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3f;
 
 import java.util.*;
-import java.util.List;
 
 public final class CosmicBakeModel implements BakedModel {
     private static final ItemModelGenerator ITEM_MODEL_GENERATOR = new ItemModelGenerator();

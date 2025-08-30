@@ -17,7 +17,7 @@ import net.minecraftforge.client.model.geometry.IUnbakedGeometry;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
-
+@SuppressWarnings("removal")
 public final class CosmicModelLoader implements IGeometryLoader<CosmicModelLoader.CosmicGeometry> {
     public static final CosmicModelLoader INSTANCE = new CosmicModelLoader();
 
