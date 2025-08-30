@@ -10,10 +10,10 @@ import com.guhao.stars.efmex.StarWeaponCapabilityPresets;
 import com.guhao.stars.entity.StarAttributes;
 import com.guhao.stars.event.BlockBreakEvent;
 import com.guhao.stars.network.ParticlePacket;
-import com.guhao.stars.regirster.Effect;
-import com.guhao.stars.regirster.Items;
-import com.guhao.stars.regirster.ParticleType;
-import com.guhao.stars.regirster.Sounds;
+import com.guhao.stars.regirster.StarsEffect;
+import com.guhao.stars.regirster.StarsItems;
+import com.guhao.stars.regirster.StarsParticleType;
+import com.guhao.stars.regirster.StarsSounds;
 import com.guhao.stars.units.StarDataUnit;
 import com.guhao.stars.units.TransformUtils;
 import com.guhao.stars.units.data.TimeContext;
@@ -25,7 +25,6 @@ import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -59,10 +58,10 @@ public class StarsMod {
     }
     public StarsMod() {
         IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
-        Effect.REGISTRY.register(bus);
-        ParticleType.PARTICLES.register(bus);
-        Sounds.REGISTRY.register(bus);
-        Items.ITEMS.register(bus);
+        StarsEffect.REGISTRY.register(bus);
+        StarsParticleType.PARTICLES.register(bus);
+        StarsSounds.REGISTRY.register(bus);
+        StarsItems.ITEMS.register(bus);
         StarAttributes.ATTRIBUTES.register(bus);
         bus.addListener(StarAttributes::onEntityAttributeModification);
         bus.addListener(StarWeaponCapabilityPresets::register);
@@ -131,7 +130,7 @@ public class StarsMod {
         Entity entity = event.getEntity();
         if (entity instanceof Monster monster) {
             if (monster.getRandom().nextDouble() < 0.00001) {
-                ItemStack disc = new ItemStack(Items.HUA.get(), 1);
+                ItemStack disc = new ItemStack(StarsItems.HUA.get(), 1);
                 entity.spawnAtLocation(disc);
             }
         }
@@ -142,7 +141,7 @@ public class StarsMod {
         evt.enqueueWork(() -> {
             CosmicRenderProperties tool = new CosmicRenderProperties(TransformUtils.DEFAULT_TOOL, StarShaders.SKY_ITEM);
             CosmicRenderProperties item = new CosmicRenderProperties(TransformUtils.DEFAULT_ITEM, StarShaders.SKY_ITEM);
-            CosmicRenderingRegistry.registerRenderItem(Items.BLOOD_BATTLE.get(), tool);
+            CosmicRenderingRegistry.registerRenderItem(StarsItems.BLOOD_BATTLE.get(), tool);
 /*
             CosmicRenderingRegistry.registerRenderItem(com.guhao.init.Items.GUHAO.get(), item);
 */

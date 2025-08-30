@@ -1,6 +1,6 @@
 package com.guhao.stars.client.particle.par;
 
-import com.guhao.stars.regirster.ParticleType;
+import com.guhao.stars.regirster.StarsParticleType;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.NoRenderParticle;
 import net.minecraft.client.particle.Particle;
@@ -21,9 +21,9 @@ public class AllSpark extends NoRenderParticle {
             ).normalize();
             Vec3 pos = new Vec3(x,y,z).add(direction.scale(0.6 * 0.2));
             Vec3 velocity = direction.scale(0.05 + level.random.nextDouble() * 0.25 * 3.2);
-           this. level.addParticle(ParticleType.SPARK_EXPANSIVE.get(), pos.x,pos.y,pos.z,velocity.x,velocity.y,velocity.z);
+           this. level.addParticle(StarsParticleType.SPARK_EXPANSIVE.get(), pos.x,pos.y,pos.z,velocity.x,velocity.y,velocity.z);
         }
-        this.level.addParticle(ParticleType.FLASH.get(), x,y,z,0d,0d,0d);
+        this.level.addParticle(StarsParticleType.FLASH.get(), x,y,z,0d,0d,0d);
     }
 
 

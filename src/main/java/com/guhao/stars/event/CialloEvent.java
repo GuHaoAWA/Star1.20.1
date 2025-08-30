@@ -1,6 +1,6 @@
 package com.guhao.stars.event;
 
-import com.guhao.stars.regirster.Sounds;
+import com.guhao.stars.regirster.StarsSounds;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
@@ -32,7 +32,7 @@ public class CialloEvent {
                 Objects.requireNonNull(player.level().getServer()).getPlayerList().broadcastSystemMessage(Component.literal("§dCiallo～(∠・ω< )⌒☆"),false);
                 for (ServerPlayer serverPlayer : player.level().getServer().getPlayerList().getPlayers()) {
                     ServerPlayerPatch pp = EpicFightCapabilities.getEntityPatch(serverPlayer, ServerPlayerPatch.class);
-                    pp.playSound(Sounds.CAILLO.get(),1.0f,1.0f,1.0f);
+                    pp.playSound(StarsSounds.CAILLO.get(),1.0f,1.0f,1.0f);
                 }
             }
         }

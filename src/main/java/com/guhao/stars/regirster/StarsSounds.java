@@ -13,7 +13,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
 @SuppressWarnings("removal")
-public class Sounds {
+public class StarsSounds {
     public static final DeferredRegister<SoundEvent> REGISTRY = DeferredRegister.create(ForgeRegistries.SOUND_EVENTS, StarsMod.MODID);
     public static final RegistryObject<SoundEvent> BONG = registerSoundEvent("bong");
     public static final RegistryObject<SoundEvent> BIGBONG = registerSoundEvent("bigbong");
@@ -37,7 +37,7 @@ public class Sounds {
     public static final RegistryObject<SoundEvent> THE_WORLD = registerSoundEvent("the_world");
     public static final RegistryObject<SoundEvent> WRYYYYY = registerSoundEvent("wryyyyy");
 
-    public Sounds() {
+    public StarsSounds() {
     }
 
     private static RegistryObject<SoundEvent> registerSoundEvent(String name) {

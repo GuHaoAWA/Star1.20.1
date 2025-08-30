@@ -17,7 +17,7 @@ import static com.guhao.stars.StarsMod.MODID;
 
 
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
-public class ParticleType {
+public class StarsParticleType {
     public static final DeferredRegister<net.minecraft.core.particles.ParticleType<?>> PARTICLES;
     public static final RegistryObject<SimpleParticleType> DANGER;
     public static final RegistryObject<SimpleParticleType> DANGER_RED;
@@ -58,7 +58,7 @@ public class ParticleType {
 /*        event.registerSpriteSet(FLASH.get(), Flash.FlashParticleProvider::new);*/
         event.registerSpecial(ALL_SPARK.get(), new AllSpark.Provider());
     }
-    public ParticleType() {
+    public StarsParticleType() {
     }
 
     static {

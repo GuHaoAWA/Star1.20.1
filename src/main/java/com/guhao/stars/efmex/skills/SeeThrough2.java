@@ -2,7 +2,7 @@ package com.guhao.stars.efmex.skills;
 
 import com.guhao.stars.efmex.StarSkillCategories;
 import com.guhao.stars.efmex.StarSkillDataKeys;
-import com.guhao.stars.regirster.Effect;
+import com.guhao.stars.regirster.StarsEffect;
 import com.guhao.stars.regirster.StarSkill;
 import com.guhao.stars.units.StarDataUnit;
 import com.nameless.indestructible.world.capability.AdvancedCustomHumanoidMobPatch;
@@ -89,7 +89,7 @@ public class SeeThrough2 extends Skill {
             EpicFightDamageSource epicFightDamageSource = StarDataUnit.getEpicFightDamageSources(event.getDamageSource());
             if ((epicFightDamageSource!=null) && (StarDataUnit.isNoGuard(epicFightDamageSource.getAnimation().get()) || (StarDataUnit.isNoParry(epicFightDamageSource.getAnimation().get()) && !StarDataUnit.canCaiDAO(epicFightDamageSource.getAnimation().get())))) {
                 container.getDataManager().setDataSync(StarSkillDataKeys.COUNTER_TICK2.get(), 60.0f, event.getPlayerPatch().getOriginal());
-                event.getPlayerPatch().getOriginal().addEffect(new MobEffectInstance(Effect.ORANGE_GLOW.get(), 60, 60, true, true));
+                event.getPlayerPatch().getOriginal().addEffect(new MobEffectInstance(StarsEffect.ORANGE_GLOW.get(), 60, 60, true, true));
             }
         });
         listener.addEventListener(PlayerEventListener.EventType.SKILL_CAST_EVENT, EVENT_UUID, (event) -> {
@@ -130,7 +130,7 @@ public class SeeThrough2 extends Skill {
                 }
                 container.getExecutor().setStamina(container.getExecutor().getStamina() + 1.5f);
                 container.getExecutor().playAnimationSynchronized(Animations.REVELATION_ONEHAND,0.0f);
-                container.getExecutor().getOriginal().addEffect(new MobEffectInstance(Effect.IMPACT_ENHANCE.get(),1,400));
+                container.getExecutor().getOriginal().addEffect(new MobEffectInstance(StarsEffect.IMPACT_ENHANCE.get(),1,400));
 
 
             }
@@ -161,7 +161,7 @@ public class SeeThrough2 extends Skill {
             EpicFightDamageSource epicFightDamageSource = StarDataUnit.getEpicFightDamageSources(event.getDamageSource());
             if (epicFightDamageSource != null && StarDataUnit.isNoParry(epicFightDamageSource.getAnimation().get()) && event.isParried()) {
                 container.getDataManager().setDataSync(StarSkillDataKeys.COUNTER_TICK3.get(), 60.0f, event.getPlayerPatch().getOriginal());
-                event.getPlayerPatch().getOriginal().addEffect(new MobEffectInstance(Effect.ORANGE_GLOW.get(), 60, 60, true, true));
+                event.getPlayerPatch().getOriginal().addEffect(new MobEffectInstance(StarsEffect.ORANGE_GLOW.get(), 60, 60, true, true));
             }
 
 

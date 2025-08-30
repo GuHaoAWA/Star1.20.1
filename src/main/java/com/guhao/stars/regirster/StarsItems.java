@@ -10,7 +10,7 @@ import net.minecraftforge.registries.RegistryObject;
 
 import static com.guhao.stars.StarsMod.MODID;
 
-public class Items {
+public class StarsItems {
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, MODID);
 
 

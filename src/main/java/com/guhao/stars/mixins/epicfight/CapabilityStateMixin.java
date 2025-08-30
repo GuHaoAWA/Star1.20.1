@@ -1,7 +1,7 @@
 package com.guhao.stars.mixins.epicfight;
 
 import com.guhao.stars.entity.StarAttributes;
-import com.guhao.stars.regirster.Effect;
+import com.guhao.stars.regirster.StarsEffect;
 import com.guhao.stars.units.StarDataUnit;
 import com.nameless.indestructible.api.animation.types.LivingEntityPatchEvent;
 import com.nameless.indestructible.data.AdvancedMobpatchReloader;
@@ -54,10 +54,10 @@ public class CapabilityStateMixin<T extends MobPatch<?>, V extends AdvancedMobpa
             stunType = stunType == StunType.KNOCKDOWN ? stunType : StunType.NONE;
         } else if (mobPatch instanceof IAdvancedCapability iac && this.staminaLoseMultiply > 0 && this.lastGetImpact > 0 && mobPatch.getStunShield() <= 0) {
             float reduceX;
-            if (!mobPatch.getOriginal().hasEffect(Effect.TOUGHNESS.get())) {
+            if (!mobPatch.getOriginal().hasEffect(StarsEffect.TOUGHNESS.get())) {
                 reduceX = (float) (1.0f - mobPatch.getOriginal().getAttributeValue(StarAttributes.HIT_STAMINA_LOSE.get()));
             } else {
-                int buffer = mobPatch.getOriginal().getEffect(Effect.TOUGHNESS.get()).getAmplifier() + 1;
+                int buffer = mobPatch.getOriginal().getEffect(StarsEffect.TOUGHNESS.get()).getAmplifier() + 1;
                 if (((float) buffer/10  + (1.0f - (mobPatch.getOriginal().getAttributeValue(StarAttributes.HIT_STAMINA_LOSE.get()))) >= 1.0f)) {
                     reduceX = 1.0f;
                 } else {

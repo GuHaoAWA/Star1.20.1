@@ -2,26 +2,20 @@ package com.guhao.stars.units;
 
 import com.guhao.stars.StarsMod;
 import com.guhao.stars.client.particle.par.SparkParticle;
-import com.guhao.stars.efmex.StarAnimations;
 import com.guhao.stars.network.ParticlePacket;
-import com.guhao.stars.regirster.ParticleType;
+import com.guhao.stars.regirster.StarsParticleType;
 import net.corruptdog.cdm.gameasset.CorruptAnimations;
 import net.minecraft.core.particles.ParticleOptions;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.network.PacketDistributor;
 import yesman.epicfight.api.animation.types.StaticAnimation;
 import yesman.epicfight.gameasset.Animations;
 import yesman.epicfight.world.damagesource.EpicFightDamageSource;
 
 import java.util.Arrays;
-
-import static com.guhao.stars.StarsMod.PACKET_HANDLER;
 
 public record StarDataUnit() {
     private static boolean timeStopped = false;
@@ -232,9 +226,9 @@ public record StarDataUnit() {
 
     private static ParticleOptions getParticleType(SparkParticle.PhysicsType type) {
         return switch (type) {
-            case NORMAL -> ParticleType.NORMAL_SPARK.get();
-            case EXPANSIVE -> ParticleType.SPARK_EXPANSIVE.get();
-            case CONTRACTIVE -> ParticleType.SPARK_CONTRACTIVE.get();
+            case NORMAL -> StarsParticleType.NORMAL_SPARK.get();
+            case EXPANSIVE -> StarsParticleType.SPARK_EXPANSIVE.get();
+            case CONTRACTIVE -> StarsParticleType.SPARK_CONTRACTIVE.get();
         };
     }
 }

@@ -2,8 +2,8 @@ package com.guhao.stars.mixins.epicfight;
 
 import com.guhao.stars.efmex.skills.DOTEPassive;
 import com.guhao.stars.entity.StarAttributes;
-import com.guhao.stars.regirster.Effect;
-import com.guhao.stars.regirster.ParticleType;
+import com.guhao.stars.regirster.StarsEffect;
+import com.guhao.stars.regirster.StarsParticleType;
 import com.guhao.stars.units.StarDataUnit;
 import com.nameless.indestructible.world.capability.AdvancedCustomHumanoidMobPatch;
 import net.minecraft.server.level.ServerLevel;
@@ -83,12 +83,12 @@ public class ParryingSkillMixin extends GuardSkill {
         AdvancedCustomHumanoidMobPatch<?> longpatch = EpicFightCapabilities.getEntityPatch(event.getDamageSource().getEntity(), AdvancedCustomHumanoidMobPatch.class);
         if (longpatch != null) {
             longpatch.setStamina((float) (longpatch.getStamina() - longpatch.getOriginal().getAttribute(StarAttributes.PARRY_STAMINA_LOSE.get()).getValue()));
-            if (longpatch.getOriginal().hasEffect(Effect.STA.get())) {
-                longpatch.setStamina(longpatch.getStamina() - longpatch.getOriginal().getEffect(Effect.STA.get()).getAmplifier() + 1);
+            if (longpatch.getOriginal().hasEffect(StarsEffect.STA.get())) {
+                longpatch.setStamina(longpatch.getStamina() - longpatch.getOriginal().getEffect(StarsEffect.STA.get()).getAmplifier() + 1);
             }
         }
         ServerPlayer playerentity = event.getPlayerPatch().getOriginal();
-        ParticleType.ALL_SPARK.get().spawnParticleWithArgument((ServerLevel)playerentity.level(), HitParticleType.FRONT_OF_EYES, HitParticleType.ZERO, playerentity, event.getDamageSource().getDirectEntity());
+        StarsParticleType.ALL_SPARK.get().spawnParticleWithArgument((ServerLevel)playerentity.level(), HitParticleType.FRONT_OF_EYES, HitParticleType.ZERO, playerentity, event.getDamageSource().getDirectEntity());
     }
 
     @Inject(

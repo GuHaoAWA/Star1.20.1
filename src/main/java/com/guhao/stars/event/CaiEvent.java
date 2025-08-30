@@ -1,6 +1,6 @@
 package com.guhao.stars.event;
 
-import com.guhao.stars.regirster.ParticleType;
+import com.guhao.stars.regirster.StarsParticleType;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.LevelAccessor;
@@ -26,7 +26,7 @@ public class CaiEvent {
 
     private static void execute(@Nullable Event event, LevelAccessor world, double x, double y, double z) {
         if (world instanceof ServerLevel _level) {
-            _level.sendParticles(ParticleType.CAI.get(), x, y + 1.2, z, 1, 0, 0, 0, 0);
+            _level.sendParticles(StarsParticleType.CAI.get(), x, y + 1.2, z, 1, 0, 0, 0, 0);
         }
     }
 }

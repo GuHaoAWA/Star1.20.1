@@ -103,7 +103,6 @@ public class DOTEPassive extends Skill {
             container.getDataManager().registerData(StarSkillDataKeys.WEAKNESS_COUNT_2.get());
         }
 
-
         if (container.getDataManager().getDataValue(StarSkillDataKeys.WEAKNESS.get()) > 0 && container.getExecutor().getOriginal() instanceof ServerPlayer) {
             container.getDataManager().setDataSync(StarSkillDataKeys.WEAKNESS.get(), container.getDataManager().getDataValue(StarSkillDataKeys.WEAKNESS.get()) - 1.0f, (ServerPlayer) container.getExecutor().getOriginal());
         }

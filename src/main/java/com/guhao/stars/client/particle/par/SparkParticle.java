@@ -1,7 +1,7 @@
 package com.guhao.stars.client.particle.par;
 
 
-import com.guhao.stars.regirster.ParticleType;
+import com.guhao.stars.regirster.StarsParticleType;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.*;
 import net.minecraft.core.particles.SimpleParticleType;
@@ -195,7 +195,7 @@ public class SparkParticle extends TextureSheetParticle {
                     for(int z = -1; z <= 1; z += 2) {
                         for(int i = 0; i < this.density; ++i) {
                             Vec3 rand = (new Vec3(Math.random() * (double)x, Math.random() * (double)y, Math.random() * (double)z)).normalize().scale(this.radius);
-                            this.level.addParticle(ParticleType.SPARK_CONTRACTIVE.get(), this.x + rand.x, this.y + rand.y, this.z + rand.z, -rand.x, -rand.y, -rand.z);
+                            this.level.addParticle(StarsParticleType.SPARK_CONTRACTIVE.get(), this.x + rand.x, this.y + rand.y, this.z + rand.z, -rand.x, -rand.y, -rand.z);
                         }
                     }
                 }
@@ -224,7 +224,7 @@ public class SparkParticle extends TextureSheetParticle {
                 for(int vz = -1; vz <= 1; vz += 2) {
                     for(int i = 0; i < density; ++i) {
                         Vec3 rand = (new Vec3(Math.random() * (double)vx, Math.random(), Math.random() * (double)vz)).normalize().scale(radius);
-                        level.addParticle(ParticleType.SPARK_EXPANSIVE.get(), x, y, z, rand.x, rand.y, rand.z);
+                        level.addParticle(StarsParticleType.SPARK_EXPANSIVE.get(), x, y, z, rand.x, rand.y, rand.z);
                     }
                 }
             }

@@ -16,7 +16,6 @@ import java.util.function.Supplier;
 
 import static com.guhao.stars.StarsMod.MODID;
 
-@SuppressWarnings("removal")
 public class StarSkillDataKeys {
     // 使用正确的资源位置和注册表
     public static final DeferredRegister<SkillDataKey<?>> DATA_KEYS =

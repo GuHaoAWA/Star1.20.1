@@ -8,7 +8,7 @@ import net.minecraftforge.registries.RegistryObject;
 
 import static com.guhao.stars.StarsMod.MODID;
 
-public class Effect {
+public class StarsEffect {
     public static final DeferredRegister<MobEffect> REGISTRY = DeferredRegister.create(ForgeRegistries.MOB_EFFECTS, MODID);
     public static final RegistryObject<MobEffect> DEFENSE = REGISTRY.register("defense", Defense::new);
     public static final RegistryObject<MobEffect> UNSTABLE = REGISTRY.register("unstable", Unstable::new);

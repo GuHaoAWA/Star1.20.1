@@ -1,6 +1,6 @@
 package com.guhao.stars.mixins.epicfight;
 
-import com.guhao.stars.regirster.Effect;
+import com.guhao.stars.regirster.StarsEffect;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
@@ -127,7 +127,7 @@ public class EntityEvents {
                         case HOLD:
                             stunType = StunType.SHORT;
                             stunTime = epicFightDamageSource.getBaseImpact() * 0.25F;
-                            if (event.getEntity().hasEffect(Effect.REALLY_STUN_IMMUNITY.get())) {
+                            if (event.getEntity().hasEffect(StarsEffect.REALLY_STUN_IMMUNITY.get())) {
                                 stunType = StunType.NONE;
                                 stunTime = 0.0f;
                             }

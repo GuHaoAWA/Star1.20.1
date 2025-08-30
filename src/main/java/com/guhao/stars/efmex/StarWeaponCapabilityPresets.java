@@ -2,8 +2,8 @@ package com.guhao.stars.efmex;
 
 import com.guhao.stars.StarsMod;
 import com.guhao.stars.capability.TimeStopCapability;
-import com.guhao.stars.regirster.ParticleType;
-import com.guhao.stars.regirster.Sounds;
+import com.guhao.stars.regirster.StarsParticleType;
+import com.guhao.stars.regirster.StarsSounds;
 import com.guhao.stars.regirster.StarSkill;
 import com.mojang.logging.LogUtils;
 import net.minecraft.resources.ResourceLocation;
@@ -17,9 +17,7 @@ import yesman.epicfight.gameasset.Animations;
 import yesman.epicfight.gameasset.ColliderPreset;
 import yesman.epicfight.gameasset.EpicFightSkills;
 import yesman.epicfight.gameasset.EpicFightSounds;
-import yesman.epicfight.skill.SkillSlots;
 import yesman.epicfight.world.capabilities.EpicFightCapabilities;
-import yesman.epicfight.world.capabilities.entitypatch.player.PlayerPatch;
 import yesman.epicfight.world.capabilities.item.CapabilityItem;
 import yesman.epicfight.world.capabilities.item.CapabilityItem.Styles;
 import yesman.epicfight.world.capabilities.item.CapabilityItem.WeaponCategories;
@@ -108,7 +106,7 @@ public class StarWeaponCapabilityPresets {
             WeaponCapability.builder()
                     .newStyleCombo(Styles.ONE_HAND, StarAnimations.FIST_AUTO_1.getAccessor(), StarAnimations.FIST_AUTO_2.getAccessor(), StarAnimations.FIST_AUTO_3.getAccessor(),StarAnimations.FIST_AUTO_4.getAccessor(), Animations.FIST_DASH, Animations.FIST_AIR_SLASH)
                     .innateSkill(Styles.ONE_HAND, (itemstack) -> StarSkill.THE_WORLD)
-                    .hitSound(Sounds.PUNCH.get())
+                    .hitSound(StarsSounds.PUNCH.get())
                     .passiveSkill(StarSkill.TIME_STOP_PASSIVE)
                     .category(WeaponCategories.FIST)
                     .constructor(TimeStopCapability::new);
@@ -117,10 +115,10 @@ public class StarWeaponCapabilityPresets {
             WeaponCapability.builder()
                     .newStyleCombo(Styles.ONE_HAND, StarAnimations.FIST_AUTO_1.getAccessor(), StarAnimations.FIST_AUTO_2.getAccessor(), StarAnimations.FIST_AUTO_3.getAccessor(),StarAnimations.FIST_AUTO_4.getAccessor(), Animations.FIST_DASH, Animations.FIST_AIR_SLASH)
                     .innateSkill(Styles.ONE_HAND, (itemstack) -> StarSkill.SUPER_PUNCH)
-                    .hitSound(Sounds.PUNCH.get())
+                    .hitSound(StarsSounds.PUNCH.get())
                     .passiveSkill(StarSkill.SUPER_PUNCH_PASSIVE)
                     .category(WeaponCategories.FIST)
-                    .hitParticle(ParticleType.AIR_PUNCH_BURST_PARTICLE.get())
+                    .hitParticle(StarsParticleType.AIR_PUNCH_BURST_PARTICLE.get())
                     .constructor(TimeStopCapability::new);
     @SubscribeEvent
     public static void register(WeaponCapabilityPresetRegistryEvent event) {

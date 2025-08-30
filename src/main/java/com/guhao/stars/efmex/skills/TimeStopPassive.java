@@ -1,7 +1,7 @@
 package com.guhao.stars.efmex.skills;
 
 import com.guhao.stars.efmex.StarAnimations;
-import com.guhao.stars.regirster.Sounds;
+import com.guhao.stars.regirster.StarsSounds;
 import com.guhao.stars.units.ShakeUnit;
 import com.guhao.stars.units.StarDataUnit;
 import net.minecraft.client.Minecraft;
@@ -71,10 +71,10 @@ public class TimeStopPassive extends Skill {
 				container.getDataManager().setDataSync(TIME_TICK.get(),0,event.getPlayerPatch().getOriginal());
 				event.setResult(AttackResult.ResultType.MISSED);
 				event.setParried(false);
-				event.getPlayerPatch().playSound(Sounds.WRYYYYY.get(), 1.0F,1.0F,1.0F);
+				event.getPlayerPatch().playSound(StarsSounds.WRYYYYY.get(), 1.0F,1.0F,1.0F);
 				ShakeUnit.shake(40,10,10,event.getPlayerPatch().getOriginal().position,10);
 
-				event.getPlayerPatch().playSound(Sounds.SUPER_TIME.get(),1.0f,1.0f);
+				event.getPlayerPatch().playSound(StarsSounds.SUPER_TIME.get(),1.0f,1.0f);
 				event.getPlayerPatch().getOriginal().setHealth(event.getPlayerPatch().getOriginal().getMaxHealth());
 				event.getPlayerPatch().getOriginal().getFoodData().setFoodLevel(20);
 				event.getPlayerPatch().getOriginal().getFoodData().setSaturation(20);

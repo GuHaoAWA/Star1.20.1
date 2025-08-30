@@ -1,6 +1,6 @@
 package com.guhao.stars.effects;
 
-import com.guhao.stars.regirster.Effect;
+import com.guhao.stars.regirster.StarsEffect;
 import com.guhao.stars.units.Proxy;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.effect.MobEffect;
@@ -44,7 +44,7 @@ public class Orange_Glow extends MobEffect {
 
         // 检查实体自身是否拥有效果
         if (self instanceof LivingEntity livingEntity) {
-            return livingEntity.hasEffect(Effect.ORANGE_GLOW.get());
+            return livingEntity.hasEffect(StarsEffect.ORANGE_GLOW.get());
         }
 
         return false;
