@@ -1,5 +1,5 @@
 /*
-package com.guhao.stars.mixins.epicfight;
+package com.guhao.stars.mixins.epicfight.dangerAnimSystem;
 
 import com.guhao.stars.units.StarDataUnit;
 import net.minecraft.tags.DamageTypeTags;
