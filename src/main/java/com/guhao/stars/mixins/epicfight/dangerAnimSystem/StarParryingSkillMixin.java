@@ -1,19 +1,21 @@
-package com.guhao.stars.mixins.epicfight;
+package com.guhao.stars.mixins.epicfight.dangerAnimSystem;
 
 import com.guhao.stars.efmex.skills.DOTEPassive;
 import com.guhao.stars.entity.StarAttributes;
 import com.guhao.stars.regirster.StarsEffect;
 import com.guhao.stars.regirster.StarsParticleType;
-import com.guhao.stars.units.StarDataUnit;
+import com.guhao.stars.utils.dangerAnimSystem.AnimationEffectManager;
 import com.nameless.indestructible.world.capability.AdvancedCustomHumanoidMobPatch;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import yesman.epicfight.api.animation.types.StaticAnimation;
 import yesman.epicfight.api.utils.AttackResult;
 import yesman.epicfight.gameasset.Animations;
 import yesman.epicfight.particle.HitParticleType;
@@ -26,13 +28,18 @@ import yesman.epicfight.world.capabilities.item.CapabilityItem;
 import yesman.epicfight.world.damagesource.EpicFightDamageSource;
 import yesman.epicfight.world.entity.eventlistener.TakeDamageEvent;
 
-@Mixin(value = ParryingSkill.class, remap = false, priority = 500)
-public class ParryingSkillMixin extends GuardSkill {
-    public ParryingSkillMixin(Builder builder) {
+import java.util.Objects;
+
+@SuppressWarnings("all")
+@Mixin(ParryingSkill.class)
+public class StarParryingSkillMixin extends GuardSkill{
+
+    public StarParryingSkillMixin(Builder builder) {
         super(builder);
     }
 
-    private TakeDamageEvent.Attack event;
+    @Unique
+    private TakeDamageEvent.Attack star1_20_1$event;
 
     /**
      * @author
@@ -70,7 +77,6 @@ public class ParryingSkillMixin extends GuardSkill {
         DOTEPassive.breakdown(container);
     }
 
-    // 在if块开头注入
     @Inject(
             method = "guard",
             at = @At(
@@ -82,9 +88,9 @@ public class ParryingSkillMixin extends GuardSkill {
     private void onSuccessfulParry(SkillContainer container, CapabilityItem itemCapability, TakeDamageEvent.Attack event, float knockback, float impact, boolean advanced, CallbackInfo ci) {
         AdvancedCustomHumanoidMobPatch<?> longpatch = EpicFightCapabilities.getEntityPatch(event.getDamageSource().getEntity(), AdvancedCustomHumanoidMobPatch.class);
         if (longpatch != null) {
-            longpatch.setStamina((float) (longpatch.getStamina() - longpatch.getOriginal().getAttribute(StarAttributes.PARRY_STAMINA_LOSE.get()).getValue()));
+            longpatch.setStamina((float) (longpatch.getStamina() - Objects.requireNonNull(longpatch.getOriginal().getAttribute(StarAttributes.PARRY_STAMINA_LOSE.get())).getValue()));
             if (longpatch.getOriginal().hasEffect(StarsEffect.STA.get())) {
-                longpatch.setStamina(longpatch.getStamina() - longpatch.getOriginal().getEffect(StarsEffect.STA.get()).getAmplifier() + 1);
+                longpatch.setStamina(longpatch.getStamina() - Objects.requireNonNull(longpatch.getOriginal().getEffect(StarsEffect.STA.get())).getAmplifier() + 1);
             }
         }
         ServerPlayer playerentity = event.getPlayerPatch().getOriginal();
@@ -93,29 +99,33 @@ public class ParryingSkillMixin extends GuardSkill {
 
     @Inject(
             method = "guard",
-            at = @At(
-                    value = "HEAD"
-            ),
-            cancellable = true)
-    public void star$head_guard(SkillContainer container, CapabilityItem itemCapability, TakeDamageEvent.Attack event, float knockback, float impact, boolean advanced, CallbackInfo ci) {
-        EpicFightDamageSource damageSource = StarDataUnit.getEpicFightDamageSources(event.getDamageSource());
-        ServerPlayer playerentity = event.getPlayerPatch().getOriginal();
-        boolean successParrying = playerentity.tickCount - container.getDataManager().getDataValue(SkillDataKeys.LAST_ACTIVE.get()) < 8;
+            at = @At("HEAD"),
+            cancellable = true,
+            remap = false
+    )
+    protected void onGuard(SkillContainer container, CapabilityItem itemCapability,
+                           TakeDamageEvent.Attack event, float knockback, float impact,
+                           boolean advanced, CallbackInfo ci) {
 
-        if (damageSource != null && !successParrying && StarDataUnit.isNoParry(damageSource.getAnimation().get())) {
-            event.setParried(false);
-            event.setResult(AttackResult.ResultType.SUCCESS);
-            ci.cancel();
-        }
-        if (damageSource != null && (StarDataUnit.isNoGuard(damageSource.getAnimation().get()))) {
-            event.setParried(false);
-            event.setResult(AttackResult.ResultType.SUCCESS);
-            ci.cancel();
-        }
-        if (damageSource != null && (StarDataUnit.isNoDodge(damageSource.getAnimation().get()))) {
-            event.setParried(false);
-            event.setResult(AttackResult.ResultType.SUCCESS);
-            ci.cancel();
+        EpicFightDamageSource damageSource = AnimationEffectManager.getEpicFightDamageSources(event.getDamageSource());
+
+        if (damageSource != null && damageSource.getAnimation() != null) {
+            StaticAnimation animation = damageSource.getAnimation().get();
+
+            ServerPlayer playerentity = event.getPlayerPatch().getOriginal();
+            boolean successParrying = playerentity.tickCount - container.getDataManager().getDataValue(SkillDataKeys.LAST_ACTIVE.get()) < 8;
+
+            if (!successParrying && AnimationEffectManager.isNoParryAnimation(animation)) {
+                event.setParried(false);
+                event.setResult(AttackResult.ResultType.SUCCESS);
+                ci.cancel();
+            }
+
+            if (AnimationEffectManager.isNoGuardAnimation(animation)) {
+                event.setParried(false);
+                event.setResult(AttackResult.ResultType.SUCCESS);
+                ci.cancel();
+            }
         }
     }
 
@@ -125,7 +135,7 @@ public class ParryingSkillMixin extends GuardSkill {
             remap = false
     )
     private void getSuccessParry(SkillContainer container, CapabilityItem itemCapability, TakeDamageEvent.Attack event, float knockback, float impact, boolean advanced, CallbackInfo ci) {
-        this.event = event;
+        this.star1_20_1$event = event;
     }
 
     @ModifyVariable(
@@ -135,13 +145,14 @@ public class ParryingSkillMixin extends GuardSkill {
             remap = false,
             argsOnly = true)
     private float setImpact(float impact) {
-        float blockrate = 1.0F - Math.min((float) this.event.getPlayerPatch().getOriginal().getAttributeValue(StarAttributes.BLOCK_RATE.get()) / 100.0F, 0.9F);
-        Object var4 = this.event.getDamageSource();
+        float blockrate = 1.0F - Math.min((float) this.star1_20_1$event.getPlayerPatch().getOriginal().getAttributeValue(StarAttributes.BLOCK_RATE.get()) / 100.0F, 0.9F);
+        Object var4 = this.star1_20_1$event.getDamageSource();
         if (var4 instanceof EpicFightDamageSource epicdamagesource) {
-            float k = epicdamagesource.calculateImpact(); // 修复：getImpact() -> calculateImpact()
-            return this.event.getDamage() * (1.0F + k / 5F) * blockrate; // 修复：getAmount() -> getDamage()
+            float k = epicdamagesource.calculateImpact();
+            return this.star1_20_1$event.getDamage() * (1.0F + k / 5F) * blockrate;
         } else {
-            return this.event.getDamage() / 3.0F * blockrate; // 修复：getAmount() -> getDamage()
+            return this.star1_20_1$event.getDamage() / 3.0F * blockrate;
         }
     }
 }
+

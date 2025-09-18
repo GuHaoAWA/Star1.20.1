@@ -1,6 +1,11 @@
-// AnimationEffectManager.java
 package com.guhao.stars.utils.dangerAnimSystem;
 
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.DamageTypeTags;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageType;
 import yesman.epicfight.api.animation.types.StaticAnimation;
 import yesman.epicfight.world.damagesource.EpicFightDamageSource;
 import yesman.epicfight.world.damagesource.EpicFightDamageTypeTags;
@@ -10,14 +15,22 @@ import net.corruptdog.cdm.gameasset.CorruptAnimations;
 import java.util.Arrays;
 import java.util.List;
 
+@SuppressWarnings("removal")
 public class AnimationEffectManager {
 
+    public static final TagKey<DamageType> BYPASS_GUARD_ONLY = create("star_bypass_guard");
+    public static final TagKey<DamageType> BYPASS_PARRY = create("star_bypass_parry");
+    public static final TagKey<DamageType> BYPASS_DODGE= create("star_bypass_dodge");
+
+    private static TagKey<DamageType> create(String name) {
+        return TagKey.create(Registries.DAMAGE_TYPE, new ResourceLocation("star", name));
+    }
+
     // 红危:不可防御，不可招架的动画列表
-    private static final List<StaticAnimation> NO_GUARD_ANIMATIONS = Arrays.asList(
+    private static final List<StaticAnimation> NO_BLOCK_ANIMATIONS = Arrays.asList(
             Animations.TSUNAMI_REINFORCED.get(),
             Animations.WRATHFUL_LIGHTING.get(),
             Animations.REVELATION_TWOHAND.get(),
-            Animations.RUSHING_TEMPO3.get(),
             CorruptAnimations.LETHAL_SLICING_ONCE1.get(),
             CorruptAnimations.KATANA_SHEATHING_DASH_DAWN.get(),
             CorruptAnimations.FATAL_DRAW_DAWN.get(),
@@ -27,7 +40,7 @@ public class AnimationEffectManager {
     );
 
     // 黄危:不可防御的动画列表
-    private static final List<StaticAnimation> NO_PARRY_ANIMATIONS = Arrays.asList(
+    private static final List<StaticAnimation> NO_GUARD_ANIMATIONS = Arrays.asList(
             Animations.SPEAR_DASH.get(),
             Animations.LONGSWORD_DASH.get(),
             Animations.REVELATION_ONEHAND.get(),
@@ -61,57 +74,74 @@ public class AnimationEffectManager {
             CorruptAnimations.YAMATO_DAWN_DAWN.get()
     );
 
+    private static boolean shouldBypassBlock(StaticAnimation animation) {
+        return animation != null && NO_BLOCK_ANIMATIONS.contains(animation);
+    }
+
     private static boolean shouldBypassGuard(StaticAnimation animation) {
         return animation != null && NO_GUARD_ANIMATIONS.contains(animation);
     }
 
-    private static boolean shouldBypassParry(StaticAnimation animation) {
-        return animation != null && NO_PARRY_ANIMATIONS.contains(animation);
-    }
-
-    private static boolean shouldBypassDodge(StaticAnimation animation) {
+    static boolean shouldBypassDodge(StaticAnimation animation) {
         return animation != null && NO_DODGE_ANIMATIONS.contains(animation);
     }
 
-    private static boolean shouldBypassAll(StaticAnimation animation) {
+    static boolean shouldBypassAll(StaticAnimation animation) {
         return animation != null && NO_DODGE_GUARD_ANIMATIONS.contains(animation);
     }
 
-    /**
-     * 处理伤害源，添加相应的运行时标签
-     * 现在对所有执行者（攻击者）都生效
-     */
+    public static boolean isNoDodgeAnimation(StaticAnimation animation) {
+        return shouldBypassDodge(animation) || shouldBypassAll(animation);
+    }
+
+    public static boolean isNoGuardAnimation(StaticAnimation animation) {
+        return shouldBypassBlock(animation) || shouldBypassAll(animation);
+    }
+
+    public static boolean isNoParryAnimation(StaticAnimation animation) {
+        return shouldBypassGuard(animation) || shouldBypassAll(animation);
+    }
+
     public static void processDamageSource(EpicFightDamageSource damageSource) {
         if (damageSource.getAnimation() == null) return;
 
         StaticAnimation animation = damageSource.getAnimation().get();
 
-        if (shouldBypassGuard(animation)) {
+        if (shouldBypassBlock(animation)) {
             damageSource.addRuntimeTag(EpicFightDamageTypeTags.UNBLOCKALBE);
+            return;
         }
 
-        if (shouldBypassParry(animation)) {
-            damageSource.addRuntimeTag(EpicFightDamageTypeTags.GUARD_PUNCTURE);
+        if (shouldBypassGuard(animation)) {
+            damageSource.addRuntimeTag(AnimationEffectManager.BYPASS_GUARD_ONLY);
         }
 
         if (shouldBypassDodge(animation)) {
             damageSource.addRuntimeTag(EpicFightDamageTypeTags.BYPASS_DODGE);
+            damageSource.addRuntimeTag(DamageTypeTags.BYPASSES_INVULNERABILITY);
         }
 
         if (shouldBypassAll(animation)) {
-            damageSource.addRuntimeTag(EpicFightDamageTypeTags.BYPASS_DODGE);
             damageSource.addRuntimeTag(EpicFightDamageTypeTags.UNBLOCKALBE);
-            damageSource.addRuntimeTag(EpicFightDamageTypeTags.GUARD_PUNCTURE);
+            damageSource.addRuntimeTag(EpicFightDamageTypeTags.BYPASS_DODGE);
+            damageSource.addRuntimeTag(DamageTypeTags.BYPASSES_INVULNERABILITY);
         }
     }
 
-    // 提供获取方法以便其他地方使用
-    public static List<StaticAnimation> getNoGuardAnimations() {
-        return NO_GUARD_ANIMATIONS;
+    public static EpicFightDamageSource getEpicFightDamageSources(DamageSource damageSource) {
+        if (damageSource instanceof EpicFightDamageSource epicfightDamageSource) {
+            return epicfightDamageSource;
+        } else {
+            return null;
+        }
     }
 
-    public static List<StaticAnimation> getNoParryAnimations() {
-        return NO_PARRY_ANIMATIONS;
+    public static List<StaticAnimation> getNoBlockAnimations() {
+        return NO_BLOCK_ANIMATIONS;
+    }
+
+    public static List<StaticAnimation> getNoGuardAnimations() {
+        return NO_GUARD_ANIMATIONS;
     }
 
     public static List<StaticAnimation> getNoDodgeAnimations() {

@@ -1,4 +1,4 @@
-// DamageEventHandler.java
+// file: DamageEventHandler.java (更新版)
 package com.guhao.stars.utils.dangerAnimSystem;
 
 import net.minecraft.world.entity.LivingEntity;
@@ -18,7 +18,6 @@ public class DamageEventHandler {
                     (LivingEntity) damageSource.getEntity() : null;
 
             if (attacker != null) {
-                // 处理动画穿透效果
                 AnimationEffectManager.processDamageSource(damageSource);
             }
         }
