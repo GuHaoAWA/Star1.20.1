@@ -64,18 +64,18 @@ public record StarDataUnit() {
                 Animations.TSUNAMI_REINFORCED.get(),
                 Animations.WRATHFUL_LIGHTING.get(),
                 Animations.REVELATION_TWOHAND.get(),
-               /* WOMAnimations.GESETZ_SPRENGKOPF,
+/*                WOMAnimations.GESETZ_SPRENGKOPF,
                 WOMAnimations.SOLAR_BRASERO_CREMATORIO,
                 WOMAnimations.SOLAR_BRASERO_INFIERNO,
-                WOMAnimations.STRONG_KICK,*/
-////////////////////////////////////////////////////////////////zi
-//                WOMAnimations.RUINE_CHATIMENT,
-//                WOMAnimations.SOLAR_QUEMADURA,
-                /*WOMAnimations.SOLAR_AUTO_2_POLVORA,*/
-//                WOMAnimations.ENDERBLASTER_ONEHAND_SHOOT_LAYED,
-//                WOMAnimations.ENDERBLASTER_TWOHAND_SHOOT_LAYED_LEFT,
-//                WOMAnimations.ENDERBLASTER_TWOHAND_SHOOT_LAYED_RIGHT,
-//                WOMAnimations.ENDERBLASTER_ONEHAND_SHOOT_DASH,
+                WOMAnimations.STRONG_KICK,
+
+              WOMAnimations.RUINE_CHATIMENT,
+               WOMAnimations.SOLAR_QUEMADURA,
+                WOMAnimations.SOLAR_AUTO_2_POLVORA,
+              WOMAnimations.ENDERBLASTER_ONEHAND_SHOOT_LAYED,
+               WOMAnimations.ENDERBLASTER_TWOHAND_SHOOT_LAYED_LEFT,
+               WOMAnimations.ENDERBLASTER_TWOHAND_SHOOT_LAYED_RIGHT,
+              WOMAnimations.ENDERBLASTER_ONEHAND_SHOOT_DASH,*/
                CorruptAnimations.LETHAL_SLICING_ONCE1.get(),
                CorruptAnimations.KATANA_SHEATHING_DASH_DAWN.get(),
                CorruptAnimations.FATAL_DRAW_DAWN.get(),
@@ -95,7 +95,7 @@ public record StarDataUnit() {
                 Animations.SPEAR_DASH.get(),
                 Animations.LONGSWORD_DASH.get(),
                 Animations.REVELATION_ONEHAND.get(),
-/*                WOMAnimations.HERRSCHER_AUTO_2,
+              /*  WOMAnimations.HERRSCHER_AUTO_2,
                 WOMAnimations.STAFF_KINKONG,
                 WOMAnimations.SOLAR_HORNO,
                 WOMAnimations.ENDERBLASTER_ONEHAND_SHOOT_3,
@@ -115,8 +115,8 @@ public record StarDataUnit() {
                 CorruptAnimations.YAMATO_POWER3_FINISH.get(),
         };//purple 无视格挡+闪避的下段紫危：
         DODGE = new StaticAnimation[]{
-/*                StarAnimations.KILL,
-                WOMAnimations.TORMENT_AUTO_1,
+/*                StarAnimations.KILL,*/
+               /* WOMAnimations.TORMENT_AUTO_1,
                 WOMAnimations.RUINE_CHATIMENT,
                 WOMAnimations.SOLAR_QUEMADURA,
                 WOMAnimations.SOLAR_AUTO_2_POLVORA,

@@ -97,6 +97,7 @@ dependencies {
     implementation 'me.fallenbreath:conditional-mixin-forge:0.6.4'
 
     // 其他依赖
+    implementation fg.deobf('libs:wom:20.2.0.1')
     implementation fg.deobf("libs:EFR:20.12.2")
     implementation fg.deobf("libs:epicfight:20.12.5")
     implementation fg.deobf("libs:indestructible-20.12.1:1.0")
