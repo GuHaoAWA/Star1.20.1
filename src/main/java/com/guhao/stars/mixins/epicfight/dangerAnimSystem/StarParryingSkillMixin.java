@@ -86,11 +86,11 @@ public class StarParryingSkillMixin extends GuardSkill{
             )
     )
     private void onSuccessfulParry(SkillContainer container, CapabilityItem itemCapability, TakeDamageEvent.Attack event, float knockback, float impact, boolean advanced, CallbackInfo ci) {
-        AdvancedCustomHumanoidMobPatch<?> longpatch = EpicFightCapabilities.getEntityPatch(event.getDamageSource().getEntity(), AdvancedCustomHumanoidMobPatch.class);
-        if (longpatch != null) {
-            longpatch.setStamina((float) (longpatch.getStamina() - Objects.requireNonNull(longpatch.getOriginal().getAttribute(StarAttributes.PARRY_STAMINA_LOSE.get())).getValue()));
-            if (longpatch.getOriginal().hasEffect(StarsEffect.STA.get())) {
-                longpatch.setStamina(longpatch.getStamina() - Objects.requireNonNull(longpatch.getOriginal().getEffect(StarsEffect.STA.get())).getAmplifier() + 1);
+        AdvancedCustomHumanoidMobPatch<?> indestructiblepatch = EpicFightCapabilities.getEntityPatch(event.getDamageSource().getEntity(), AdvancedCustomHumanoidMobPatch.class);
+        if (indestructiblepatch != null) {
+            indestructiblepatch.setStamina((float) (indestructiblepatch.getStamina() - Objects.requireNonNull(indestructiblepatch.getOriginal().getAttribute(StarAttributes.PARRY_STAMINA_LOSE.get())).getValue()));
+            if (indestructiblepatch.getOriginal().hasEffect(StarsEffect.STA.get())) {
+                indestructiblepatch.setStamina(indestructiblepatch.getStamina() - Objects.requireNonNull(indestructiblepatch.getOriginal().getEffect(StarsEffect.STA.get())).getAmplifier() + 1);
             }
         }
         ServerPlayer playerentity = event.getPlayerPatch().getOriginal();
