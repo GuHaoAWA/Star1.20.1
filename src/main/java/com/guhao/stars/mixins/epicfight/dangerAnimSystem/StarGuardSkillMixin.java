@@ -19,7 +19,7 @@ import yesman.epicfight.world.damagesource.EpicFightDamageSource;
 import yesman.epicfight.world.entity.eventlistener.TakeDamageEvent;
 
 @SuppressWarnings("all")
-@Mixin(GuardSkill.class)
+@Mixin(value = GuardSkill.class, remap = false, priority = 500)
 public class StarGuardSkillMixin extends Skill {
     @Unique
     private TakeDamageEvent.Attack star1_20_1$event;

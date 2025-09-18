@@ -31,7 +31,7 @@ import yesman.epicfight.world.entity.eventlistener.TakeDamageEvent;
 import java.util.Objects;
 
 @SuppressWarnings("all")
-@Mixin(ParryingSkill.class)
+@Mixin(value = ParryingSkill.class, remap = false, priority = 500)
 public class StarParryingSkillMixin extends GuardSkill{
 
     public StarParryingSkillMixin(Builder builder) {
