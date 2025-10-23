@@ -28,6 +28,17 @@ public class AnimationEffectManager {
         return TagKey.create(Registries.DAMAGE_TYPE, new ResourceLocation("star", name));
     }
 
+    // 可踩刀识破的动画
+    private static final List<StaticAnimation> SPECIAL_SEETHROUGH_ANIMATIONS = Arrays.asList(
+            CorruptAnimations.SSPEAR_DASH.get(),
+            CorruptAnimations.LONGSWORD_OLD_DASH.get(),
+            CorruptAnimations.UCHIGATANA_DASH.get(),
+            CorruptAnimations.UCHIGATANA_HEAVY1.get(),
+            CorruptAnimations.DUAL_TACHI_DASH.get(),
+            CorruptAnimations.BLADE_RUSH4.get(),
+            CorruptAnimations.BLADE_RUSH_FINISHER.get()
+    );
+
     // 红危:不可防御，不可招架的动画列表
     private static final List<StaticAnimation> NO_BLOCK_ANIMATIONS = Arrays.asList(
             WOMAnimations.STRONG_KICK.get(),
@@ -121,6 +132,10 @@ public class AnimationEffectManager {
         return animation != null && NO_DODGE_GUARD_ANIMATIONS.contains(animation);
     }
 
+    static boolean specialSeeThrough(StaticAnimation animation) {
+        return animation != null && SPECIAL_SEETHROUGH_ANIMATIONS.contains(animation);
+    }
+
     public static boolean isNoDodgeAnimation(StaticAnimation animation) {
         return shouldBypassDodge(animation) || shouldBypassAll(animation);
     }
@@ -133,12 +148,17 @@ public class AnimationEffectManager {
         return shouldBypassGuard(animation) || shouldBypassAll(animation);
     }
 
+    public static boolean isSpecialSeeThroughAnimation(StaticAnimation animation) {
+        return specialSeeThrough(animation);
+    }
+
     public static void processDamageSource(EpicFightDamageSource damageSource) {
         if (damageSource.getAnimation() == null) return;
 
         StaticAnimation animation = damageSource.getAnimation().get();
 
         if (shouldBypassBlock(animation)) {
+            damageSource.addRuntimeTag(EpicFightDamageTypeTags.GUARD_PUNCTURE);
             damageSource.addRuntimeTag(EpicFightDamageTypeTags.UNBLOCKALBE);
             return;
         }
@@ -181,5 +201,9 @@ public class AnimationEffectManager {
 
     public static List<StaticAnimation> getNoDodgeGuardAnimations() {
         return NO_DODGE_GUARD_ANIMATIONS;
+    }
+
+    public static List<StaticAnimation> getSpecialSeethroughAnimations() {
+        return SPECIAL_SEETHROUGH_ANIMATIONS;
     }
 }

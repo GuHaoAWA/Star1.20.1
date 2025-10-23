@@ -2,7 +2,7 @@ package com.guhao.stars.efmex.skills;
 
 import com.guhao.stars.efmex.StarSkillDataKeys;
 import com.guhao.stars.regirster.StarSkill;
-import com.guhao.stars.units.StarDataUnit;
+import com.guhao.stars.utils.dangerAnimSystem.AnimationEffectManager;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.ResourceLocation;
@@ -47,7 +47,7 @@ public class DOTEPassive extends Skill {
         super.onInitiate(container);
 
         container.getExecutor().getEventListener().addEventListener(PlayerEventListener.EventType.TAKE_DAMAGE_EVENT_ATTACK, EVENT_UUID, (e) -> {
-            EpicFightDamageSource efd = StarDataUnit.getEpicFightDamageSources(e.getDamageSource());
+            EpicFightDamageSource efd = AnimationEffectManager.getEpicFightDamageSources(e.getDamageSource());
             if (e.getResult() == AttackResult.ResultType.BLOCKED && e.isParried()) {
                 if (container.getDataManager().getDataValue(StarSkillDataKeys.WEAKNESS.get()) > 0.0f && container.getExecutor().getOriginal() instanceof ServerPlayer) { container.getDataManager().setDataSync(StarSkillDataKeys.WEAKNESS.get(), container.getDataManager().getDataValue(StarSkillDataKeys.WEAKNESS.get()) - 20.0f, (ServerPlayer) container.getExecutor().getOriginal());}
             }
@@ -60,7 +60,7 @@ public class DOTEPassive extends Skill {
             }
         },999);
         container.getExecutor().getEventListener().addEventListener(PlayerEventListener.EventType.TAKE_DAMAGE_EVENT_DAMAGE, EVENT_UUID, (e) -> {
-            EpicFightDamageSource efd = StarDataUnit.getEpicFightDamageSources(e.getDamageSource());
+            EpicFightDamageSource efd = AnimationEffectManager.getEpicFightDamageSources(e.getDamageSource());
             float impact = 0.0f;
             if (efd != null) impact = efd.getBaseImpact();
             if (container.getExecutor().getStamina() <= container.getExecutor().getMaxStamina()*0.25f) {

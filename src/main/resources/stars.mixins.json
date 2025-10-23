@@ -15,6 +15,8 @@
     "epicfight.PlayerPatchMixin",
     "epicfight.StrongGuardSkillMixin",
     "epicfight.WeaponInnateSkillMixin",
+    "epicfight.dangerAnimSystem.DodgeAnimationMixin",
+    "epicfight.dangerAnimSystem.DodgeLocationIndicatorMixin",
     "epicfight.dangerAnimSystem.StarGuardSkillMixin",
     "epicfight.dangerAnimSystem.StarParryingSkillMixin",
     "minimap.HudRendererMixin",
@@ -28,9 +30,7 @@
     "ItemRendererMixin",
     "time.ClientLevelMixin",
     "time.LevelRendererMixin",
-    "time.MusicManagerMixin",
     "time.SoundEngineMixin",
-    "time.SoundManagerMixin",
     "time.TextureManagerMixin",
     "time.TutorialMixin"
   ],

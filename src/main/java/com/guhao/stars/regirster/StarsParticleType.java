@@ -30,6 +30,7 @@ public class StarsParticleType {
     public static final RegistryObject<SimpleParticleType> EX_LASER;
     public static final RegistryObject<HitParticleType> AIR_PUNCH_BURST_PARTICLE;
     public static final RegistryObject<SimpleParticleType> OLA;
+
     public static final RegistryObject<SimpleParticleType> SPARK_EXPANSIVE;
     public static final RegistryObject<SimpleParticleType> SPARK_CONTRACTIVE;
     public static final RegistryObject<SimpleParticleType> NORMAL_SPARK;
@@ -74,10 +75,14 @@ public class StarsParticleType {
         EX_LASER = PARTICLES.register("ex_laser", () -> new SimpleParticleType(true));
         OLA = PARTICLES.register("ola", () -> new SimpleParticleType(true));
         AIR_PUNCH_BURST_PARTICLE = PARTICLES.register("air_punch_burst", () -> new HitParticleType(true, HitParticleType.RANDOM_WITHIN_BOUNDING_BOX,HitParticleType.ATTACKER_XY_ROTATION));
+
+
+
         SPARK_EXPANSIVE = PARTICLES.register("spark_expansive", () -> new SimpleParticleType(true));
         SPARK_CONTRACTIVE = PARTICLES.register("spark_contractive", () -> new SimpleParticleType(true));
         NORMAL_SPARK = PARTICLES.register("spark_normal", () -> new SimpleParticleType(true));
         FLASH = PARTICLES.register("flash", () -> new SimpleParticleType(true));
         ALL_SPARK = PARTICLES.register("all_spark", () -> new HitParticleType(true, HitParticleType.RANDOM_WITHIN_BOUNDING_BOX, HitParticleType.ZERO));
+
     }
 }

@@ -3,6 +3,7 @@ package com.guhao.stars.mixins.epicfight;
 import com.guhao.stars.entity.StarAttributes;
 import com.guhao.stars.regirster.StarsEffect;
 import com.guhao.stars.units.StarDataUnit;
+import com.guhao.stars.utils.dangerAnimSystem.AnimationEffectManager;
 import com.nameless.indestructible.api.animation.types.LivingEntityPatchEvent;
 import com.nameless.indestructible.data.AdvancedMobpatchReloader;
 import com.nameless.indestructible.world.capability.Utils.CapabilityState;
@@ -93,8 +94,8 @@ public class CapabilityStateMixin<T extends MobPatch<?>, V extends AdvancedMobpa
     }
     @Inject(method = "tryProcess",at = @At("HEAD"), cancellable = true)
     private void tryProcess(DamageSource damageSource, float amount, CallbackInfoReturnable<AttackResult> cir) {
-        EpicFightDamageSource epicFightDamageSource = StarDataUnit.getEpicFightDamageSources(damageSource);
-        if (((MobPatch<?>) this.mobPatch instanceof IAdvancedCapability iac) && epicFightDamageSource != null && StarDataUnit.isNoGuard(epicFightDamageSource.getAnimation().get())) {
+        EpicFightDamageSource epicFightDamageSource = AnimationEffectManager.getEpicFightDamageSources(damageSource);
+        if (((MobPatch<?>) this.mobPatch instanceof IAdvancedCapability iac) && epicFightDamageSource != null && AnimationEffectManager.isNoGuardAnimation(epicFightDamageSource.getAnimation().get())) {
             cir.setReturnValue(new AttackResult(AttackResult.ResultType.SUCCESS, amount));
             cir.cancel();
         }

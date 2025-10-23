@@ -3,7 +3,7 @@ package com.guhao.stars.efmex.skills;
 import com.guhao.stars.efmex.StarSkillCategories;
 import com.guhao.stars.efmex.StarSkillDataKeys;
 import com.guhao.stars.regirster.StarsEffect;
-import com.guhao.stars.units.StarDataUnit;
+import com.guhao.stars.utils.dangerAnimSystem.AnimationEffectManager;
 import com.nameless.indestructible.world.capability.AdvancedCustomHumanoidMobPatch;
 import net.corruptdog.cdm.gameasset.CorruptAnimations;
 import net.minecraft.client.player.LocalPlayer;
@@ -28,6 +28,7 @@ import yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch;
 import yesman.epicfight.world.damagesource.EpicFightDamageSource;
 import yesman.epicfight.world.entity.eventlistener.PlayerEventListener;
 
+import java.util.Objects;
 import java.util.UUID;
 
 import static yesman.epicfight.world.entity.eventlistener.PlayerEventListener.EventType.BASIC_ATTACK_EVENT;
@@ -111,8 +112,8 @@ public class SeeThrough1 extends Skill {
             }
             ///////////////////////////////////////
             AdvancedCustomHumanoidMobPatch<?> longpatch = EpicFightCapabilities.getEntityPatch(event.getDamageSource().getDirectEntity(), AdvancedCustomHumanoidMobPatch.class);
-            EpicFightDamageSource epicFightDamageSource = StarDataUnit.getEpicFightDamageSources(event.getDamageSource());
-            if (epicFightDamageSource != null && StarDataUnit.isNoParry(epicFightDamageSource.getAnimation().get()) && event.isParried()) {
+            EpicFightDamageSource epicFightDamageSource = AnimationEffectManager.getEpicFightDamageSources(event.getDamageSource());
+            if (epicFightDamageSource != null && AnimationEffectManager.isNoParryAnimation(epicFightDamageSource.getAnimation().get()) && event.isParried()) {
                 container.getDataManager().setDataSync(StarSkillDataKeys.COUNTER_TICK.get(), 60.0f, event.getPlayerPatch().getOriginal());
                 event.getPlayerPatch().getOriginal().addEffect(new MobEffectInstance(StarsEffect.ORANGE_GLOW.get(), 60, 1, true, true));
             }
@@ -129,12 +130,12 @@ public class SeeThrough1 extends Skill {
 
 
 ////////////////////////////////////////////////
-            DynamicAnimation animation = event.getPlayerPatch().getAnimator().getPlayerFor(null).getAnimation().get();
-            DynamicAnimation targetanimation = entitypatch.getAnimator().getPlayerFor(null).getAnimation().get();
+            DynamicAnimation animation = Objects.requireNonNull(event.getPlayerPatch().getAnimator().getPlayerFor(null)).getAnimation().get();
+            DynamicAnimation targetanimation = Objects.requireNonNull(entitypatch.getAnimator().getPlayerFor(null)).getAnimation().get();
 
             DamageSource damagesource = event.getDamageSource();
             Vec3 sourceLocation = damagesource.getSourcePosition();
-            StaticAnimation[] attackAnimations = StarDataUnit.getcaidao();
+            StaticAnimation[] attackAnimations = AnimationEffectManager.getSpecialSeethroughAnimations().toArray(new StaticAnimation[0]);
             StaticAnimation[] dodgeAnimations = new StaticAnimation[]{
                     Animations.BIPED_STEP_FORWARD.get(),
                     CorruptAnimations.STEP_FORWARD.get(),
@@ -147,7 +148,7 @@ public class SeeThrough1 extends Skill {
                         Vec3 viewVector = event.getPlayerPatch().getOriginal().getViewVector(1.0F);
                         Vec3 toSourceLocation = sourceLocation.subtract(playerPosition).normalize();
                         double dotProduct = toSourceLocation.dot(viewVector);
-                        if (dotProduct > Math.cos(Math.toRadians(120))) {
+                        if (dotProduct > Math.cos(Math.toRadians(180))) {
                             for (StaticAnimation dodgeAnim : dodgeAnimations) {
                                 if (animation == dodgeAnim) {
                                     event.setCanceled(true);

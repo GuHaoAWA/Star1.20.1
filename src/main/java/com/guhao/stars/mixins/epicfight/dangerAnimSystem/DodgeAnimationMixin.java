@@ -1,7 +1,6 @@
-/*
 package com.guhao.stars.mixins.epicfight.dangerAnimSystem;
 
-import com.guhao.stars.units.StarDataUnit;
+import com.guhao.stars.utils.dangerAnimSystem.AnimationEffectManager;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
@@ -17,6 +16,7 @@ import yesman.epicfight.api.animation.types.EntityState;
 import yesman.epicfight.api.asset.AssetAccessor;
 import yesman.epicfight.api.model.Armature;
 import yesman.epicfight.api.utils.AttackResult;
+import yesman.epicfight.world.damagesource.EpicFightDamageSource;
 import yesman.epicfight.world.damagesource.EpicFightDamageTypeTags;
 
 import java.util.function.Function;
@@ -29,23 +29,26 @@ public abstract class DodgeAnimationMixin extends ActionAnimation {
 
     @Unique
     private static final Function<DamageSource, AttackResult.ResultType> star$DODGEABLE_SOURCE_VALIDATOR = (damagesource) -> {
-        if (StarDataUnit.getEpicFightDamageSources(damagesource) != null) {
-            return damagesource.getEntity() != null &&
-                    !damagesource.is(DamageTypeTags.IS_EXPLOSION) &&
-                    !StarDataUnit.isNoDodge(StarDataUnit.getEpicFightDamageSources(damagesource).getAnimation().get()) &&
-                    !damagesource.is(DamageTypes.MAGIC) &&
-                    !damagesource.is(DamageTypeTags.BYPASSES_ARMOR) &&
-                    !damagesource.is(DamageTypeTags.BYPASSES_INVULNERABILITY) &&
-                    !damagesource.is(EpicFightDamageTypeTags.BYPASS_DODGE) ?
-                    AttackResult.ResultType.MISSED : AttackResult.ResultType.SUCCESS;
+        boolean isNoDodgeAnimation = false;
+        if (damagesource instanceof EpicFightDamageSource epicFightDamageSource) {
+            if (epicFightDamageSource.getAnimation() != null) {
+                var animation = epicFightDamageSource.getAnimation().get();
+                isNoDodgeAnimation = AnimationEffectManager.isNoDodgeAnimation(animation);
+            }
         }
-        return damagesource.getEntity() != null &&
-                !damagesource.is(DamageTypeTags.IS_EXPLOSION) &&
-                !damagesource.is(DamageTypes.MAGIC) &&
-                !damagesource.is(DamageTypeTags.BYPASSES_ARMOR) &&
-                !damagesource.is(DamageTypeTags.BYPASSES_INVULNERABILITY) &&
-                !damagesource.is(EpicFightDamageTypeTags.BYPASS_DODGE) ?
-                AttackResult.ResultType.MISSED : AttackResult.ResultType.SUCCESS;
+
+        if (damagesource.getEntity() != null
+                && !damagesource.is(DamageTypeTags.IS_EXPLOSION)
+                && !damagesource.is(DamageTypes.MAGIC)
+                && !damagesource.is(DamageTypeTags.BYPASSES_ARMOR)
+                && !damagesource.is(DamageTypeTags.BYPASSES_INVULNERABILITY)
+                && !damagesource.is(EpicFightDamageTypeTags.BYPASS_DODGE)
+                && !isNoDodgeAnimation
+        ) {
+            return AttackResult.ResultType.MISSED;
+        }
+
+        return AttackResult.ResultType.SUCCESS;
     };
 
     @Inject(method = "<init>(FFLyesman/epicfight/api/animation/AnimationManager$AnimationAccessor;FFLyesman/epicfight/api/asset/AssetAccessor;)V",
@@ -65,4 +68,3 @@ public abstract class DodgeAnimationMixin extends ActionAnimation {
                 .addState(EntityState.ATTACK_RESULT, star$DODGEABLE_SOURCE_VALIDATOR);
     }
 }
-*/
