@@ -1,5 +1,6 @@
 package com.guhao.stars.utils.dangerAnimSystem;
 
+import net.corruptdog.cdm.gameasset.CorruptAnimations;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.DamageTypeTags;
@@ -9,10 +10,9 @@ import net.minecraft.world.damagesource.DamageType;
 import reascer.wom.gameasset.WOMAnimations;
 import reascer.wom.gameasset.animations.weapons.*;
 import yesman.epicfight.api.animation.types.StaticAnimation;
+import yesman.epicfight.gameasset.Animations;
 import yesman.epicfight.world.damagesource.EpicFightDamageSource;
 import yesman.epicfight.world.damagesource.EpicFightDamageTypeTags;
-import yesman.epicfight.gameasset.Animations;
-import net.corruptdog.cdm.gameasset.CorruptAnimations;
 
 import java.util.Arrays;
 import java.util.List;
@@ -22,12 +22,7 @@ public class AnimationEffectManager {
 
     public static final TagKey<DamageType> BYPASS_GUARD_ONLY = create("star_bypass_guard");
     public static final TagKey<DamageType> BYPASS_PARRY = create("star_bypass_parry");
-    public static final TagKey<DamageType> BYPASS_DODGE= create("star_bypass_dodge");
-
-    private static TagKey<DamageType> create(String name) {
-        return TagKey.create(Registries.DAMAGE_TYPE, new ResourceLocation("star", name));
-    }
-
+    public static final TagKey<DamageType> BYPASS_DODGE = create("star_bypass_dodge");
     // 可踩刀识破的动画
     private static final List<StaticAnimation> SPECIAL_SEETHROUGH_ANIMATIONS = Arrays.asList(
             CorruptAnimations.SSPEAR_DASH.get(),
@@ -38,7 +33,6 @@ public class AnimationEffectManager {
             CorruptAnimations.BLADE_RUSH4.get(),
             CorruptAnimations.BLADE_RUSH_FINISHER.get()
     );
-
     // 红危:不可防御，不可招架的动画列表
     private static final List<StaticAnimation> NO_BLOCK_ANIMATIONS = Arrays.asList(
             WOMAnimations.STRONG_KICK.get(),
@@ -62,7 +56,6 @@ public class AnimationEffectManager {
             CorruptAnimations.BLADE_RUSH3_DAWN.get(),
             CorruptAnimations.YAMATO_DAWN_DAWN.get()
     );
-
     // 黄危:不可防御的动画列表
     private static final List<StaticAnimation> NO_GUARD_ANIMATIONS = Arrays.asList(
             WOMAnimations.STAFF_KINKONG.get(),
@@ -87,7 +80,6 @@ public class AnimationEffectManager {
             CorruptAnimations.BLADE_RUSH_FINISHER.get(),
             CorruptAnimations.YAMATO_POWER3_FINISH.get()
     );
-
     // 蓝危:不可闪避的动画列表
     private static final List<StaticAnimation> NO_DODGE_ANIMATIONS = Arrays.asList(
             CorruptAnimations.LETHAL_SLICING_ONCE1.get(),
@@ -97,7 +89,6 @@ public class AnimationEffectManager {
             CorruptAnimations.BLADE_RUSH3_DAWN.get(),
             CorruptAnimations.YAMATO_DAWN_DAWN.get()
     );
-
     // 紫危：不可闪避不可招架不可防御的动画列表
     private static final List<StaticAnimation> NO_DODGE_GUARD_ANIMATIONS = Arrays.asList(
             WOMAnimations.TORMENT_AUTO_1.get(),
@@ -115,6 +106,10 @@ public class AnimationEffectManager {
             CorruptAnimations.BLADE_RUSH3_DAWN.get(),
             CorruptAnimations.YAMATO_DAWN_DAWN.get()
     );
+
+    private static TagKey<DamageType> create(String name) {
+        return TagKey.create(Registries.DAMAGE_TYPE, new ResourceLocation("star", name));
+    }
 
     private static boolean shouldBypassBlock(StaticAnimation animation) {
         return animation != null && NO_BLOCK_ANIMATIONS.contains(animation);

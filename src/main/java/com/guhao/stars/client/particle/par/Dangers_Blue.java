@@ -14,19 +14,6 @@ import org.jetbrains.annotations.NotNull;
 
 @OnlyIn(Dist.CLIENT)
 public class Dangers_Blue extends TextureSheetParticle {
-    @OnlyIn(Dist.CLIENT)
-    public static Dangers_BlueParticleProvider provider(SpriteSet spriteSet) {
-        return new Dangers_BlueParticleProvider(spriteSet);
-    }
-    public static class Dangers_BlueParticleProvider implements ParticleProvider<SimpleParticleType> {
-        private final SpriteSet spriteSet;
-        public Dangers_BlueParticleProvider(SpriteSet spriteSet) {
-            this.spriteSet = spriteSet;
-        }
-        public Particle createParticle(SimpleParticleType typeIn, ClientLevel worldIn, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed) {
-            return new Dangers_Blue(worldIn, x, y, z,this.spriteSet);
-        }
-    }
     protected Dangers_Blue(ClientLevel world, double x, double y, double z, SpriteSet spriteSet) {
         super(world, x, y, z);
         this.setSize(2.5f, 2.5f);
@@ -36,10 +23,17 @@ public class Dangers_Blue extends TextureSheetParticle {
         this.hasPhysics = false;
         this.setSpriteFromAge(spriteSet);
     }
+
+    @OnlyIn(Dist.CLIENT)
+    public static Dangers_BlueParticleProvider provider(SpriteSet spriteSet) {
+        return new Dangers_BlueParticleProvider(spriteSet);
+    }
+
     @Override
     public boolean shouldCull() {
         return false;
     }
+
     @Override
     public int getLightColor(float partialTick) {
         return 15728880;
@@ -49,6 +43,7 @@ public class Dangers_Blue extends TextureSheetParticle {
     public @NotNull ParticleRenderType getRenderType() {
         return ParticleRenderTypeN.PARTICLE_SHEET_LIT_NO_CULL;
     }
+
     @Override
     public void render(@NotNull VertexConsumer vertexBuffer, Camera camera, float pt) {
         super.render(vertexBuffer, camera, pt);
@@ -60,9 +55,22 @@ public class Dangers_Blue extends TextureSheetParticle {
             this.setPos(x, y, z);
         }
     }
+
     @Override
     public void tick() {
         super.tick();
+    }
+
+    public static class Dangers_BlueParticleProvider implements ParticleProvider<SimpleParticleType> {
+        private final SpriteSet spriteSet;
+
+        public Dangers_BlueParticleProvider(SpriteSet spriteSet) {
+            this.spriteSet = spriteSet;
+        }
+
+        public Particle createParticle(SimpleParticleType typeIn, ClientLevel worldIn, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed) {
+            return new Dangers_Blue(worldIn, x, y, z, this.spriteSet);
+        }
     }
 
 }

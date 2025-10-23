@@ -12,18 +12,16 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.PacketDistributor;
 import yesman.epicfight.api.animation.types.StaticAnimation;
-import yesman.epicfight.gameasset.Animations;
 import yesman.epicfight.world.damagesource.EpicFightDamageSource;
 
 import java.util.Arrays;
 
 public record StarDataUnit() {
-    private static boolean timeStopped = false;
-
-    // 获取当前时停状态
-    public static boolean isTimeStopped() {
-        return timeStopped;
-    }
+    /* static final StaticAnimation[] GUARD;
+     static final StaticAnimation[] PARRY;
+     static final StaticAnimation[] DODGE;*/
+    static final StaticAnimation[] CAIDAO;
+    static final StaticAnimation[] LOCK_OFF;
 
    /* public static void setTimeStopped(boolean stopped) {
         // 只在服务端执行同步
@@ -47,18 +45,8 @@ public record StarDataUnit() {
         PACKET_HANDLER.send(PacketDistributor.PLAYER.with(() -> player),
                 new TimeStopSyncPacket(stopped));
     }*/
+    private static boolean timeStopped = false;
 
-    // 处理网络包的方法
-    public static void handleTimeStopSync(boolean stopped) {
-        timeStopped = stopped;
-    }
-
-
-   /* static final StaticAnimation[] GUARD;
-    static final StaticAnimation[] PARRY;
-    static final StaticAnimation[] DODGE;*/
-    static final StaticAnimation[] CAIDAO;
-    static final StaticAnimation[] LOCK_OFF;
     static {//无视格挡red
         /*GUARD = new StaticAnimation[]{
                 Animations.TSUNAMI_REINFORCED.get(),
@@ -85,7 +73,7 @@ public record StarDataUnit() {
 ////////////////////////////////////////////////////////////////
 *//*                StarAnimations.SCRATCH,
                 StarAnimations.EVIL_BLADE,*//*
-*//*                GuHaoAnimations.NB_ATTACK,
+         *//*                GuHaoAnimations.NB_ATTACK,
                 GuHaoAnimations.GUHAO_BATTOJUTSU_DASH,
                 GuHaoAnimations.GUHAO_BIU,
                 GuHaoAnimations.BLOOD_JUDGEMENT,
@@ -116,7 +104,7 @@ public record StarDataUnit() {
         };//purple 无视格挡+闪避的下段紫危：
         DODGE = new StaticAnimation[]{
 *//*                StarAnimations.KILL,*//*
-               *//* WOMAnimations.TORMENT_AUTO_1,
+         *//* WOMAnimations.TORMENT_AUTO_1,
                 WOMAnimations.RUINE_CHATIMENT,
                 WOMAnimations.SOLAR_QUEMADURA,
                 WOMAnimations.SOLAR_AUTO_2_POLVORA,
@@ -160,6 +148,16 @@ public record StarDataUnit() {
         };
     }
 
+    // 获取当前时停状态
+    public static boolean isTimeStopped() {
+        return timeStopped;
+    }
+
+    // 处理网络包的方法
+    public static void handleTimeStopSync(boolean stopped) {
+        timeStopped = stopped;
+    }
+
     public static EpicFightDamageSource getEpicFightDamageSources(DamageSource damageSource) {
         if (damageSource instanceof EpicFightDamageSource epicfightDamageSource) {
             return epicfightDamageSource;
@@ -167,31 +165,33 @@ public record StarDataUnit() {
             return null;
         }
     }
-   /* public static StaticAnimation[] getGuard() {
-        return GUARD;
-    }
-    public static StaticAnimation[] getParry() {
-        return PARRY;
-    }*/
+
+    /* public static StaticAnimation[] getGuard() {
+         return GUARD;
+     }
+     public static StaticAnimation[] getParry() {
+         return PARRY;
+     }*/
     public static StaticAnimation[] getcaidao() {
         return CAIDAO;
     }
-   /* public static boolean isNoGuard(StaticAnimation staticAnimation) {
-        return Arrays.asList(GUARD).contains(staticAnimation);
-    }
-    public static boolean isNoParry(StaticAnimation staticAnimation) {
-        return Arrays.asList(PARRY).contains(staticAnimation);
-    }
-    public static boolean isNoDodge(StaticAnimation staticAnimation) {
-        return Arrays.asList(DODGE).contains(staticAnimation);
-    }*/
+
+    /* public static boolean isNoGuard(StaticAnimation staticAnimation) {
+         return Arrays.asList(GUARD).contains(staticAnimation);
+     }
+     public static boolean isNoParry(StaticAnimation staticAnimation) {
+         return Arrays.asList(PARRY).contains(staticAnimation);
+     }
+     public static boolean isNoDodge(StaticAnimation staticAnimation) {
+         return Arrays.asList(DODGE).contains(staticAnimation);
+     }*/
     public static boolean canCaiDAO(StaticAnimation staticAnimation) {
         return Arrays.asList(CAIDAO).contains(staticAnimation);
     }
+
     public static boolean isLockOff(StaticAnimation staticAnimation) {
         return Arrays.asList(LOCK_OFF).contains(staticAnimation);
     }
-
 
 
     public static void spawnBurst(Level level, Vec3 center, float radius, int count,

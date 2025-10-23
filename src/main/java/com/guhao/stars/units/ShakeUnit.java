@@ -59,6 +59,7 @@ public class ShakeUnit {
                 && !Minecraft.getInstance().isPaused()
                 && center != null;
     }
+
     private static void applyShakeEffect(ViewportEvent.ComputeCameraAngles event,
                                          float partialTicks) {
         Player player = Minecraft.getInstance().player;
@@ -71,7 +72,7 @@ public class ShakeUnit {
         float attenuatedIntensity = currentIntensity * distanceFactor;
 
         float time = (player.tickCount + partialTicks) * frequency;
-        float progress = 1.0f - (float)shakeDuration / (shakeDuration + partialTicks);
+        float progress = 1.0f - (float) shakeDuration / (shakeDuration + partialTicks);
         float dynamicIntensity = attenuatedIntensity * (1.0f - progress * progress);
 
         Vec3f shakeOffset = calculateShakeOffset(time, dynamicIntensity);
@@ -79,13 +80,15 @@ public class ShakeUnit {
         event.setYaw(event.getYaw() + shakeOffset.y);
         event.setRoll(event.getRoll() + shakeOffset.z);
     }
+
     private static Vec3f calculateShakeOffset(float time, float intensity) {
         return new Vec3f(
-                intensity * (float)(Math.sin(time * 1.1) * 0.6f),
-                intensity * (float)(Math.cos(time * 0.9) * 0.7f),
-                intensity * (float)(Math.sin(time * 1.3 + 2)) * 0.4f
+                intensity * (float) (Math.sin(time * 1.1) * 0.6f),
+                intensity * (float) (Math.cos(time * 0.9) * 0.7f),
+                intensity * (float) (Math.sin(time * 1.3 + 2)) * 0.4f
         );
     }
+
     private static void updateShakeState() {
         if (!Minecraft.getInstance().isPaused()) {
             shakeDuration--;
@@ -96,6 +99,7 @@ public class ShakeUnit {
             }
         }
     }
+
     public static void reset() {
         shakeDuration = 0;
         currentIntensity = 0f;

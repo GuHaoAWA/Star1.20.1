@@ -12,12 +12,13 @@ import yesman.epicfight.world.entity.ai.attribute.EpicFightAttributes;
 import java.util.UUID;
 
 public class ImpactEnhance extends MobEffect {
+    private static final UUID KNOCKBACK_MODIFIER_UUID = UUID.fromString("4f2c9273-c7d1-46cb-8de8-4571c696c2e4");
+    private static final UUID KNOCKBACK_OFF_MODIFIER_UUID = UUID.fromString("4f2c9273-c7d1-46cb-8de9-4571c696c2e4");
     public ImpactEnhance() {
         super(MobEffectCategory.NEUTRAL, 0xFF0000);
 
     }
-    private static final UUID KNOCKBACK_MODIFIER_UUID = UUID.fromString("4f2c9273-c7d1-46cb-8de8-4571c696c2e4");
-    private static final UUID KNOCKBACK_OFF_MODIFIER_UUID = UUID.fromString("4f2c9273-c7d1-46cb-8de9-4571c696c2e4");
+
     @Override
     public void applyEffectTick(@NotNull LivingEntity entity, int amplifier) {
         AttributeInstance attackDamage = entity.getAttribute(EpicFightAttributes.IMPACT.get());
@@ -26,7 +27,7 @@ public class ImpactEnhance extends MobEffect {
             AttributeModifier modifier = new AttributeModifier(
                     KNOCKBACK_MODIFIER_UUID,
                     "enhance_impact",
-                    0.3 *(amplifier+1),
+                    0.3 * (amplifier + 1),
                     AttributeModifier.Operation.ADDITION
             );
             attackDamage.addTransientModifier(modifier);
@@ -37,13 +38,14 @@ public class ImpactEnhance extends MobEffect {
             AttributeModifier modifier = new AttributeModifier(
                     KNOCKBACK_OFF_MODIFIER_UUID,
                     "enhance_off_impact",
-                    0.3 *(amplifier+1),
+                    0.3 * (amplifier + 1),
                     AttributeModifier.Operation.ADDITION
             );
             off.addTransientModifier(modifier);
         }
 
     }
+
     @Override
     public void removeAttributeModifiers(@NotNull LivingEntity entity, @NotNull AttributeMap attributeMap, int amplifier) {
         super.removeAttributeModifiers(entity, attributeMap, amplifier);

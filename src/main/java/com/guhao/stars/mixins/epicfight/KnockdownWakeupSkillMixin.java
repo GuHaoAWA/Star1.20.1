@@ -6,7 +6,7 @@ import yesman.epicfight.api.animation.types.EntityState;
 import yesman.epicfight.skill.dodge.KnockdownWakeupSkill;
 import yesman.epicfight.world.capabilities.entitypatch.player.PlayerPatch;
 
-@Mixin(value = KnockdownWakeupSkill.class,remap = false)
+@Mixin(value = KnockdownWakeupSkill.class, remap = false)
 public class KnockdownWakeupSkillMixin {
     /**
      * @author

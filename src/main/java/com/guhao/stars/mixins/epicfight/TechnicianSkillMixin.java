@@ -19,19 +19,22 @@ import java.util.UUID;
         remap = false
 )
 public class TechnicianSkillMixin extends PassiveSkill {
+    @Unique
+    private static final UUID EVENT_UUID = UUID.fromString("99e5c782-fdaf-11pb-9a03-0242ac130003");
+
     public TechnicianSkillMixin(SkillBuilder<? extends PassiveSkill> builder) {
         super(builder);
     }
-    @Unique
-    private static final UUID EVENT_UUID = UUID.fromString("99e5c782-fdaf-11pb-9a03-0242ac130003");
-    @Inject(method = "onInitiate" ,at = @At("HEAD"))
+
+    @Inject(method = "onInitiate", at = @At("HEAD"))
     public void onInitiate(SkillContainer container, CallbackInfo ci) {
         container.getExecutor().getEventListener().addEventListener(PlayerEventListener.EventType.DODGE_SUCCESS_EVENT, EVENT_UUID, (event) -> {
             float consumption = container.getExecutor().getModifiedStaminaConsume(container.getExecutor().getSkill(SkillSlots.DODGE).getSkill().getConsumption());
             container.getExecutor().setStamina(container.getExecutor().getStamina() + consumption * 0.08f);
         });
     }
-    @Inject(method = "onRemoved" ,at = @At("HEAD"))
+
+    @Inject(method = "onRemoved", at = @At("HEAD"))
     public void onRemoved(SkillContainer container, CallbackInfo ci) {
         container.getExecutor().getEventListener().removeListener(PlayerEventListener.EventType.DODGE_SUCCESS_EVENT, EVENT_UUID);
     }

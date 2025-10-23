@@ -29,10 +29,10 @@ public class CialloEvent {
     private static void execute(@Nullable Event event, Level world, String message, Player player) {
         if (message.equals("ciallo") || message.equals("Ciallo")) {
             if (!world.isClientSide() && player.getServer() != null) {
-                Objects.requireNonNull(player.level().getServer()).getPlayerList().broadcastSystemMessage(Component.literal("§dCiallo～(∠・ω< )⌒☆"),false);
+                Objects.requireNonNull(player.level().getServer()).getPlayerList().broadcastSystemMessage(Component.literal("§dCiallo～(∠・ω< )⌒☆"), false);
                 for (ServerPlayer serverPlayer : player.level().getServer().getPlayerList().getPlayers()) {
                     ServerPlayerPatch pp = EpicFightCapabilities.getEntityPatch(serverPlayer, ServerPlayerPatch.class);
-                    pp.playSound(StarsSounds.CAILLO.get(),1.0f,1.0f,1.0f);
+                    pp.playSound(StarsSounds.CAILLO.get(), 1.0f, 1.0f, 1.0f);
                 }
             }
         }

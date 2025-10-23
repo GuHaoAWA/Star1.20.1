@@ -1,11 +1,11 @@
 package com.guhao.stars.utils.dangerAnimSystem;
 
+import com.guhao.stars.StarsMod;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import yesman.epicfight.world.damagesource.EpicFightDamageSource;
-import com.guhao.stars.StarsMod;
 
 @Mod.EventBusSubscriber(modid = StarsMod.MODID)
 public class DamageEventHandler {

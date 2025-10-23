@@ -8,6 +8,7 @@ public class Toughness extends MobEffect {
     public Toughness() {
         super(MobEffectCategory.BENEFICIAL, -13261);
     }
+
     @Override
     public @NotNull String getDescriptionId() {
         return "effect.star.toughness";

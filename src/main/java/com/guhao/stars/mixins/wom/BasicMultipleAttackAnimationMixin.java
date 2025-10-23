@@ -26,9 +26,9 @@ public class BasicMultipleAttackAnimationMixin extends AttackAnimation {
 
     */
 /**
-     * @author
-     * @reason
-     *//*
+ * @author
+ * @reason
+ *//*
 
     @Overwrite
     public Vec3 getCoordVector(LivingEntityPatch<?> entitypatch, DynamicAnimation dynamicAnimation) {

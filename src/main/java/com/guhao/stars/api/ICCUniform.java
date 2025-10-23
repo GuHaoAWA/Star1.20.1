@@ -4,6 +4,14 @@ import org.joml.Matrix3f;
 import org.joml.Matrix4f;
 
 public interface ICCUniform {
+    private static float[] toArrayF(Matrix3f matrix) {
+        return new float[]{matrix.m00, matrix.m01, matrix.m02, matrix.m10, matrix.m11, matrix.m12, matrix.m20, matrix.m21, matrix.m22,};
+    }
+
+    private static float[] toArrayF(Matrix4f matrix) {
+        return new float[]{matrix.m00(), matrix.m01(), matrix.m02(), matrix.m03(), matrix.m10(), matrix.m11(), matrix.m12(), matrix.m13(), matrix.m20(), matrix.m21(), matrix.m22(), matrix.m23(), matrix.m30(), matrix.m31(), matrix.m32(), matrix.m33(),};
+    }
+
     default void glUniform1i(int i0) {
         glUniformI(i0);
     }
@@ -53,12 +61,4 @@ public interface ICCUniform {
     void glUniformF(boolean transpose, float... values);
 
     void glUniformD(boolean transpose, double... values);
-
-    private static float[] toArrayF(Matrix3f matrix) {
-        return new float[]{matrix.m00, matrix.m01, matrix.m02, matrix.m10, matrix.m11, matrix.m12, matrix.m20, matrix.m21, matrix.m22,};
-    }
-
-    private static float[] toArrayF(Matrix4f matrix) {
-        return new float[]{matrix.m00(), matrix.m01(), matrix.m02(), matrix.m03(), matrix.m10(), matrix.m11(), matrix.m12(), matrix.m13(), matrix.m20(), matrix.m21(), matrix.m22(), matrix.m23(), matrix.m30(), matrix.m31(), matrix.m32(), matrix.m33(),};
-    }
 }

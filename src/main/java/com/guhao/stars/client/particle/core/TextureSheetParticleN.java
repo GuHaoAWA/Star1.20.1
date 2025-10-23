@@ -1,4 +1,3 @@
-
 package com.guhao.stars.client.particle.core;
 
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -9,7 +8,6 @@ public abstract class TextureSheetParticleN extends MagicRuneParticle {
     protected TextureAtlasSprite sprite;
 
 
-
     protected TextureSheetParticleN(ClientLevel p_108323_, double p_108324_, double p_108325_, double p_108326_) {
         super(p_108323_, p_108324_, p_108325_, p_108326_);
     }
@@ -17,7 +15,6 @@ public abstract class TextureSheetParticleN extends MagicRuneParticle {
     protected TextureSheetParticleN(ClientLevel p_108328_, double p_108329_, double p_108330_, double p_108331_, double p_108332_, double p_108333_, double p_108334_) {
         super(p_108328_, p_108329_, p_108330_, p_108331_, p_108332_, p_108333_, p_108334_);
     }
-
 
 
     protected void setSprite(TextureAtlasSprite p_108338_) {

@@ -84,7 +84,8 @@ public final class TransformUtils {
     public static ModelState stateFromItemTransforms(ItemTransforms itemTransforms) {
         if (itemTransforms == ItemTransforms.NO_TRANSFORMS) return IDENTITY;
         ImmutableMap.Builder<ItemDisplayContext, Transformation> map = ImmutableMap.builder();
-        for (ItemDisplayContext value : ItemDisplayContext.values()) map.put(value, create(itemTransforms.getTransform(value)));
+        for (ItemDisplayContext value : ItemDisplayContext.values())
+            map.put(value, create(itemTransforms.getTransform(value)));
         return new PerspectiveModelState(map.build());
     }
 

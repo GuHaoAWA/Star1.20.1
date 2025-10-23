@@ -25,11 +25,16 @@ public class OLA extends TextureSheetParticle {
 
         this.setSpriteFromSet(random);
         Random rand = new Random();
-        float angle = (float)Math.toRadians(90.0F + (rand.nextFloat() - 0.5F) * 90.0F + (rand.nextBoolean() ? 0.0F : 180.0F));
+        float angle = (float) Math.toRadians(90.0F + (rand.nextFloat() - 0.5F) * 90.0F + (rand.nextBoolean() ? 0.0F : 180.0F));
         this.oRoll = angle;
         this.roll = angle;
         this.lifetime = 20 + random.nextInt(5);
         this.quadSize = 0.45f + random.nextFloat() * 0.2f;
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    public static OLA.OLAParticleProvider provider(SpriteSet spriteSet) {
+        return new OLA.OLAParticleProvider(spriteSet);
     }
 
     private void setSpriteFromSet(RandomSource random) {
@@ -55,11 +60,6 @@ public class OLA extends TextureSheetParticle {
     public void render(@NotNull VertexConsumer var1, @NotNull Camera var2, float var3) {
         super.render(var1, var2, var3);
         this.quadSize += 0.002F;
-    }
-
-    @OnlyIn(Dist.CLIENT)
-    public static OLA.OLAParticleProvider provider(SpriteSet spriteSet) {
-        return new OLA.OLAParticleProvider(spriteSet);
     }
 
     public static class OLAParticleProvider implements ParticleProvider<SimpleParticleType> {

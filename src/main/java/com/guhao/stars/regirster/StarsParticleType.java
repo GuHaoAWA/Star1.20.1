@@ -37,11 +37,37 @@ public class StarsParticleType {
     public static final RegistryObject<SimpleParticleType> FLASH;
     public static final RegistryObject<HitParticleType> ALL_SPARK;
 
+    static {
+        PARTICLES = DeferredRegister.create(ForgeRegistries.PARTICLE_TYPES, MODID);
+        DANGER = PARTICLES.register("dangers", () -> new SimpleParticleType(true));
+        DANGER_RED = PARTICLES.register("dangers_red", () -> new SimpleParticleType(true));
+        DANGER_BLACK = PARTICLES.register("dangers_black", () -> new SimpleParticleType(true));
+        DANGER_BLUE = PARTICLES.register("dangers_blue", () -> new SimpleParticleType(true));
+        DANGER_PURPLE = PARTICLES.register("dangers_purple", () -> new SimpleParticleType(true));
+        FIRE_BALL = PARTICLES.register("fire_ball", () -> new SimpleParticleType(true));
+        DING = PARTICLES.register("ding", () -> new SimpleParticleType(true));
+        CAI = PARTICLES.register("cai", () -> new SimpleParticleType(true));
+        EX_LASER = PARTICLES.register("ex_laser", () -> new SimpleParticleType(true));
+        OLA = PARTICLES.register("ola", () -> new SimpleParticleType(true));
+        AIR_PUNCH_BURST_PARTICLE = PARTICLES.register("air_punch_burst", () -> new HitParticleType(true, HitParticleType.RANDOM_WITHIN_BOUNDING_BOX, HitParticleType.ATTACKER_XY_ROTATION));
+
+
+        SPARK_EXPANSIVE = PARTICLES.register("spark_expansive", () -> new SimpleParticleType(true));
+        SPARK_CONTRACTIVE = PARTICLES.register("spark_contractive", () -> new SimpleParticleType(true));
+        NORMAL_SPARK = PARTICLES.register("spark_normal", () -> new SimpleParticleType(true));
+        FLASH = PARTICLES.register("flash", () -> new SimpleParticleType(true));
+        ALL_SPARK = PARTICLES.register("all_spark", () -> new HitParticleType(true, HitParticleType.RANDOM_WITHIN_BOUNDING_BOX, HitParticleType.ZERO));
+
+    }
+
+    public StarsParticleType() {
+    }
+
     @OnlyIn(Dist.CLIENT)
     @SubscribeEvent
     public static void RP(RegisterParticleProvidersEvent event) {
 
-        
+
         event.registerSpriteSet(DANGER.get(), Dangers.DangerParticleProvider::new);
         event.registerSpriteSet(DANGER_RED.get(), Dangers_Red.Dangers_RedParticleProvider::new);
         event.registerSpriteSet(DANGER_BLACK.get(), Dangers_Black.Dangers_BlackParticleProvider::new);
@@ -56,33 +82,7 @@ public class StarsParticleType {
         event.registerSpriteSet(NORMAL_SPARK.get(), SparkParticle.NormalDustProvider::new);
         event.registerSpriteSet(SPARK_CONTRACTIVE.get(), SparkParticle.ContractiveDustProvider::new);
         event.registerSpriteSet(SPARK_EXPANSIVE.get(), SparkParticle.ExpansiveDustProvider::new);
-/*        event.registerSpriteSet(FLASH.get(), Flash.FlashParticleProvider::new);*/
+        /*        event.registerSpriteSet(FLASH.get(), Flash.FlashParticleProvider::new);*/
         event.registerSpecial(ALL_SPARK.get(), new AllSpark.Provider());
-    }
-    public StarsParticleType() {
-    }
-
-    static {
-        PARTICLES = DeferredRegister.create(ForgeRegistries.PARTICLE_TYPES, MODID);
-        DANGER = PARTICLES.register("dangers", () -> new SimpleParticleType(true));
-        DANGER_RED = PARTICLES.register("dangers_red", () -> new SimpleParticleType(true));
-        DANGER_BLACK = PARTICLES.register("dangers_black", () -> new SimpleParticleType(true));
-        DANGER_BLUE = PARTICLES.register("dangers_blue", () -> new SimpleParticleType(true));
-        DANGER_PURPLE = PARTICLES.register("dangers_purple", () -> new SimpleParticleType(true));
-        FIRE_BALL = PARTICLES.register("fire_ball", () -> new SimpleParticleType(true));
-        DING = PARTICLES.register("ding", () -> new SimpleParticleType(true));
-        CAI = PARTICLES.register("cai", () -> new SimpleParticleType(true));
-        EX_LASER = PARTICLES.register("ex_laser", () -> new SimpleParticleType(true));
-        OLA = PARTICLES.register("ola", () -> new SimpleParticleType(true));
-        AIR_PUNCH_BURST_PARTICLE = PARTICLES.register("air_punch_burst", () -> new HitParticleType(true, HitParticleType.RANDOM_WITHIN_BOUNDING_BOX,HitParticleType.ATTACKER_XY_ROTATION));
-
-
-
-        SPARK_EXPANSIVE = PARTICLES.register("spark_expansive", () -> new SimpleParticleType(true));
-        SPARK_CONTRACTIVE = PARTICLES.register("spark_contractive", () -> new SimpleParticleType(true));
-        NORMAL_SPARK = PARTICLES.register("spark_normal", () -> new SimpleParticleType(true));
-        FLASH = PARTICLES.register("flash", () -> new SimpleParticleType(true));
-        ALL_SPARK = PARTICLES.register("all_spark", () -> new HitParticleType(true, HitParticleType.RANDOM_WITHIN_BOUNDING_BOX, HitParticleType.ZERO));
-
     }
 }

@@ -36,7 +36,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import yesman.epicfight.client.world.capabilites.entitypatch.player.LocalPlayerPatch;
 import yesman.epicfight.world.capabilities.EpicFightCapabilities;
-import yesman.epicfight.world.capabilities.entitypatch.EntityPatch;
 import yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch;
 import yesman.epicfight.world.capabilities.entitypatch.player.PlayerPatch;
 
@@ -45,19 +44,17 @@ import javax.annotation.Nullable;
 @Mixin(Minecraft.class)
 public abstract class MinecraftMixin {
     @Shadow
+    public static Minecraft instance;
+    @Shadow
     @Nullable
     public ClientLevel level;
-
     @Shadow
     @Nullable
     public LocalPlayer player;
-
     @Shadow
     public Gui gui;
-
     @Shadow
     public GameRenderer gameRenderer;
-
     @Shadow
     @Nullable
     public Screen screen;
@@ -110,9 +107,6 @@ public abstract class MinecraftMixin {
 
     @Shadow
     protected abstract void handleKeybinds();
-
-
-    @Shadow public static Minecraft instance;
 
     @Inject(method = "getPartialTick", at = @At(value = "HEAD"), cancellable = true, remap = false)
     private void getPartialTick(CallbackInfoReturnable<Float> cir) {

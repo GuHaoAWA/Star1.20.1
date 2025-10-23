@@ -22,9 +22,11 @@ import java.util.List;
 
 public abstract class PerspectiveModel implements BakedModel {
 
-    @Nullable public abstract PerspectiveModelState getModelState();
+    @Nullable
+    public abstract PerspectiveModelState getModelState();
 
-    public void renderItem(ItemStack stack, ItemDisplayContext ctx, PoseStack mStack, MultiBufferSource source, int packedLight, int packedOverlay) {}
+    public void renderItem(ItemStack stack, ItemDisplayContext ctx, PoseStack mStack, MultiBufferSource source, int packedLight, int packedOverlay) {
+    }
 
     @Override
     public @NotNull List<BakedQuad> getQuads(@Nullable BlockState blockState, @Nullable Direction direction, @NotNull RandomSource source) {
@@ -52,10 +54,33 @@ public abstract class PerspectiveModel implements BakedModel {
         return BakedModel.super.applyTransform(context, pStack, leftFlip);
     }
 
-    @Override public boolean useAmbientOcclusion() { return false; }
-    @Override public boolean isGui3d() { return false; }
-    @Override public boolean usesBlockLight() { return false; }
-    @Override public boolean isCustomRenderer() { return true; }
-    @Override public @NotNull TextureAtlasSprite getParticleIcon() { return null; }
-    @Override public @NotNull ItemOverrides getOverrides() { return ItemOverrides.EMPTY; }
+    @Override
+    public boolean useAmbientOcclusion() {
+        return false;
+    }
+
+    @Override
+    public boolean isGui3d() {
+        return false;
+    }
+
+    @Override
+    public boolean usesBlockLight() {
+        return false;
+    }
+
+    @Override
+    public boolean isCustomRenderer() {
+        return true;
+    }
+
+    @Override
+    public @NotNull TextureAtlasSprite getParticleIcon() {
+        return null;
+    }
+
+    @Override
+    public @NotNull ItemOverrides getOverrides() {
+        return ItemOverrides.EMPTY;
+    }
 }

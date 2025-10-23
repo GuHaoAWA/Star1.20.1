@@ -25,7 +25,7 @@ import java.util.List;
 import java.util.function.Supplier;
 
 @Mixin(ServerLevel.class)
-public abstract class ServerLevelMixin extends Level{
+public abstract class ServerLevelMixin extends Level {
 
 
     ServerLevelMixin(WritableLevelData p_270739_, ResourceKey<Level> p_270683_, RegistryAccess p_270200_, Holder<DimensionType> p_270240_, Supplier<ProfilerFiller> p_270692_, boolean p_270904_, boolean p_270470_, long p_270248_, int p_270466_) {
@@ -41,10 +41,8 @@ public abstract class ServerLevelMixin extends Level{
     public abstract Entity getEntity(int p_8597_);
 
 
-
     @Shadow
     public abstract @NotNull List<ServerPlayer> players();
-
 
 
     @Inject(method = "tickCustomSpawners", at = @At("HEAD"), cancellable = true)

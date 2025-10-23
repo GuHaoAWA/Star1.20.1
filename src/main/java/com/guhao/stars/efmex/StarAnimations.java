@@ -13,8 +13,6 @@ import yesman.epicfight.model.armature.HumanoidArmature;
         bus = Mod.EventBusSubscriber.Bus.MOD
 )
 public class StarAnimations {
-    public StarAnimations() {
-    }
     public static StaticAnimation BIPED_PHANTOM_ASCENT_FORWARD_NEW;
     public static StaticAnimation BIPED_PHANTOM_ASCENT_BACKWARD_NEW;
     public static StaticAnimation FIRE_BALL;
@@ -31,6 +29,8 @@ public class StarAnimations {
     public static StaticAnimation FIST_AUTO_3;
     public static StaticAnimation FIST_AUTO_4;
     public static StaticAnimation OLA;
+    public StarAnimations() {
+    }
 
     @SubscribeEvent
     public static void registerAnimations(AnimationManager.AnimationRegistryEvent event) {
@@ -169,4 +169,5 @@ public class StarAnimations {
                 .addStateRemoveOld(EntityState.MOVEMENT_LOCKED,true);
     }*/
 
-}}
+    }
+}

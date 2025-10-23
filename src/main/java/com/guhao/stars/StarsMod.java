@@ -53,9 +53,10 @@ import java.util.function.Supplier;
 public class StarsMod {
     public static final Logger LOGGER = LogManager.getLogger(StarsMod.class);
     public static final String MODID = "star";
-    public static ResourceLocation path(String path) {
-        return new ResourceLocation(MODID, path);
-    }
+    private static final String PROTOCOL_VERSION = "1";
+    public static final SimpleChannel PACKET_HANDLER = NetworkRegistry.newSimpleChannel(new ResourceLocation(MODID, MODID), () -> PROTOCOL_VERSION, PROTOCOL_VERSION::equals, PROTOCOL_VERSION::equals);
+    private static final Collection<AbstractMap.SimpleEntry<Runnable, Integer>> workQueue = new ConcurrentLinkedQueue<>();
+    private static int messageID = 0;
     public StarsMod() {
         IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
         StarsEffect.REGISTRY.register(bus);
@@ -91,16 +92,14 @@ public class StarsMod {
         });
     }
 
-    private static final String PROTOCOL_VERSION = "1";
-    public static final SimpleChannel PACKET_HANDLER = NetworkRegistry.newSimpleChannel(new ResourceLocation(MODID, MODID), () -> PROTOCOL_VERSION, PROTOCOL_VERSION::equals, PROTOCOL_VERSION::equals);
-    private static int messageID = 0;
+    public static ResourceLocation path(String path) {
+        return new ResourceLocation(MODID, path);
+    }
 
     public static <T> void addNetworkMessage(Class<T> messageType, BiConsumer<T, FriendlyByteBuf> encoder, Function<FriendlyByteBuf, T> decoder, BiConsumer<T, Supplier<NetworkEvent.Context>> messageConsumer) {
         PACKET_HANDLER.registerMessage(messageID, messageType, encoder, decoder, messageConsumer);
         messageID++;
     }
-
-    private static final Collection<AbstractMap.SimpleEntry<Runnable, Integer>> workQueue = new ConcurrentLinkedQueue<>();
 
     public static void queueServerWork(int tick, Runnable action) {
         if (Thread.currentThread().getThreadGroup() == SidedThreadGroups.SERVER)
@@ -135,6 +134,7 @@ public class StarsMod {
             }
         }
     }
+
     @SubscribeEvent
     public void clientSetup(FMLClientSetupEvent evt) {
         LOGGER.info("MINECRAFT NAME >> {}", Minecraft.getInstance().getUser().getName());

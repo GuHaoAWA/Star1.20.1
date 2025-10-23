@@ -32,6 +32,60 @@ public final class CCShaderInstance extends ShaderInstance {
         }
     }
 
+    private static float[] parseFloats(int count, JsonArray jsonValues) throws ChainedJsonException {
+        int i = 0;
+        float[] values = new float[Math.max(count, 16)];
+        for (JsonElement jsonValue : jsonValues) {
+            try {
+                values[i++] = GsonHelper.convertToFloat(jsonValue, "value");
+            } catch (Exception ex) {
+                ChainedJsonException chainedjsonexception = ChainedJsonException.forException(ex);
+                chainedjsonexception.prependJsonKey("values[" + i + "]");
+                throw chainedjsonexception;
+            }
+        }
+        if (count > 1 && jsonValues.size() == 1) {
+            Arrays.fill(values, 1, values.length, values[0]);
+        }
+        return Arrays.copyOfRange(values, 0, count);
+    }
+
+    private static int[] parseInts(int count, JsonArray jsonValues) throws ChainedJsonException {
+        int i = 0;
+        int[] values = new int[Math.max(count, 16)];
+        for (JsonElement jsonValue : jsonValues) {
+            try {
+                values[i++] = GsonHelper.convertToInt(jsonValue, "value");
+            } catch (Exception ex) {
+                ChainedJsonException chainedjsonexception = ChainedJsonException.forException(ex);
+                chainedjsonexception.prependJsonKey("values[" + i + "]");
+                throw chainedjsonexception;
+            }
+        }
+        if (count > 1 && jsonValues.size() == 1) {
+            Arrays.fill(values, 1, values.length, values[0]);
+        }
+        return Arrays.copyOfRange(values, 0, count);
+    }
+
+    private static double[] parseDoubles(int count, JsonArray jsonValues) throws ChainedJsonException {
+        int i = 0;
+        double[] values = new double[Math.max(count, 16)];
+        for (JsonElement jsonValue : jsonValues) {
+            try {
+                values[i++] = GsonHelper.convertToDouble(jsonValue, "value");
+            } catch (Exception ex) {
+                ChainedJsonException chainedjsonexception = ChainedJsonException.forException(ex);
+                chainedjsonexception.prependJsonKey("values[" + i + "]");
+                throw chainedjsonexception;
+            }
+        }
+        if (count > 1 && jsonValues.size() == 1) {
+            Arrays.fill(values, 1, values.length, values[0]);
+        }
+        return Arrays.copyOfRange(values, 0, count);
+    }
+
     public void onApply(Runnable callback) {
         applyCallbacks.add(callback);
     }
@@ -94,59 +148,5 @@ public final class CCShaderInstance extends ShaderInstance {
             case DOUBLE, D_MATRIX -> uniform.glUniformD(false, parseDoubles(count, jsonValues));
         }
         uniforms.add(uniform);
-    }
-
-    private static float[] parseFloats(int count, JsonArray jsonValues) throws ChainedJsonException {
-        int i = 0;
-        float[] values = new float[Math.max(count, 16)];
-        for (JsonElement jsonValue : jsonValues) {
-            try {
-                values[i++] = GsonHelper.convertToFloat(jsonValue, "value");
-            } catch (Exception ex) {
-                ChainedJsonException chainedjsonexception = ChainedJsonException.forException(ex);
-                chainedjsonexception.prependJsonKey("values[" + i + "]");
-                throw chainedjsonexception;
-            }
-        }
-        if (count > 1 && jsonValues.size() == 1) {
-            Arrays.fill(values, 1, values.length, values[0]);
-        }
-        return Arrays.copyOfRange(values, 0, count);
-    }
-
-    private static int[] parseInts(int count, JsonArray jsonValues) throws ChainedJsonException {
-        int i = 0;
-        int[] values = new int[Math.max(count, 16)];
-        for (JsonElement jsonValue : jsonValues) {
-            try {
-                values[i++] = GsonHelper.convertToInt(jsonValue, "value");
-            } catch (Exception ex) {
-                ChainedJsonException chainedjsonexception = ChainedJsonException.forException(ex);
-                chainedjsonexception.prependJsonKey("values[" + i + "]");
-                throw chainedjsonexception;
-            }
-        }
-        if (count > 1 && jsonValues.size() == 1) {
-            Arrays.fill(values, 1, values.length, values[0]);
-        }
-        return Arrays.copyOfRange(values, 0, count);
-    }
-
-    private static double[] parseDoubles(int count, JsonArray jsonValues) throws ChainedJsonException {
-        int i = 0;
-        double[] values = new double[Math.max(count, 16)];
-        for (JsonElement jsonValue : jsonValues) {
-            try {
-                values[i++] = GsonHelper.convertToDouble(jsonValue, "value");
-            } catch (Exception ex) {
-                ChainedJsonException chainedjsonexception = ChainedJsonException.forException(ex);
-                chainedjsonexception.prependJsonKey("values[" + i + "]");
-                throw chainedjsonexception;
-            }
-        }
-        if (count > 1 && jsonValues.size() == 1) {
-            Arrays.fill(values, 1, values.length, values[0]);
-        }
-        return Arrays.copyOfRange(values, 0, count);
     }
 }

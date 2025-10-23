@@ -8,6 +8,7 @@ public class Execute extends MobEffect {
     public Execute() {
         super(MobEffectCategory.BENEFICIAL, -13261);
     }
+
     @Override
     public @NotNull String getDescriptionId() {
         return "effect.star.execute";

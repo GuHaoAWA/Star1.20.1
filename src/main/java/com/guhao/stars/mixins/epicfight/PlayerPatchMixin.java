@@ -20,7 +20,7 @@ import yesman.epicfight.world.entity.eventlistener.ModifyAttackSpeedEvent;
 import yesman.epicfight.world.entity.eventlistener.PlayerEventListener;
 import yesman.epicfight.world.gamerule.EpicFightGameRules;
 
-@Mixin(value = PlayerPatch.class ,remap = false)
+@Mixin(value = PlayerPatch.class, remap = false)
 public abstract class PlayerPatchMixin<T extends Player> extends LivingEntityPatch<T> {
     @Shadow(
             remap = false
@@ -29,24 +29,26 @@ public abstract class PlayerPatchMixin<T extends Player> extends LivingEntityPat
     @Shadow
     protected int tickSinceLastAction;
     @Shadow
-    public float getStamina() {
-        return 1.0f;
-    }
-    @Shadow
-    public float getMaxStamina() {
-        AttributeInstance maxStamina = this.original.getAttribute(EpicFightAttributes.MAX_STAMINA.get());
-        return (float)(maxStamina == null ? 0.0 : maxStamina.getValue());
-    }
-
-    @Shadow
-    public void setStamina(float value) {
-    }
-    @Shadow
     protected double xo;
     @Shadow
     protected double yo;
     @Shadow
     protected double zo;
+
+    @Shadow
+    public float getStamina() {
+        return 1.0f;
+    }
+
+    @Shadow
+    public void setStamina(float value) {
+    }
+
+    @Shadow
+    public float getMaxStamina() {
+        AttributeInstance maxStamina = this.original.getAttribute(EpicFightAttributes.MAX_STAMINA.get());
+        return (float) (maxStamina == null ? 0.0 : maxStamina.getValue());
+    }
 
     @Unique
     private float Star$getStaminaRecoverySpeed(float maxStamina, float staminaRegen) {
@@ -102,6 +104,7 @@ public abstract class PlayerPatchMixin<T extends Player> extends LivingEntityPat
         this.yo = this.original.getY();
         this.zo = this.original.getZ();
     }
+
     @Inject(
             method = {"getModifiedAttackSpeed(Lyesman/epicfight/world/capabilities/item/CapabilityItem;F)F"},
             at = {@At("HEAD")},
@@ -109,14 +112,14 @@ public abstract class PlayerPatchMixin<T extends Player> extends LivingEntityPat
             cancellable = true
     )
     private void onGetAttackSpeedPenalty(CapabilityItem itemCapability, float baseSpeed, CallbackInfoReturnable<Float> cir) {
-        ModifyAttackSpeedEvent event = new ModifyAttackSpeedEvent((PlayerPatch<?>) (Object)this, itemCapability, baseSpeed);
+        ModifyAttackSpeedEvent event = new ModifyAttackSpeedEvent((PlayerPatch<?>) (Object) this, itemCapability, baseSpeed);
         this.eventListeners.triggerEvents(PlayerEventListener.EventType.MODIFY_ATTACK_SPEED_EVENT, event);
         float weight = this.getWeight();
         Player player = this.getOriginal();
         double currentburden = player.getAttribute(StarAttributes.BURDEN.get()).getValue() + 40.0;
-        if ((double)weight > currentburden) {
-            float attenuation = (float)Mth.clamp(player.level.getGameRules().getInt(EpicFightGameRules.WEIGHT_PENALTY.getRuleKey()), 0, 100) / 100.0F;
-            cir.setReturnValue((float)((double)event.getAttackSpeed() + -0.17499999701976776 * ((double)weight / currentburden) * (double)(Math.max(event.getAttackSpeed() - 0.8F, 0.0F) * 1.5F) * (double)attenuation));
+        if ((double) weight > currentburden) {
+            float attenuation = (float) Mth.clamp(player.level.getGameRules().getInt(EpicFightGameRules.WEIGHT_PENALTY.getRuleKey()), 0, 100) / 100.0F;
+            cir.setReturnValue((float) ((double) event.getAttackSpeed() + -0.17499999701976776 * ((double) weight / currentburden) * (double) (Math.max(event.getAttackSpeed() - 0.8F, 0.0F) * 1.5F) * (double) attenuation));
         } else {
             cir.setReturnValue(event.getAttackSpeed());
         }
@@ -134,8 +137,8 @@ public abstract class PlayerPatchMixin<T extends Player> extends LivingEntityPat
         Player player = this.getOriginal();
         double currentburden = player.getAttribute(StarAttributes.BURDEN.get()).getValue() + 40.0;
         float weight = this.getWeight();
-        float attenuation = (float)Mth.clamp(player.level.getGameRules().getInt(EpicFightGameRules.WEIGHT_PENALTY.getRuleKey()), 0, 100) / 100.0F;
-        cir.setReturnValue((float)(Math.max((double)weight / currentburden - 1.0, 0.0) * (double)attenuation + 1.0) * amount);
+        float attenuation = (float) Mth.clamp(player.level.getGameRules().getInt(EpicFightGameRules.WEIGHT_PENALTY.getRuleKey()), 0, 100) / 100.0F;
+        cir.setReturnValue((float) (Math.max((double) weight / currentburden - 1.0, 0.0) * (double) attenuation + 1.0) * amount);
         cir.cancel();
     }
 }

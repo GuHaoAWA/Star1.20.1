@@ -41,12 +41,6 @@ public final class CosmicBakeModel implements BakedModel {
     private ModelState parentState;
     private LivingEntity entity;
     private ClientLevel world;
-    public static boolean isBlockContext(ItemDisplayContext context) {
-        return switch (context) {
-            case THIRD_PERSON_LEFT_HAND, THIRD_PERSON_RIGHT_HAND, FIRST_PERSON_LEFT_HAND, FIRST_PERSON_RIGHT_HAND, GROUND, FIXED, GUI -> true;
-            default -> false;
-        };
-    }
 
     public CosmicBakeModel(final BakedModel wrapped, final List<ResourceLocation> maskSprite) {
         this.overrideList = new ItemOverrides() {
@@ -60,6 +54,14 @@ public final class CosmicBakeModel implements BakedModel {
         this.wrapped = wrapped;
         this.parentState = TransformUtils.stateFromItemTransforms(wrapped.getTransforms());
         this.maskSprite = maskSprite;
+    }
+
+    public static boolean isBlockContext(ItemDisplayContext context) {
+        return switch (context) {
+            case THIRD_PERSON_LEFT_HAND, THIRD_PERSON_RIGHT_HAND, FIRST_PERSON_LEFT_HAND, FIRST_PERSON_RIGHT_HAND,
+                 GROUND, FIXED, GUI -> true;
+            default -> false;
+        };
     }
 
     public void renderItem(ItemStack stack, ItemDisplayContext transformType, PoseStack pStack, MultiBufferSource buffers, int packedLight, int packedOverlay) {

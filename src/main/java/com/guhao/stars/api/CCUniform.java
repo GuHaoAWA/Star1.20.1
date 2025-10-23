@@ -247,7 +247,9 @@ public abstract class CCUniform extends Uniform implements ICCUniform {
         }
 
         public abstract void flush();
+
         public abstract int len(T arr);
+
         public abstract boolean equals(@Nullable T a, T b);
     }
 

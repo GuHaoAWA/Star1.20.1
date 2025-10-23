@@ -2,7 +2,6 @@ package com.guhao.stars.mixins.epicfight;
 
 import com.guhao.stars.entity.StarAttributes;
 import com.guhao.stars.regirster.StarsEffect;
-import com.guhao.stars.units.StarDataUnit;
 import com.guhao.stars.utils.dangerAnimSystem.AnimationEffectManager;
 import com.nameless.indestructible.api.animation.types.LivingEntityPatchEvent;
 import com.nameless.indestructible.data.AdvancedMobpatchReloader;
@@ -23,22 +22,22 @@ import yesman.epicfight.world.capabilities.entitypatch.MobPatch;
 import yesman.epicfight.world.damagesource.EpicFightDamageSource;
 import yesman.epicfight.world.damagesource.StunType;
 
-@Mixin(value = CapabilityState.class,remap = false)
+@Mixin(value = CapabilityState.class, remap = false)
 public class CapabilityStateMixin<T extends MobPatch<?>, V extends AdvancedMobpatchReloader.AdvancedCustomMobPatchProvider> {
-    @Shadow
-    public boolean neutralized;
     @Mutable
     @Final
     @Shadow
     private final T mobPatch;
-    @Shadow
-    private Entity lastAttacker;
-    @Shadow
-    private float lastGetImpact;
     @Mutable
     @Final
     @Shadow
     private final float staminaLoseMultiply;
+    @Shadow
+    public boolean neutralized;
+    @Shadow
+    private Entity lastAttacker;
+    @Shadow
+    private float lastGetImpact;
 
     public CapabilityStateMixin(T mobPatch, float staminaLoseMultiply) {
         this.mobPatch = mobPatch;
@@ -50,7 +49,7 @@ public class CapabilityStateMixin<T extends MobPatch<?>, V extends AdvancedMobpa
      * @reason
      */
     @Overwrite
-    public StunType processStun(StunType stunType){
+    public StunType processStun(StunType stunType) {
         if (this.neutralized) {
             stunType = stunType == StunType.KNOCKDOWN ? stunType : StunType.NONE;
         } else if (mobPatch instanceof IAdvancedCapability iac && this.staminaLoseMultiply > 0 && this.lastGetImpact > 0 && mobPatch.getStunShield() <= 0) {
@@ -59,10 +58,10 @@ public class CapabilityStateMixin<T extends MobPatch<?>, V extends AdvancedMobpa
                 reduceX = (float) (1.0f - mobPatch.getOriginal().getAttributeValue(StarAttributes.HIT_STAMINA_LOSE.get()));
             } else {
                 int buffer = mobPatch.getOriginal().getEffect(StarsEffect.TOUGHNESS.get()).getAmplifier() + 1;
-                if (((float) buffer/10  + (1.0f - (mobPatch.getOriginal().getAttributeValue(StarAttributes.HIT_STAMINA_LOSE.get()))) >= 1.0f)) {
+                if (((float) buffer / 10 + (1.0f - (mobPatch.getOriginal().getAttributeValue(StarAttributes.HIT_STAMINA_LOSE.get()))) >= 1.0f)) {
                     reduceX = 1.0f;
                 } else {
-                    reduceX = (float) (buffer/10  + (1.0f - (mobPatch.getOriginal().getAttributeValue(StarAttributes.HIT_STAMINA_LOSE.get()))));
+                    reduceX = (float) (buffer / 10 + (1.0f - (mobPatch.getOriginal().getAttributeValue(StarAttributes.HIT_STAMINA_LOSE.get()))));
                 }
             }
             iac.setStamina((iac.getStamina() - ((this.lastGetImpact * this.staminaLoseMultiply) * reduceX)));
@@ -75,24 +74,28 @@ public class CapabilityStateMixin<T extends MobPatch<?>, V extends AdvancedMobpa
             }
         }
 
-        if(mobPatch instanceof IAnimationEventCapability iec && iec.getEventManager().hasStunEvent()){
-            if(mobPatch.getHitAnimation(stunType) != null){
-                for(LivingEntityPatchEvent.StunEvent event: iec.getEventManager().getStunEvents()) {
+        if (mobPatch instanceof IAnimationEventCapability iec && iec.getEventManager().hasStunEvent()) {
+            if (mobPatch.getHitAnimation(stunType) != null) {
+                for (LivingEntityPatchEvent.StunEvent event : iec.getEventManager().getStunEvents()) {
                     event.testAndExecute(mobPatch, lastAttacker, stunType.ordinal());
-                    if(!mobPatch.getOriginal().isAlive() || !iec.getEventManager().hasStunEvent()){break;}
+                    if (!mobPatch.getOriginal().isAlive() || !iec.getEventManager().hasStunEvent()) {
+                        break;
+                    }
                 }
             }
         }
 
-        if(stunType != StunType.NONE) {
+        if (stunType != StunType.NONE) {
             resetWhenStunned();
         }
         return stunType;
     }
+
     @Shadow
     private void resetWhenStunned() {
     }
-    @Inject(method = "tryProcess",at = @At("HEAD"), cancellable = true)
+
+    @Inject(method = "tryProcess", at = @At("HEAD"), cancellable = true)
     private void tryProcess(DamageSource damageSource, float amount, CallbackInfoReturnable<AttackResult> cir) {
         EpicFightDamageSource epicFightDamageSource = AnimationEffectManager.getEpicFightDamageSources(damageSource);
         if (((MobPatch<?>) this.mobPatch instanceof IAdvancedCapability iac) && epicFightDamageSource != null && AnimationEffectManager.isNoGuardAnimation(epicFightDamageSource.getAnimation().get())) {

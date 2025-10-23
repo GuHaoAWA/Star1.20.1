@@ -7,13 +7,12 @@ public enum StarSkillCategories implements SkillCategory {
     COUNTER(true, true, true);
 
 
-
     final boolean save;
     final boolean sync;
     final boolean modifiable;
     final int id;
 
-    private StarSkillCategories(boolean ShouldSave, boolean ShouldSync, boolean Modifiable) {
+    StarSkillCategories(boolean ShouldSave, boolean ShouldSync, boolean Modifiable) {
         this.modifiable = Modifiable;
         this.save = ShouldSave;
         this.sync = ShouldSync;

@@ -4,7 +4,6 @@ import com.guhao.stars.StarsMod;
 import com.guhao.stars.efmex.StarSkillSlots;
 import com.guhao.stars.regirster.StarSkill;
 import net.minecraft.world.entity.Entity;
-import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.EventPriority;
@@ -21,11 +20,11 @@ import javax.annotation.Nullable;
 public class EntityJoinWorldEvent {
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void onEntityJoin(EntityJoinLevelEvent event) {
-        execute(event,event.getEntity());
+        execute(event, event.getEntity());
     }
 
     public static void execute(Entity entity) {
-        execute(null,entity);
+        execute(null, entity);
     }
 
     private static void execute(@Nullable Event event, Entity entity) {

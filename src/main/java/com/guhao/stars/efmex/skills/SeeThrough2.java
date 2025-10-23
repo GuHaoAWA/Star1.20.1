@@ -2,8 +2,8 @@ package com.guhao.stars.efmex.skills;
 
 import com.guhao.stars.efmex.StarSkillCategories;
 import com.guhao.stars.efmex.StarSkillDataKeys;
-import com.guhao.stars.regirster.StarsEffect;
 import com.guhao.stars.regirster.StarSkill;
+import com.guhao.stars.regirster.StarsEffect;
 import com.guhao.stars.utils.dangerAnimSystem.AnimationEffectManager;
 import com.nameless.indestructible.world.capability.AdvancedCustomHumanoidMobPatch;
 import net.corruptdog.cdm.gameasset.CorruptAnimations;
@@ -38,21 +38,20 @@ import java.util.Objects;
 import java.util.UUID;
 
 import static yesman.epicfight.world.entity.eventlistener.PlayerEventListener.EventType.BASIC_ATTACK_EVENT;
+
 @SuppressWarnings("removal")
 public class SeeThrough2 extends Skill {
     private static final UUID EVENT_UUID = UUID.fromString("570e8490-e29b-41d4-a716-446655440000");
+
+    public SeeThrough2(SeeThrough2.Builder builder) {
+        super(builder);
+    }
 
     public static SeeThrough2.Builder createSeeThrough2Builder() {
         return (new SeeThrough2.Builder())
                 .setCategory(StarSkillCategories.COUNTER)
                 .setActivateType(ActivateType.DURATION)
                 .setResource(Resource.NONE);
-    }
-
-    public static class Builder extends SkillBuilder<SeeThrough2> {}
-
-    public SeeThrough2(SeeThrough2.Builder builder) {
-        super(builder);
     }
 
     public void onRemoved(SkillContainer container) {
@@ -65,6 +64,7 @@ public class SeeThrough2 extends Skill {
     public Skill getPriorSkill() {
         return StarSkill.SEE_THROUGH_1;
     }
+
     @Override
     public void updateContainer(SkillContainer container) {
         if (container.getDataManager().getDataValue(StarSkillDataKeys.COUNTER_TICK3.get()) > 0 && container.getExecutor().getOriginal() instanceof ServerPlayer) {
@@ -75,6 +75,7 @@ public class SeeThrough2 extends Skill {
         }
 
     }
+
     @Override
     public void onInitiate(SkillContainer container) {
         PlayerEventListener listener = container.getExecutor().getEventListener();
@@ -88,7 +89,7 @@ public class SeeThrough2 extends Skill {
         });
         listener.addEventListener(PlayerEventListener.EventType.DODGE_SUCCESS_EVENT, EVENT_UUID, (event) -> {
             EpicFightDamageSource epicFightDamageSource = AnimationEffectManager.getEpicFightDamageSources(event.getDamageSource());
-            if ((epicFightDamageSource!=null) && (AnimationEffectManager.isNoGuardAnimation(epicFightDamageSource.getAnimation().get()) || (AnimationEffectManager.isNoParryAnimation(epicFightDamageSource.getAnimation().get()) && !AnimationEffectManager.isSpecialSeeThroughAnimation(epicFightDamageSource.getAnimation().get())))) {
+            if ((epicFightDamageSource != null) && (AnimationEffectManager.isNoGuardAnimation(epicFightDamageSource.getAnimation().get()) || (AnimationEffectManager.isNoParryAnimation(epicFightDamageSource.getAnimation().get()) && !AnimationEffectManager.isSpecialSeeThroughAnimation(epicFightDamageSource.getAnimation().get())))) {
                 container.getDataManager().setDataSync(StarSkillDataKeys.COUNTER_TICK2.get(), 60.0f, event.getPlayerPatch().getOriginal());
                 event.getPlayerPatch().getOriginal().addEffect(new MobEffectInstance(StarsEffect.ORANGE_GLOW.get(), 60, 60, true, true));
             }
@@ -120,7 +121,7 @@ public class SeeThrough2 extends Skill {
 
                     container.getExecutor().playAnimationSynchronized(combo1.getAccessor(), 0.0f);
 
-            }
+                }
 
             }
             if (container.getDataManager().getDataValue(StarSkillDataKeys.COUNTER_TICK2.get()) > 0.0f) {
@@ -130,8 +131,8 @@ public class SeeThrough2 extends Skill {
                     container.getDataManager().setDataSync(StarSkillDataKeys.COUNTER_TICK2.get(), 0.0f, serverPlayer);
                 }
                 container.getExecutor().setStamina(container.getExecutor().getStamina() + 1.5f);
-                container.getExecutor().playAnimationSynchronized(Animations.REVELATION_ONEHAND,0.0f);
-                container.getExecutor().getOriginal().addEffect(new MobEffectInstance(StarsEffect.IMPACT_ENHANCE.get(),1,400));
+                container.getExecutor().playAnimationSynchronized(Animations.REVELATION_ONEHAND, 0.0f);
+                container.getExecutor().getOriginal().addEffect(new MobEffectInstance(StarsEffect.IMPACT_ENHANCE.get(), 1, 400));
 
 
             }
@@ -148,7 +149,7 @@ public class SeeThrough2 extends Skill {
             if (rl == CorruptAnimations.RECOGNITION.get().getRegistryName()) {
                 event.setCanceled(true);
                 event.getPlayerPatch().playAnimationSynchronized(CorruptAnimations.LETHAL_SLICING_ONCE, 0.1F);
-                event.getPlayerPatch().setStamina(stamina -  costStamina);
+                event.getPlayerPatch().setStamina(stamina - costStamina);
             }
         });
         listener.addEventListener(PlayerEventListener.EventType.TAKE_DAMAGE_EVENT_ATTACK, EVENT_UUID, (event) -> {
@@ -164,9 +165,6 @@ public class SeeThrough2 extends Skill {
                 container.getDataManager().setDataSync(StarSkillDataKeys.COUNTER_TICK3.get(), 60.0f, event.getPlayerPatch().getOriginal());
                 event.getPlayerPatch().getOriginal().addEffect(new MobEffectInstance(StarsEffect.ORANGE_GLOW.get(), 60, 60, true, true));
             }
-
-
-
 
 
 ////////////////////////////////////////////////
@@ -202,7 +200,7 @@ public class SeeThrough2 extends Skill {
 ////////////////////////////////////////////////////////////
                                     container.getExecutor().setStamina(container.getExecutor().getStamina() + 3.5f);
                                     if (longpatch != null) {
-                                        longpatch.setStamina(longpatch.getStamina()-2.0f-longpatch.getMaxStamina()*0.02f);
+                                        longpatch.setStamina(longpatch.getStamina() - 2.0f - longpatch.getMaxStamina() * 0.02f);
                                     }
 ////////////////////////////////////////////////////////////
                                     break;
@@ -214,5 +212,8 @@ public class SeeThrough2 extends Skill {
                 }
             }
         });
+    }
+
+    public static class Builder extends SkillBuilder<SeeThrough2> {
     }
 }

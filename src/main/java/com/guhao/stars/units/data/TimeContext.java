@@ -14,7 +14,11 @@ import org.joml.Vector4f;
 import java.awt.*;
 import java.util.concurrent.atomic.AtomicLong;
 
-public class TimeContext { 
+public class TimeContext {
+
+    public static float safeClientPartialTicks() {
+        return Minecraft.getInstance().getFrameTime();
+    }
 
     @OnlyIn(Dist.CLIENT)
     public static class Client {
@@ -25,6 +29,7 @@ public class TimeContext {
          */
         public static long count = 0L;
         public static long timeStopGLFW = 0L;
+
         public static float getCommonDegrees() {
             return timeStopGLFW / 100F;
         }
@@ -76,6 +81,7 @@ public class TimeContext {
             Color color = rainbow(f0, saturation, lgiht);
             return FastColor.ARGB32.color(color.getAlpha(), color.getRed(), color.getGreen(), color.getBlue());
         }
+
         public static long getNanos() {
             return timeSource.getAsLong();
         }
@@ -83,8 +89,5 @@ public class TimeContext {
         public static long milliTime() {
             return Util.getMillis();
         }
-    }
-    public static float safeClientPartialTicks() {
-        return Minecraft.getInstance().getFrameTime();
     }
 }

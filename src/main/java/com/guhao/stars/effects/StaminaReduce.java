@@ -10,6 +10,7 @@ public class StaminaReduce extends MobEffect {
     public StaminaReduce() {
         super(MobEffectCategory.HARMFUL, -13261);
     }
+
     @Override
     public @NotNull String getDescriptionId() {
         return "effect.star.stamina_reduce";

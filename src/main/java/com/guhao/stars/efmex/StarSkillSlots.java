@@ -10,7 +10,7 @@ public enum StarSkillSlots implements SkillSlot {
     final SkillCategory category;
     final int id;
 
-    private StarSkillSlots(StarSkillCategories category) {
+    StarSkillSlots(StarSkillCategories category) {
         this.category = category;
         this.id = SkillSlot.ENUM_MANAGER.assign(this);
     }

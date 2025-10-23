@@ -11,9 +11,9 @@ import xaero.hud.render.HudRenderer;
 import yesman.epicfight.client.world.capabilites.entitypatch.player.LocalPlayerPatch;
 import yesman.epicfight.world.capabilities.EpicFightCapabilities;
 
-@Mixin(value = HudRenderer.class,remap = false)
+@Mixin(value = HudRenderer.class, remap = false)
 public class HudRendererMixin {
-    @Inject(method = "render",at = @At("HEAD"), cancellable = true)
+    @Inject(method = "render", at = @At("HEAD"), cancellable = true)
     public void render(Hud hud, GuiGraphics guiGraphics, float partialTicks, CallbackInfo ci) {
         LocalPlayerPatch pp = EpicFightCapabilities.getEntityPatch(Minecraft.instance.player, LocalPlayerPatch.class);
         if (pp != null && pp.isEpicFightMode()) {

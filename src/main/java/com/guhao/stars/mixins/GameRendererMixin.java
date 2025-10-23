@@ -29,6 +29,7 @@ public class GameRendererMixin {
     public Minecraft minecraft;
     @Shadow
     public RenderBuffers renderBuffers;
+
     /**
      * @author
      * @reason
@@ -37,7 +38,7 @@ public class GameRendererMixin {
     public void renderItemActivationAnimation(int screenWidth, int screenHeight, float partialTicks) {
         if (this.itemActivationItem != null && this.itemActivationTicks > 0) {
             int i = 40 - this.itemActivationTicks;
-            float f = ((float)i + partialTicks) / 40.0F;
+            float f = ((float) i + partialTicks) / 40.0F;
             float f1 = f * f;
             float f2 = f * f1;
             float f3 = 10.25F * f2 * f1 - 24.95F * f1 * f1 + 25.5F * f2 - 13.8F * f1 + 4.0F * f;
@@ -45,15 +46,15 @@ public class GameRendererMixin {
 
             float screenFactor = Math.min(screenWidth, screenHeight) / 1080.0F;
 
-            float f5 = this.itemActivationOffX * (float)(screenWidth / 4);
-            float f6 = this.itemActivationOffY * (float)(screenHeight / 4);
+            float f5 = this.itemActivationOffX * (float) (screenWidth / 4);
+            float f6 = this.itemActivationOffY * (float) (screenHeight / 4);
             RenderSystem.enableDepthTest();
             RenderSystem.disableCull();
             PoseStack posestack = new PoseStack();
             posestack.pushPose();
             posestack.translate(
-                    (float)(screenWidth / 2) + f5 * Mth.abs(Mth.sin(f4 * 2.0F)),
-                    (float)(screenHeight / 2) + f6 * Mth.abs(Mth.sin(f4 * 2.0F)),
+                    (float) (screenWidth / 2) + f5 * Mth.abs(Mth.sin(f4 * 2.0F)),
+                    (float) (screenHeight / 2) + f6 * Mth.abs(Mth.sin(f4 * 2.0F)),
                     -50.0F
             );
 

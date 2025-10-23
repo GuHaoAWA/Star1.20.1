@@ -37,9 +37,9 @@ public class ParryingSkillMixin extends GuardSkill {
 
     */
 /**
-     * @author
-     * @reason
-     *//*
+ * @author
+ * @reason
+ *//*
 
     @Overwrite
     public static GuardSkill.Builder createActiveGuardBuilder() {

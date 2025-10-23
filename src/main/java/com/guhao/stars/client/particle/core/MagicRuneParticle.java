@@ -1,4 +1,3 @@
-
 package com.guhao.stars.client.particle.core;
 
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -25,9 +24,9 @@ public abstract class MagicRuneParticle extends Particle {
 
     public void render(VertexConsumer p_107678_, Camera p_107679_, float p_107680_) {
         Vec3 vec3 = p_107679_.getPosition();
-        float f = (float)(Mth.lerp((double)p_107680_, this.xo, this.x) - vec3.x());
-        float f1 = (float)(Mth.lerp((double)p_107680_, this.yo, this.y) - vec3.y());
-        float f2 = (float)(Mth.lerp((double)p_107680_, this.zo, this.z) - vec3.z());
+        float f = (float) (Mth.lerp(p_107680_, this.xo, this.x) - vec3.x());
+        float f1 = (float) (Mth.lerp(p_107680_, this.yo, this.y) - vec3.y());
+        float f2 = (float) (Mth.lerp(p_107680_, this.zo, this.z) - vec3.z());
 
         // Commented out the rotation related code
         // Quaternion quaternion;
@@ -51,7 +50,7 @@ public abstract class MagicRuneParticle extends Particle {
         };
         float f4 = this.getQuadSize(p_107680_);
 
-        for(int i = 0; i < 4; ++i) {
+        for (int i = 0; i < 4; ++i) {
             Vector3f vector3f = avector3f[i];
             // Removed the transformation and translation related to the rotation
             // vector3f.transform(quaternion);
@@ -64,12 +63,11 @@ public abstract class MagicRuneParticle extends Particle {
         float f5 = this.getV0();
         float f6 = this.getV1();
         int j = this.getLightColor(p_107680_);
-        p_107678_.vertex((double)avector3f[0].x(), (double)avector3f[0].y(), (double)avector3f[0].z()).uv(f8, f6).color(this.rCol, this.gCol, this.bCol, this.alpha).uv2(j).endVertex();
-        p_107678_.vertex((double)avector3f[1].x(), (double)avector3f[1].y(), (double)avector3f[1].z()).uv(f8, f5).color(this.rCol, this.gCol, this.bCol, this.alpha).uv2(j).endVertex();
-        p_107678_.vertex((double)avector3f[2].x(), (double)avector3f[2].y(), (double)avector3f[2].z()).uv(f7, f5).color(this.rCol, this.gCol, this.bCol, this.alpha).uv2(j).endVertex();
-        p_107678_.vertex((double)avector3f[3].x(), (double)avector3f[3].y(), (double)avector3f[3].z()).uv(f7, f6).color(this.rCol, this.gCol, this.bCol, this.alpha).uv2(j).endVertex();
+        p_107678_.vertex(avector3f[0].x(), avector3f[0].y(), avector3f[0].z()).uv(f8, f6).color(this.rCol, this.gCol, this.bCol, this.alpha).uv2(j).endVertex();
+        p_107678_.vertex(avector3f[1].x(), avector3f[1].y(), avector3f[1].z()).uv(f8, f5).color(this.rCol, this.gCol, this.bCol, this.alpha).uv2(j).endVertex();
+        p_107678_.vertex(avector3f[2].x(), avector3f[2].y(), avector3f[2].z()).uv(f7, f5).color(this.rCol, this.gCol, this.bCol, this.alpha).uv2(j).endVertex();
+        p_107678_.vertex(avector3f[3].x(), avector3f[3].y(), avector3f[3].z()).uv(f7, f6).color(this.rCol, this.gCol, this.bCol, this.alpha).uv2(j).endVertex();
     }
-
 
 
     public float getQuadSize(float p_107681_) {

@@ -9,9 +9,8 @@ import yesman.epicfight.api.forgeevent.SkillBuildEvent;
 import yesman.epicfight.skill.Skill;
 import yesman.epicfight.skill.SkillCategories;
 
-@Mod.EventBusSubscriber(modid = StarsMod.MODID, bus= Mod.EventBusSubscriber.Bus.MOD)
+@Mod.EventBusSubscriber(modid = StarsMod.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class StarSkill {
-    public StarSkill() {}
     public static Skill SHADOW_PASSIVE;
     public static Skill TIME_STOP_PASSIVE;
     public static Skill DOTE;
@@ -22,6 +21,8 @@ public class StarSkill {
     public static Skill THE_WORLD;
     public static Skill SUPER_PUNCH;
     public static Skill SUPER_PUNCH_PASSIVE;
+    public StarSkill() {
+    }
 
     @SubscribeEvent
     public static void registerSkills(SkillBuildEvent event) {

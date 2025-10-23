@@ -20,7 +20,7 @@ public abstract class LivingEntityMixin extends Entity {
 
     @Inject(method = "tick", at = @At("HEAD"), cancellable = true)
     private void onTick(CallbackInfo ci) {
-        LivingEntity self = (LivingEntity)(Object)this;
+        LivingEntity self = (LivingEntity) (Object) this;
 
         // 组合判断两种时停
         if (StarDataUnit.isTimeStopped() && !(self instanceof Player)) {

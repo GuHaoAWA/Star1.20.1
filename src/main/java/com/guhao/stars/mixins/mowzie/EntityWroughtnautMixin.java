@@ -45,9 +45,9 @@ public class EntityWroughtnautMixin  extends MowzieLLibraryEntity implements Ene
 
     */
 /**
-     * @author
-     * @reason
-     *//*
+ * @author
+ * @reason
+ *//*
 
     @Overwrite
     public boolean hurt(DamageSource source, float amount) {

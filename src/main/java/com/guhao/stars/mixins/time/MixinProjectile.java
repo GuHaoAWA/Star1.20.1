@@ -17,11 +17,13 @@ public abstract class MixinProjectile extends Entity {
 
     @Shadow
     public boolean hasBeenShot;
-    @Shadow
-    public abstract Entity getOwner();
+
     public MixinProjectile(EntityType<?> p_19870_, Level p_19871_) {
         super(p_19870_, p_19871_);
     }
+
+    @Shadow
+    public abstract Entity getOwner();
 
     @Inject(method = "tick()V", at = @At("HEAD"), cancellable = true)
     private void onTick(CallbackInfo ci) {
@@ -37,12 +39,14 @@ public abstract class MixinProjectile extends Entity {
             ci.cancel();
         }
     }
+
     @Inject(method = "updateRotation", at = @At("HEAD"), cancellable = true)
     protected void updateRotation(CallbackInfo ci) {
         if (StarDataUnit.isTimeStopped() && hasBeenShot) {
             ci.cancel();
         }
     }
+
     @Inject(method = "lerpMotion", at = @At("HEAD"), cancellable = true)
     public void lerpMotion(double p_37279_, double p_37280_, double p_37281_, CallbackInfo ci) {
         Entity self = this;

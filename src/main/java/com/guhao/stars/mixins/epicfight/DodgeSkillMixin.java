@@ -6,7 +6,7 @@ import yesman.epicfight.api.animation.types.EntityState;
 import yesman.epicfight.skill.dodge.DodgeSkill;
 import yesman.epicfight.world.capabilities.entitypatch.player.PlayerPatch;
 
-@Mixin(value = DodgeSkill.class,remap = false)
+@Mixin(value = DodgeSkill.class, remap = false)
 public class DodgeSkillMixin {
     /**
      * @author

@@ -23,10 +23,6 @@ import java.util.function.Function;
 
 @Mixin(value = DodgeAnimation.class, remap = false)
 public abstract class DodgeAnimationMixin extends ActionAnimation {
-    public DodgeAnimationMixin(float convertTime, AnimationAccessor<? extends ActionAnimation> accessor, AssetAccessor<? extends Armature> armature) {
-        super(convertTime, accessor, armature);
-    }
-
     @Unique
     private static final Function<DamageSource, AttackResult.ResultType> star$DODGEABLE_SOURCE_VALIDATOR = (damagesource) -> {
         boolean isNoDodgeAnimation = false;
@@ -50,6 +46,10 @@ public abstract class DodgeAnimationMixin extends ActionAnimation {
 
         return AttackResult.ResultType.SUCCESS;
     };
+
+    public DodgeAnimationMixin(float convertTime, AnimationAccessor<? extends ActionAnimation> accessor, AssetAccessor<? extends Armature> armature) {
+        super(convertTime, accessor, armature);
+    }
 
     @Inject(method = "<init>(FFLyesman/epicfight/api/animation/AnimationManager$AnimationAccessor;FFLyesman/epicfight/api/asset/AssetAccessor;)V",
             at = @At("TAIL"))

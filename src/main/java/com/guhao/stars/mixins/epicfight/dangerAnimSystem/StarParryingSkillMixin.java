@@ -32,14 +32,14 @@ import java.util.Objects;
 
 @SuppressWarnings("all")
 @Mixin(value = ParryingSkill.class, remap = false, priority = 500)
-public class StarParryingSkillMixin extends GuardSkill{
+public class StarParryingSkillMixin extends GuardSkill {
+
+    @Unique
+    private TakeDamageEvent.Attack star1_20_1$event;
 
     public StarParryingSkillMixin(Builder builder) {
         super(builder);
     }
-
-    @Unique
-    private TakeDamageEvent.Attack star1_20_1$event;
 
     /**
      * @author
@@ -94,7 +94,7 @@ public class StarParryingSkillMixin extends GuardSkill{
             }
         }
         ServerPlayer playerentity = event.getPlayerPatch().getOriginal();
-        StarsParticleType.ALL_SPARK.get().spawnParticleWithArgument((ServerLevel)playerentity.level(), HitParticleType.FRONT_OF_EYES, HitParticleType.ZERO, playerentity, event.getDamageSource().getDirectEntity());
+        StarsParticleType.ALL_SPARK.get().spawnParticleWithArgument((ServerLevel) playerentity.level(), HitParticleType.FRONT_OF_EYES, HitParticleType.ZERO, playerentity, event.getDamageSource().getDirectEntity());
     }
 
     @Inject(

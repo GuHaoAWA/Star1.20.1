@@ -15,7 +15,8 @@ import yesman.epicfight.client.particle.EpicFightParticleRenderTypes;
 public class SparkParticle extends TextureSheetParticle {
     private final SparkParticle.PhysicsType physicsType;
     private final float baseSize;
-    private float rotationSpeed;
+    private final float rotationSpeed;
+
     public SparkParticle(ClientLevel level, double x, double y, double z, double xd, double yd, double zd, SparkParticle.PhysicsType physicsType) {
         super(level, x, y, z);
         this.x = x;
@@ -29,8 +30,8 @@ public class SparkParticle extends TextureSheetParticle {
 
         // 根据类型设置大小
         this.baseSize = physicsType == SparkParticle.PhysicsType.NORMAL ?
-                (this.random.nextFloat() * 0.02F + 0.01F)*0.4F :
-                (this.random.nextFloat() * 0.03F + 0.02F)*0.4F;
+                (this.random.nextFloat() * 0.02F + 0.01F) * 0.4F :
+                (this.random.nextFloat() * 0.03F + 0.02F) * 0.4F;
         this.quadSize = baseSize;
 
         // 生命周期设置
@@ -76,7 +77,7 @@ public class SparkParticle extends TextureSheetParticle {
         this.roll += this.rotationSpeed;
 
         // 根据生命周期改变大小和颜色
-        float lifeProgress = (float)this.age / (float)this.lifetime;
+        float lifeProgress = (float) this.age / (float) this.lifetime;
 
         // 大小变化
         if (physicsType == PhysicsType.EXPANSIVE) {
@@ -114,17 +115,19 @@ public class SparkParticle extends TextureSheetParticle {
             this.zd += (random.nextDouble() - 0.5) * 0.015;
         }
     }
-    public static enum PhysicsType {
+
+    public enum PhysicsType {
         EXPANSIVE(Vec3::new),
         CONTRACTIVE((dx, dy, dz) -> new Vec3(dx * 0.02, dy * 0.02, dz * 0.02)),
         NORMAL(Vec3::new);
 
         final SparkParticle.DeltaMovementFunction function;
 
-        private PhysicsType(SparkParticle.DeltaMovementFunction function) {
+        PhysicsType(SparkParticle.DeltaMovementFunction function) {
             this.function = function;
         }
     }
+
     @FunctionalInterface
     interface DeltaMovementFunction {
         Vec3 getDeltaMovement(double var1, double var3, double var5);
@@ -190,11 +193,11 @@ public class SparkParticle extends TextureSheetParticle {
         public void tick() {
             super.tick();
 
-            for(int x = -1; x <= 1; x += 2) {
-                for(int y = -1; y <= 1; y += 2) {
-                    for(int z = -1; z <= 1; z += 2) {
-                        for(int i = 0; i < this.density; ++i) {
-                            Vec3 rand = (new Vec3(Math.random() * (double)x, Math.random() * (double)y, Math.random() * (double)z)).normalize().scale(this.radius);
+            for (int x = -1; x <= 1; x += 2) {
+                for (int y = -1; y <= 1; y += 2) {
+                    for (int z = -1; z <= 1; z += 2) {
+                        for (int i = 0; i < this.density; ++i) {
+                            Vec3 rand = (new Vec3(Math.random() * (double) x, Math.random() * (double) y, Math.random() * (double) z)).normalize().scale(this.radius);
                             this.level.addParticle(StarsParticleType.SPARK_CONTRACTIVE.get(), this.x + rand.x, this.y + rand.y, this.z + rand.z, -rand.x, -rand.y, -rand.z);
                         }
                     }
@@ -209,7 +212,7 @@ public class SparkParticle extends TextureSheetParticle {
             }
 
             public Particle createParticle(SimpleParticleType typeIn, ClientLevel worldIn, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed) {
-                SparkParticle.ContractiveMetaParticle particle = new SparkParticle.ContractiveMetaParticle(worldIn, x, y, z, xSpeed, (int)Double.doubleToLongBits(ySpeed), (int)Double.doubleToLongBits(zSpeed));
+                SparkParticle.ContractiveMetaParticle particle = new SparkParticle.ContractiveMetaParticle(worldIn, x, y, z, xSpeed, (int) Double.doubleToLongBits(ySpeed), (int) Double.doubleToLongBits(zSpeed));
                 return particle;
             }
         }
@@ -220,10 +223,10 @@ public class SparkParticle extends TextureSheetParticle {
         public ExpansiveMetaParticle(ClientLevel level, double x, double y, double z, double radius, int density) {
             super(level, x, y, z);
 
-            for(int vx = -1; vx <= 1; vx += 2) {
-                for(int vz = -1; vz <= 1; vz += 2) {
-                    for(int i = 0; i < density; ++i) {
-                        Vec3 rand = (new Vec3(Math.random() * (double)vx, Math.random(), Math.random() * (double)vz)).normalize().scale(radius);
+            for (int vx = -1; vx <= 1; vx += 2) {
+                for (int vz = -1; vz <= 1; vz += 2) {
+                    for (int i = 0; i < density; ++i) {
+                        Vec3 rand = (new Vec3(Math.random() * (double) vx, Math.random(), Math.random() * (double) vz)).normalize().scale(radius);
                         level.addParticle(StarsParticleType.SPARK_EXPANSIVE.get(), x, y, z, rand.x, rand.y, rand.z);
                     }
                 }
@@ -237,7 +240,7 @@ public class SparkParticle extends TextureSheetParticle {
             }
 
             public Particle createParticle(SimpleParticleType typeIn, ClientLevel worldIn, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed) {
-                SparkParticle.ExpansiveMetaParticle particle = new SparkParticle.ExpansiveMetaParticle(worldIn, x, y, z, xSpeed, (int)Double.doubleToLongBits(ySpeed));
+                SparkParticle.ExpansiveMetaParticle particle = new SparkParticle.ExpansiveMetaParticle(worldIn, x, y, z, xSpeed, (int) Double.doubleToLongBits(ySpeed));
                 return particle;
             }
         }

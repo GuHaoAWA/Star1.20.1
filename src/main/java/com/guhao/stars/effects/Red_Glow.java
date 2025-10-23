@@ -17,6 +17,10 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.entity.PartEntity;
 
 public class Red_Glow extends MobEffect {
+    public Red_Glow() {
+        super(MobEffectCategory.NEUTRAL, 9740385);
+    }
+
     private static int getColor(float hue, float saturation, float brightness) {
         return 0xFFFF0000;
     }
@@ -49,10 +53,6 @@ public class Red_Glow extends MobEffect {
 
         return false;
 
-    }
-
-    public Red_Glow() {
-        super(MobEffectCategory.NEUTRAL, 9740385);
     }
 }
 

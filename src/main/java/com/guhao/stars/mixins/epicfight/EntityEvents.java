@@ -33,9 +33,9 @@ import yesman.epicfight.world.entity.eventlistener.PlayerEventListener;
 import yesman.epicfight.world.entity.eventlistener.TakeDamageEvent;
 import yesman.epicfight.world.gamerule.EpicFightGameRules;
 
-@Mixin(value = yesman.epicfight.events.EntityEvents.class , remap = false)
+@Mixin(value = yesman.epicfight.events.EntityEvents.class, remap = false)
 public class EntityEvents {
-    @Inject(method = "hurtEvent",at = @At("HEAD"), cancellable = true)
+    @Inject(method = "hurtEvent", at = @At("HEAD"), cancellable = true)
     private static void star$hurtEvent(LivingHurtEvent event, CallbackInfo ci) {
         ci.cancel();
         EpicFightDamageSource epicFightDamageSource = null;
@@ -46,7 +46,7 @@ public class EntityEvents {
             float baseDamage = event.getAmount();
             DamageSource var6 = event.getSource();
             if (var6 instanceof EpicFightDamageSource) {
-                epicFightDamageSource = (EpicFightDamageSource)var6;
+                epicFightDamageSource = (EpicFightDamageSource) var6;
             } else if (event.getSource().isIndirect() && event.getSource().getDirectEntity() != null) {
                 ProjectilePatch<?> projectileCap = EpicFightCapabilities.getEntityPatch(event.getSource().getDirectEntity(), ProjectilePatch.class);
                 if (projectileCap != null) {
@@ -116,7 +116,7 @@ public class EntityEvents {
                                     knockBackAmount = Math.min(isLongStun ? epicFightDamageSource.getBaseImpact() * 0.05F : totalStunTime, 2.0F);
                                 }
 
-                                stunTime = (float)((double)stunTime * (1.0 - hitEntity.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE)));
+                                stunTime = (float) ((double) stunTime * (1.0 - hitEntity.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE)));
                             }
                             break;
                         case LONG:
@@ -141,7 +141,7 @@ public class EntityEvents {
                         case NEUTRALIZE:
                             stunType = StunType.NEUTRALIZE;
                             hitHurtableEntityPatch.playSound(EpicFightSounds.NEUTRALIZE_MOBS.get(), 3.0F, 0.0F, 0.1F);
-                            EpicFightParticles.AIR_BURST.get().spawnParticleWithArgument((ServerLevel)hitEntity.level(), hitEntity, event.getSource().getDirectEntity());
+                            EpicFightParticles.AIR_BURST.get().spawnParticleWithArgument((ServerLevel) hitEntity.level(), hitEntity, event.getSource().getDirectEntity());
                             knockBackAmount = 0.0F;
                             stunTime = 2.0F;
                     }

@@ -31,13 +31,11 @@ public class StarsKey {
     };
 
 
-
     @SubscribeEvent
     public static void registerKeyBindings(RegisterKeyMappingsEvent event) {
         event.register(INSPECT);
 
     }
-
 
 
     @Mod.EventBusSubscriber({Dist.CLIENT})

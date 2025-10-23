@@ -34,6 +34,7 @@ public class BloodBattle extends Item {
     public boolean isFireResistant() {
         return true;
     }
+
     @Override
     public void appendHoverText(@NotNull ItemStack stack, @Nullable Level level, @NotNull List<Component> list, @NotNull TooltipFlag flag) {
         list.add(Component.literal("§b在背包时开启血战模式，仅为无伤流玩家设计"));

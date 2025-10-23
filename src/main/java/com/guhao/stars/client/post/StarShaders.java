@@ -26,76 +26,88 @@ import java.util.function.Function;
 import static com.guhao.stars.StarsMod.MODID;
 
 
-
 @SuppressWarnings("removal")
 @Mod.EventBusSubscriber(modid = MODID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public final class StarShaders {
-    private static class RenderStateShardAccess extends RenderStateShard {
-        private static final ResourceLocation END_SKY_LOCATION = new ResourceLocation(MODID,"textures/entity/in_sky.png");
-        private static final ResourceLocation END_PORTAL_LOCATION = new ResourceLocation(MODID,"textures/entity/starry_sky.png");
-        private static final DepthTestStateShard NO_DEPTH_TEST = RenderStateShard.NO_DEPTH_TEST;
-        private static final DepthTestStateShard EQUAL_DEPTH_TEST = RenderStateShard.EQUAL_DEPTH_TEST; // ITEM
-        private static final DepthTestStateShard LEQUAL_DEPTH_TEST = RenderStateShard.LEQUAL_DEPTH_TEST; // BLOCK
-        private static final LightmapStateShard LIGHT_MAP = RenderStateShard.LIGHTMAP;
-        private static final TransparencyStateShard TRANSLUCENT_TRANSPARENCY = RenderStateShard.TRANSLUCENT_TRANSPARENCY;
-        private static final TextureStateShard BLOCK_SHEET_MIPPED = RenderStateShard.BLOCK_SHEET_MIPPED;
-        private static final TextureStateShard BLOCK_SHEET = RenderStateShard.BLOCK_SHEET;
-        private static final CullStateShard NO_CULL = RenderStateShard.NO_CULL;
-        private static final CullStateShard CULL = RenderStateShard.CULL;
-        private static final ShaderStateShard EYES_LIGHT = new ShaderStateShard(GameRenderer::getRendertypeEyesShader);
-        private static final ShaderStateShard RENDERTYPE_LIGHTNING_SHADER = new ShaderStateShard(GameRenderer::getRendertypeLightningShader);
-        private static final WriteMaskStateShard COLOR_WRITE = RenderStateShard.COLOR_WRITE;
-        private static final WriteMaskStateShard COLOR_DEPTH_WRITE = RenderStateShard.COLOR_DEPTH_WRITE;
-        private static final LayeringStateShard VIEW_OFFSET_Z_LAYERING = RenderStateShard.VIEW_OFFSET_Z_LAYERING;
-        private static final TransparencyStateShard ADDITIVE_TRANSPARENCY = new TransparencyStateShard("additive_transparency", () -> {
-            RenderSystem.enableBlend();
-            RenderSystem.blendFunc(GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE);
-        }, () -> {
-            RenderSystem.disableBlend();
-            RenderSystem.defaultBlendFunc();
-        });
-
-        private static final TransparencyStateShard GUI_TRANSPARENCY = new TransparencyStateShard("gui_transparency", () -> {
-            RenderSystem.enableBlend();
-            RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-            }, () -> {
-            RenderSystem.disableBlend();
-            RenderSystem.defaultBlendFunc();
-        });
-
-        private static final TransparencyStateShard LIGHTNING_TRANSPARENCY = new TransparencyStateShard("lightning_transparency", () -> {
-            RenderSystem.enableBlend();
-            RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE);
-        }, () -> {
-            RenderSystem.disableBlend();
-            RenderSystem.defaultBlendFunc();
-        });
-
-        private static final OutputStateShard WEATHER_TARGET = new OutputStateShard("weather_target", () -> {
-            if (Minecraft.useShaderTransparency()) {
-                Objects.requireNonNull(Minecraft.getInstance().levelRenderer.getWeatherTarget()).bindWrite(false);
-            }
-
-        }, () -> {
-            if (Minecraft.useShaderTransparency()) {
-                Minecraft.getInstance().getMainRenderTarget().bindWrite(false);
-            }
-
-        });
-
-        private RenderStateShardAccess(String pName, Runnable pSetupState, Runnable pClearState) {
-            super(pName, pSetupState, pClearState);
-        }
-    }
-
     public static final float[] COSMIC_UVS = new float[40];
+    public static final Function<ResourceLocation, RenderType> EYES = Util.memoize((function) -> {
+        RenderStateShard.TextureStateShard textureStateShard = new RenderStateShard.TextureStateShard(function, false, false);
+        return RenderType.create("eyes_light", DefaultVertexFormat.NEW_ENTITY, VertexFormat.Mode.QUADS, 256, false, true, RenderType.CompositeState.builder()
+                .setShaderState(RenderStateShardAccess.EYES_LIGHT)
+                .setTextureState(textureStateShard)
+                .setTransparencyState(RenderStateShardAccess.ADDITIVE_TRANSPARENCY)
+                .setWriteMaskState(RenderStateShardAccess.COLOR_WRITE)
+                .createCompositeState(false));
+    });
+    public static final RenderType LIGHTNING = RenderType.create("lightning", DefaultVertexFormat.POSITION_COLOR, VertexFormat.Mode.QUADS, 256, false, true, RenderType.CompositeState.builder()
+            .setShaderState(RenderStateShardAccess.RENDERTYPE_LIGHTNING_SHADER)
+            .setWriteMaskState(RenderStateShardAccess.COLOR_DEPTH_WRITE)
+            .setTransparencyState(RenderStateShardAccess.LIGHTNING_TRANSPARENCY)
+            .setOutputState(RenderStateShardAccess.WEATHER_TARGET)
+            .setWriteMaskState(RenderStateShardAccess.COLOR_WRITE)
+            .createCompositeState(false));
     public static boolean inventoryRender = false;
     public static int renderTime;
     public static float tick;
     public static float renderFrame;
     public static CCShaderInstance cosmicShader; // cosmic item render
+    public static final RenderType COSMIC_RENDER_TYPE = RenderType.create(MODID + ":cosmic", DefaultVertexFormat.BLOCK, VertexFormat.Mode.QUADS, 2097152, true, false, RenderType.CompositeState.builder()
+            .setShaderState(new RenderStateShard.ShaderStateShard(() -> cosmicShader))
+            .setDepthTestState(RenderStateShardAccess.EQUAL_DEPTH_TEST)
+            .setLightmapState(RenderStateShardAccess.LIGHT_MAP)
+            .setTransparencyState(RenderStateShardAccess.TRANSLUCENT_TRANSPARENCY)
+            .setTextureState(RenderStateShardAccess.BLOCK_SHEET_MIPPED)
+            .createCompositeState(true));
+    public static final RenderType COSMIC_BLOCK_RENDER_TYPE = RenderType.create(MODID + ":cosmic_block", DefaultVertexFormat.BLOCK, VertexFormat.Mode.QUADS, 2097152, true, false, RenderType.CompositeState.builder()
+            .setShaderState(new RenderStateShard.ShaderStateShard(() -> cosmicShader))
+            .setDepthTestState(RenderStateShardAccess.LEQUAL_DEPTH_TEST)
+            .setLightmapState(RenderStateShardAccess.LIGHT_MAP)
+            .setTransparencyState(RenderStateShardAccess.TRANSLUCENT_TRANSPARENCY)
+            .setTextureState(RenderStateShardAccess.BLOCK_SHEET_MIPPED)
+            .createCompositeState(true));
+    public static final RenderType COSMIC_ENTITY_RENDER_TYPE = RenderType.create(MODID + ":cosmic_entity", DefaultVertexFormat.NEW_ENTITY, VertexFormat.Mode.QUADS, 2097152, false, true, RenderType.CompositeState.builder()
+            .setShaderState(new RenderStateShard.ShaderStateShard(() -> cosmicShader))
+            .setDepthTestState(RenderStateShardAccess.LEQUAL_DEPTH_TEST)
+            .setLightmapState(RenderStateShardAccess.LIGHT_MAP)
+            .setTransparencyState(RenderStateShardAccess.TRANSLUCENT_TRANSPARENCY)
+            .setTextureState(RenderStateShardAccess.BLOCK_SHEET_MIPPED)
+            .setWriteMaskState(RenderStateShardAccess.COLOR_DEPTH_WRITE)
+            .createCompositeState(false));
     public static CCShaderInstance starrySkyShader; // entity render
+    public static final RenderType SKY_ENTITY = RenderType.create("sky_entity", DefaultVertexFormat.NEW_ENTITY, VertexFormat.Mode.QUADS, 256, false, false, RenderType.CompositeState.builder()
+            .setShaderState(new RenderStateShard.ShaderStateShard(() -> starrySkyShader))
+            .setTextureState(RenderStateShard.MultiTextureStateShard.builder()
+                    .add(RenderStateShardAccess.END_SKY_LOCATION, false, false)
+                    .add(RenderStateShardAccess.END_PORTAL_LOCATION, false, false)
+                    .build())
+            .setTransparencyState(RenderStateShardAccess.ADDITIVE_TRANSPARENCY)
+            .setCullState(RenderStateShardAccess.NO_CULL)
+            .createCompositeState(false));
     public static CCShaderInstance starrySkyShaderItem; // item render
+    public static final RenderType SKY_ITEM = RenderType.create("sky_item", DefaultVertexFormat.BLOCK, VertexFormat.Mode.QUADS, 2097152, true, false, RenderType.CompositeState.builder()
+            .setShaderState(new RenderStateShard.ShaderStateShard(() -> starrySkyShaderItem))
+            .setDepthTestState(RenderStateShardAccess.EQUAL_DEPTH_TEST)
+            .setLightmapState(RenderStateShardAccess.LIGHT_MAP)
+            .setTextureState(RenderStateShard.MultiTextureStateShard.builder()
+                    .add(RenderStateShardAccess.END_SKY_LOCATION, false, false)
+                    .add(RenderStateShardAccess.END_PORTAL_LOCATION, false, false)
+                    .build())
+            .setTransparencyState(RenderStateShardAccess.ADDITIVE_TRANSPARENCY)
+            .setWriteMaskState(RenderStateShardAccess.COLOR_DEPTH_WRITE)
+            .createCompositeState(true));
+    public static final RenderType SKY_ITEM_GUI = RenderType.create("sky_item_gui", DefaultVertexFormat.BLOCK, VertexFormat.Mode.QUADS, 2097152, true, false, RenderType.CompositeState.builder()
+            .setShaderState(new RenderStateShard.ShaderStateShard(() -> starrySkyShaderItem))
+            .setDepthTestState(RenderStateShardAccess.NO_DEPTH_TEST)
+            .setLightmapState(RenderStateShardAccess.LIGHT_MAP)
+            .setTextureState(RenderStateShard.MultiTextureStateShard.builder()
+                    .add(RenderStateShardAccess.END_SKY_LOCATION, false, false)
+                    .add(RenderStateShardAccess.END_PORTAL_LOCATION, false, false)
+                    .build())
+            .setTransparencyState(RenderStateShardAccess.ADDITIVE_TRANSPARENCY)
+            .setWriteMaskState(RenderStateShardAccess.COLOR_WRITE)
+            .setCullState(RenderStateShardAccess.NO_CULL)
+            .createCompositeState(true)
+    );
     public static CCShaderInstance blackHoleShader;
     public static CCUniform cosmicTime;
     public static CCUniform portalTime;
@@ -119,84 +131,6 @@ public final class StarShaders {
     public static CCUniform rainbowMixItem;
     public static CCUniform opacity;
     public static CCUniform ItemOpacity;
-    public static final RenderType COSMIC_RENDER_TYPE = RenderType.create(MODID + ":cosmic", DefaultVertexFormat.BLOCK, VertexFormat.Mode.QUADS, 2097152, true, false, RenderType.CompositeState.builder()
-            .setShaderState(new RenderStateShard.ShaderStateShard(() -> cosmicShader))
-            .setDepthTestState(RenderStateShardAccess.EQUAL_DEPTH_TEST)
-            .setLightmapState(RenderStateShardAccess.LIGHT_MAP)
-            .setTransparencyState(RenderStateShardAccess.TRANSLUCENT_TRANSPARENCY)
-            .setTextureState(RenderStateShardAccess.BLOCK_SHEET_MIPPED)
-            .createCompositeState(true));
-
-    public static final RenderType COSMIC_BLOCK_RENDER_TYPE = RenderType.create(MODID + ":cosmic_block", DefaultVertexFormat.BLOCK, VertexFormat.Mode.QUADS, 2097152, true, false, RenderType.CompositeState.builder()
-            .setShaderState(new RenderStateShard.ShaderStateShard(() -> cosmicShader))
-            .setDepthTestState(RenderStateShardAccess.LEQUAL_DEPTH_TEST)
-            .setLightmapState(RenderStateShardAccess.LIGHT_MAP)
-            .setTransparencyState(RenderStateShardAccess.TRANSLUCENT_TRANSPARENCY)
-            .setTextureState(RenderStateShardAccess.BLOCK_SHEET_MIPPED)
-            .createCompositeState(true));
-
-    public static final RenderType COSMIC_ENTITY_RENDER_TYPE = RenderType.create(MODID + ":cosmic_entity", DefaultVertexFormat.NEW_ENTITY, VertexFormat.Mode.QUADS, 2097152, false, true, RenderType.CompositeState.builder()
-            .setShaderState(new RenderStateShard.ShaderStateShard(() -> cosmicShader))
-            .setDepthTestState(RenderStateShardAccess.LEQUAL_DEPTH_TEST)
-            .setLightmapState(RenderStateShardAccess.LIGHT_MAP)
-            .setTransparencyState(RenderStateShardAccess.TRANSLUCENT_TRANSPARENCY)
-            .setTextureState(RenderStateShardAccess.BLOCK_SHEET_MIPPED)
-            .setWriteMaskState(RenderStateShardAccess.COLOR_DEPTH_WRITE)
-            .createCompositeState(false));
-
-    public static final RenderType SKY_ENTITY = RenderType.create("sky_entity", DefaultVertexFormat.NEW_ENTITY, VertexFormat.Mode.QUADS, 256, false, false, RenderType.CompositeState.builder()
-                    .setShaderState(new RenderStateShard.ShaderStateShard(() -> starrySkyShader))
-                    .setTextureState(RenderStateShard.MultiTextureStateShard.builder()
-                            .add(RenderStateShardAccess.END_SKY_LOCATION,  false, false)
-                            .add(RenderStateShardAccess.END_PORTAL_LOCATION, false, false)
-                            .build())
-                    .setTransparencyState(RenderStateShardAccess.ADDITIVE_TRANSPARENCY)
-                    .setCullState(RenderStateShardAccess.NO_CULL)
-                    .createCompositeState(false));
-
-    public static final RenderType SKY_ITEM = RenderType.create("sky_item", DefaultVertexFormat.BLOCK, VertexFormat.Mode.QUADS, 2097152, true, false, RenderType.CompositeState.builder()
-            .setShaderState(new RenderStateShard.ShaderStateShard(() -> starrySkyShaderItem))
-            .setDepthTestState(RenderStateShardAccess.EQUAL_DEPTH_TEST)
-            .setLightmapState(RenderStateShardAccess.LIGHT_MAP)
-            .setTextureState(RenderStateShard.MultiTextureStateShard.builder()
-                    .add(RenderStateShardAccess.END_SKY_LOCATION,  false, false)
-                    .add(RenderStateShardAccess.END_PORTAL_LOCATION, false, false)
-                    .build())
-            .setTransparencyState(RenderStateShardAccess.ADDITIVE_TRANSPARENCY)
-            .setWriteMaskState(RenderStateShardAccess.COLOR_DEPTH_WRITE)
-            .createCompositeState(true));
-
-    public static final RenderType SKY_ITEM_GUI = RenderType.create("sky_item_gui", DefaultVertexFormat.BLOCK, VertexFormat.Mode.QUADS, 2097152, true, false, RenderType.CompositeState.builder()
-                    .setShaderState(new RenderStateShard.ShaderStateShard(() -> starrySkyShaderItem))
-                    .setDepthTestState(RenderStateShardAccess.NO_DEPTH_TEST)
-                    .setLightmapState(RenderStateShardAccess.LIGHT_MAP)
-                    .setTextureState(RenderStateShard.MultiTextureStateShard.builder()
-                            .add(RenderStateShardAccess.END_SKY_LOCATION, false, false)
-                            .add(RenderStateShardAccess.END_PORTAL_LOCATION, false, false)
-                            .build())
-                    .setTransparencyState(RenderStateShardAccess.ADDITIVE_TRANSPARENCY)
-                    .setWriteMaskState(RenderStateShardAccess.COLOR_WRITE)
-                    .setCullState(RenderStateShardAccess.NO_CULL)
-                    .createCompositeState(true)
-    );
-
-    public static final Function<ResourceLocation, RenderType> EYES = Util.memoize((function) -> {
-        RenderStateShard.TextureStateShard textureStateShard = new RenderStateShard.TextureStateShard(function, false, false);
-        return RenderType.create("eyes_light", DefaultVertexFormat.NEW_ENTITY, VertexFormat.Mode.QUADS, 256, false, true, RenderType.CompositeState.builder()
-                .setShaderState(RenderStateShardAccess.EYES_LIGHT)
-                .setTextureState(textureStateShard)
-                .setTransparencyState(RenderStateShardAccess.ADDITIVE_TRANSPARENCY)
-                .setWriteMaskState(RenderStateShardAccess.COLOR_WRITE)
-                .createCompositeState(false));
-    });
-
-    public static final RenderType LIGHTNING = RenderType.create("lightning", DefaultVertexFormat.POSITION_COLOR, VertexFormat.Mode.QUADS, 256, false, true, RenderType.CompositeState.builder()
-            .setShaderState(RenderStateShardAccess.RENDERTYPE_LIGHTNING_SHADER)
-            .setWriteMaskState(RenderStateShardAccess.COLOR_DEPTH_WRITE)
-            .setTransparencyState(RenderStateShardAccess.LIGHTNING_TRANSPARENCY)
-            .setOutputState(RenderStateShardAccess.WEATHER_TARGET)
-            .setWriteMaskState(RenderStateShardAccess.COLOR_WRITE)
-            .createCompositeState(false));
 
     // Item
     public static void registerCosmicShaders(RegisterShadersEvent shader) {
@@ -298,5 +232,63 @@ public final class StarShaders {
     @SubscribeEvent
     public static void drawScreenPost(final ScreenEvent.Render.Post e) {
         StarShaders.inventoryRender = false;
+    }
+
+    private static class RenderStateShardAccess extends RenderStateShard {
+        private static final ResourceLocation END_SKY_LOCATION = new ResourceLocation(MODID, "textures/entity/in_sky.png");
+        private static final ResourceLocation END_PORTAL_LOCATION = new ResourceLocation(MODID, "textures/entity/starry_sky.png");
+        private static final DepthTestStateShard NO_DEPTH_TEST = RenderStateShard.NO_DEPTH_TEST;
+        private static final DepthTestStateShard EQUAL_DEPTH_TEST = RenderStateShard.EQUAL_DEPTH_TEST; // ITEM
+        private static final DepthTestStateShard LEQUAL_DEPTH_TEST = RenderStateShard.LEQUAL_DEPTH_TEST; // BLOCK
+        private static final LightmapStateShard LIGHT_MAP = RenderStateShard.LIGHTMAP;
+        private static final TransparencyStateShard TRANSLUCENT_TRANSPARENCY = RenderStateShard.TRANSLUCENT_TRANSPARENCY;
+        private static final TextureStateShard BLOCK_SHEET_MIPPED = RenderStateShard.BLOCK_SHEET_MIPPED;
+        private static final TextureStateShard BLOCK_SHEET = RenderStateShard.BLOCK_SHEET;
+        private static final CullStateShard NO_CULL = RenderStateShard.NO_CULL;
+        private static final CullStateShard CULL = RenderStateShard.CULL;
+        private static final ShaderStateShard EYES_LIGHT = new ShaderStateShard(GameRenderer::getRendertypeEyesShader);
+        private static final ShaderStateShard RENDERTYPE_LIGHTNING_SHADER = new ShaderStateShard(GameRenderer::getRendertypeLightningShader);
+        private static final WriteMaskStateShard COLOR_WRITE = RenderStateShard.COLOR_WRITE;
+        private static final WriteMaskStateShard COLOR_DEPTH_WRITE = RenderStateShard.COLOR_DEPTH_WRITE;
+        private static final LayeringStateShard VIEW_OFFSET_Z_LAYERING = RenderStateShard.VIEW_OFFSET_Z_LAYERING;
+        private static final TransparencyStateShard ADDITIVE_TRANSPARENCY = new TransparencyStateShard("additive_transparency", () -> {
+            RenderSystem.enableBlend();
+            RenderSystem.blendFunc(GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE);
+        }, () -> {
+            RenderSystem.disableBlend();
+            RenderSystem.defaultBlendFunc();
+        });
+
+        private static final TransparencyStateShard GUI_TRANSPARENCY = new TransparencyStateShard("gui_transparency", () -> {
+            RenderSystem.enableBlend();
+            RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+        }, () -> {
+            RenderSystem.disableBlend();
+            RenderSystem.defaultBlendFunc();
+        });
+
+        private static final TransparencyStateShard LIGHTNING_TRANSPARENCY = new TransparencyStateShard("lightning_transparency", () -> {
+            RenderSystem.enableBlend();
+            RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE);
+        }, () -> {
+            RenderSystem.disableBlend();
+            RenderSystem.defaultBlendFunc();
+        });
+
+        private static final OutputStateShard WEATHER_TARGET = new OutputStateShard("weather_target", () -> {
+            if (Minecraft.useShaderTransparency()) {
+                Objects.requireNonNull(Minecraft.getInstance().levelRenderer.getWeatherTarget()).bindWrite(false);
+            }
+
+        }, () -> {
+            if (Minecraft.useShaderTransparency()) {
+                Minecraft.getInstance().getMainRenderTarget().bindWrite(false);
+            }
+
+        });
+
+        private RenderStateShardAccess(String pName, Runnable pSetupState, Runnable pClearState) {
+            super(pName, pSetupState, pClearState);
+        }
     }
 }

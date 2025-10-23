@@ -19,15 +19,18 @@ import java.util.UUID;
 
 public class AllEFPlayerTickEvent {
     private static final UUID EVENT_UUID = UUID.fromString("36d394ea-0461-11ee-ee56-0292ac114514");
+
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
         if (event.phase == TickEvent.Phase.START) {
-            execute(event,event.player);
+            execute(event, event.player);
         }
     }
+
     public static void execute(Player player) {
-        execute(null,player);
+        execute(null, player);
     }
+
     private static void execute(@Nullable Event event, Player player) {
         PlayerPatch<?> pp = EpicFightCapabilities.getEntityPatch(player, PlayerPatch.class);
         if (pp == null) return;

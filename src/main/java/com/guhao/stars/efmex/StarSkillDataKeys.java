@@ -3,16 +3,12 @@ package com.guhao.stars.efmex;
 import com.guhao.stars.efmex.skills.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.IForgeRegistry;
-import net.minecraftforge.registries.RegistryBuilder;
 import net.minecraftforge.registries.RegistryObject;
 import yesman.epicfight.api.utils.PacketBufferCodec;
 import yesman.epicfight.skill.SkillDataKey;
 import yesman.epicfight.skill.guard.GuardSkill;
 import yesman.epicfight.skill.guard.ImpactGuardSkill;
 import yesman.epicfight.skill.guard.ParryingSkill;
-
-import java.util.function.Supplier;
 
 import static com.guhao.stars.StarsMod.MODID;
 
