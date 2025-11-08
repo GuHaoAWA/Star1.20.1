@@ -161,15 +161,32 @@ public class EntityEvents {
                     }
                 }
             }
-        } else if (event.getSource().is(DamageTypes.FALL) && event.getAmount() > 1.0F && event.getEntity().level().getGameRules().getBoolean(EpicFightGameRules.HAS_FALL_ANIMATION.getRuleKey())) {
+        }
+
+
+        //修复wom:lycanth坠机崩溃
+        else if(event.getSource().is(DamageTypes.FALL) && event.getAmount() > 1.0F && event.getEntity().level().getGameRules().getBoolean(EpicFightGameRules.HAS_FALL_ANIMATION.getRuleKey())) {
             attackerEntityPatch = EpicFightCapabilities.getEntityPatch(event.getEntity(), LivingEntityPatch.class);
-            if (attackerEntityPatch != null && !attackerEntityPatch.getEntityState().inaction()) {
-                StaticAnimation fallAnimation = attackerEntityPatch.getAnimator().getLivingAnimation(LivingMotions.LANDING_RECOVERY, attackerEntityPatch.getHitAnimation(StunType.FALL)).get();
-                if (fallAnimation != null) {
-                    attackerEntityPatch.playAnimationSynchronized(fallAnimation.getAccessor(), 0.0F);
+            if(attackerEntityPatch != null && !attackerEntityPatch.getEntityState().inaction()){
+                var animationAccessor = attackerEntityPatch.getAnimator().getLivingAnimation(LivingMotions.LANDING_RECOVERY, attackerEntityPatch.getHitAnimation(StunType.FALL));
+                if(animationAccessor != null && animationAccessor.isPresent()){
+                    StaticAnimation fallAnimation = animationAccessor.get();
+                    if(fallAnimation != null) {
+                        attackerEntityPatch.playAnimationSynchronized(fallAnimation.getAccessor(), 0.0F);
+                    }
                 }
             }
         }
+
+//        else if (event.getSource().is(DamageTypes.FALL) && event.getAmount() > 1.0F && event.getEntity().level().getGameRules().getBoolean(EpicFightGameRules.HAS_FALL_ANIMATION.getRuleKey())) {
+//            attackerEntityPatch = EpicFightCapabilities.getEntityPatch(event.getEntity(), LivingEntityPatch.class);
+//            if (attackerEntityPatch != null && !attackerEntityPatch.getEntityState().inaction()) {
+//                StaticAnimation fallAnimation = attackerEntityPatch.getAnimator().getLivingAnimation(LivingMotions.LANDING_RECOVERY, attackerEntityPatch.getHitAnimation(StunType.FALL)).get();
+//                if (fallAnimation != null) {
+//                    attackerEntityPatch.playAnimationSynchronized(fallAnimation.getAccessor(), 0.0F);
+//                }
+//            }
+//        }
 
     }
 
