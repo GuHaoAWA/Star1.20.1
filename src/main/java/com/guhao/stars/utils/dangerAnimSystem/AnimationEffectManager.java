@@ -7,8 +7,7 @@ import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageType;
-import reascer.wom.gameasset.WOMAnimations;
-import reascer.wom.gameasset.animations.weapons.*;
+
 import yesman.epicfight.api.animation.types.StaticAnimation;
 import yesman.epicfight.gameasset.Animations;
 import yesman.epicfight.world.damagesource.EpicFightDamageSource;
@@ -35,17 +34,17 @@ public class AnimationEffectManager {
     );
     // 红危:不可防御，不可招架的动画列表
     private static final List<StaticAnimation> NO_BLOCK_ANIMATIONS = Arrays.asList(
-            WOMAnimations.STRONG_KICK.get(),
-            AnimsHerrscher.GESETZ_SPRENGKOPF.get(),
-            AnimsSolar.SOLAR_BRASERO_CREMATORIO.get(),
-            AnimsSolar.SOLAR_BRASERO_INFIERNO.get(),
-            AnimsRuine.RUINE_CHATIMENT.get(),
-            AnimsSolar.SOLAR_QUEMADURA.get(),
-            AnimsSolar.SOLAR_AUTO_2_POLVORA.get(),
-            AnimsEnderblaster.ENDERBLASTER_ONEHAND_SHOOT_LAYED.get(),
-            AnimsEnderblaster.ENDERBLASTER_TWOHAND_SHOOT_LAYED_LEFT.get(),
-            AnimsEnderblaster.ENDERBLASTER_TWOHAND_SHOOT_LAYED_RIGHT.get(),
-            AnimsEnderblaster.ENDERBLASTER_ONEHAND_SHOOT_DASH.get(),
+//            WOMAnimations.STRONG_KICK.get(),
+//            AnimsHerrscher.GESETZ_SPRENGKOPF.get(),
+//            AnimsSolar.SOLAR_BRASERO_CREMATORIO.get(),
+//            AnimsSolar.SOLAR_BRASERO_INFIERNO.get(),
+//            AnimsRuine.RUINE_CHATIMENT.get(),
+//            AnimsSolar.SOLAR_QUEMADURA.get(),
+//            AnimsSolar.SOLAR_AUTO_2_POLVORA.get(),
+//            AnimsEnderblaster.ENDERBLASTER_ONEHAND_SHOOT_LAYED.get(),
+//            AnimsEnderblaster.ENDERBLASTER_TWOHAND_SHOOT_LAYED_LEFT.get(),
+//            AnimsEnderblaster.ENDERBLASTER_TWOHAND_SHOOT_LAYED_RIGHT.get(),
+//            AnimsEnderblaster.ENDERBLASTER_ONEHAND_SHOOT_DASH.get(),
             Animations.TSUNAMI_REINFORCED.get(),
             Animations.WRATHFUL_LIGHTING.get(),
             Animations.REVELATION_TWOHAND.get(),
@@ -58,16 +57,16 @@ public class AnimationEffectManager {
     );
     // 黄危:不可防御的动画列表
     private static final List<StaticAnimation> NO_GUARD_ANIMATIONS = Arrays.asList(
-            WOMAnimations.STAFF_KINKONG.get(),
-            WOMAnimations.STRONG_PUNCH.get(),
-            AnimsHerrscher.HERRSCHER_AUTO_2.get(),
-            AnimsHerrscher.GESETZ_AUTO_3.get(),
-            AnimsSolar.SOLAR_HORNO.get(),
-            AnimsEnderblaster.ENDERBLASTER_ONEHAND_SHOOT_3.get(),
-            AnimsEnderblaster.ENDERBLASTER_TWOHAND_SHOOT_4.get(),
-            AnimsRuine.RUINE_REDEMPTION.get(),
-            AnimsRuine.RUINE_COMET.get(),
-            AnimsAgony.AGONY_AUTO_1.get(),
+//            WOMAnimations.STAFF_KINKONG.get(),
+//            WOMAnimations.STRONG_PUNCH.get(),
+//            AnimsHerrscher.HERRSCHER_AUTO_2.get(),
+//            AnimsHerrscher.GESETZ_AUTO_3.get(),
+//            AnimsSolar.SOLAR_HORNO.get(),
+//            AnimsEnderblaster.ENDERBLASTER_ONEHAND_SHOOT_3.get(),
+//            AnimsEnderblaster.ENDERBLASTER_TWOHAND_SHOOT_4.get(),
+//            AnimsRuine.RUINE_REDEMPTION.get(),
+//            AnimsRuine.RUINE_COMET.get(),
+//            AnimsAgony.AGONY_AUTO_1.get(),
             Animations.SPEAR_DASH.get(),
             Animations.LONGSWORD_DASH.get(),
             Animations.REVELATION_ONEHAND.get(),
@@ -91,14 +90,14 @@ public class AnimationEffectManager {
     );
     // 紫危：不可闪避不可招架不可防御的动画列表
     private static final List<StaticAnimation> NO_DODGE_GUARD_ANIMATIONS = Arrays.asList(
-            WOMAnimations.TORMENT_AUTO_1.get(),
-            AnimsRuine.RUINE_CHATIMENT.get(),
-            AnimsSolar.SOLAR_QUEMADURA.get(),
-            AnimsSolar.SOLAR_AUTO_2_POLVORA.get(),
-            AnimsEnderblaster.ENDERBLASTER_ONEHAND_SHOOT_LAYED.get(),
-            AnimsEnderblaster.ENDERBLASTER_TWOHAND_SHOOT_LAYED_LEFT.get(),
-            AnimsEnderblaster.ENDERBLASTER_TWOHAND_SHOOT_LAYED_RIGHT.get(),
-            AnimsEnderblaster.ENDERBLASTER_ONEHAND_SHOOT_DASH.get(),
+//            WOMAnimations.TORMENT_AUTO_1.get(),
+//            AnimsRuine.RUINE_CHATIMENT.get(),
+//            AnimsSolar.SOLAR_QUEMADURA.get(),
+//            AnimsSolar.SOLAR_AUTO_2_POLVORA.get(),
+//            AnimsEnderblaster.ENDERBLASTER_ONEHAND_SHOOT_LAYED.get(),
+//            AnimsEnderblaster.ENDERBLASTER_TWOHAND_SHOOT_LAYED_LEFT.get(),
+//            AnimsEnderblaster.ENDERBLASTER_TWOHAND_SHOOT_LAYED_RIGHT.get(),
+//            AnimsEnderblaster.ENDERBLASTER_ONEHAND_SHOOT_DASH.get(),
             CorruptAnimations.LETHAL_SLICING_ONCE1.get(),
             CorruptAnimations.KATANA_SHEATHING_DASH_DAWN.get(),
             CorruptAnimations.FATAL_DRAW_DAWN.get(),

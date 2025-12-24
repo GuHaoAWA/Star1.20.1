@@ -128,13 +128,13 @@ public record StarDataUnit() {
                 WOMAnimations.RUINE_COMET,
                 WOMAnimations.AGONY_AUTO_1,
                 WOMAnimations.ENDERBLASTER_TWOHAND_SHOOT_4,*/
-                CorruptAnimations.SSPEAR_DASH.get(),
-                CorruptAnimations.LONGSWORD_OLD_DASH.get(),
-                CorruptAnimations.UCHIGATANA_DASH.get(),
-                CorruptAnimations.UCHIGATANA_HEAVY1.get(),
-                CorruptAnimations.DUAL_TACHI_DASH.get(),
-                CorruptAnimations.BLADE_RUSH4.get(),
-                CorruptAnimations.BLADE_RUSH_FINISHER.get(),
+//                CorruptAnimations.SSPEAR_DASH.get(),
+//                CorruptAnimations.LONGSWORD_OLD_DASH.get(),
+//                CorruptAnimations.UCHIGATANA_DASH.get(),
+//                CorruptAnimations.UCHIGATANA_HEAVY1.get(),
+//                CorruptAnimations.DUAL_TACHI_DASH.get(),
+//                CorruptAnimations.BLADE_RUSH4.get(),
+//                CorruptAnimations.BLADE_RUSH_FINISHER.get(),
         };
         LOCK_OFF = new StaticAnimation[]{
 /*                StarAnimations.FIST_AUTO_1,
