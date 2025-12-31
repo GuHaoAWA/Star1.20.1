@@ -115,13 +115,13 @@ public class StarParryingSkillMixin extends GuardSkill {
             ServerPlayer playerentity = event.getPlayerPatch().getOriginal();
             boolean successParrying = playerentity.tickCount - container.getDataManager().getDataValue(SkillDataKeys.LAST_ACTIVE.get()) < 8;
 
-            if (!successParrying && AnimationEffectManager.isNoParryAnimation(animation)) {
+            if (!successParrying && AnimationEffectManager.isNoGuardAnimation(animation)) {
                 event.setParried(false);
                 event.setResult(AttackResult.ResultType.SUCCESS);
                 ci.cancel();
             }
 
-            if (AnimationEffectManager.isNoGuardAnimation(animation)) {
+            if (AnimationEffectManager.isNoGuardParryAnimation(animation)) {
                 event.setParried(false);
                 event.setResult(AttackResult.ResultType.SUCCESS);
                 ci.cancel();

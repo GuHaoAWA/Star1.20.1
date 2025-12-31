@@ -113,7 +113,7 @@ public class SeeThrough1 extends Skill {
             ///////////////////////////////////////
             AdvancedCustomHumanoidMobPatch<?> longpatch = EpicFightCapabilities.getEntityPatch(event.getDamageSource().getDirectEntity(), AdvancedCustomHumanoidMobPatch.class);
             EpicFightDamageSource epicFightDamageSource = AnimationEffectManager.getEpicFightDamageSources(event.getDamageSource());
-            if (epicFightDamageSource != null && AnimationEffectManager.isNoParryAnimation(epicFightDamageSource.getAnimation().get()) && event.isParried()) {
+            if (epicFightDamageSource != null && AnimationEffectManager.isNoGuardAnimation(epicFightDamageSource.getAnimation().get()) && event.isParried()) {
                 container.getDataManager().setDataSync(StarSkillDataKeys.COUNTER_TICK.get(), 60.0f, event.getPlayerPatch().getOriginal());
                 event.getPlayerPatch().getOriginal().addEffect(new MobEffectInstance(StarsEffect.ORANGE_GLOW.get(), 60, 1, true, true));
             }

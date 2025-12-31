@@ -98,7 +98,7 @@ public class CapabilityStateMixin<T extends MobPatch<?>, V extends AdvancedMobpa
     @Inject(method = "tryProcess", at = @At("HEAD"), cancellable = true)
     private void tryProcess(DamageSource damageSource, float amount, CallbackInfoReturnable<AttackResult> cir) {
         EpicFightDamageSource epicFightDamageSource = AnimationEffectManager.getEpicFightDamageSources(damageSource);
-        if (((MobPatch<?>) this.mobPatch instanceof IAdvancedCapability iac) && epicFightDamageSource != null && AnimationEffectManager.isNoGuardAnimation(epicFightDamageSource.getAnimation().get())) {
+        if (((MobPatch<?>) this.mobPatch instanceof IAdvancedCapability iac) && epicFightDamageSource != null && AnimationEffectManager.isNoGuardParryAnimation(epicFightDamageSource.getAnimation().get())) {
             cir.setReturnValue(new AttackResult(AttackResult.ResultType.SUCCESS, amount));
             cir.cancel();
         }

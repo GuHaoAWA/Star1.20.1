@@ -89,7 +89,7 @@ public class SeeThrough2 extends Skill {
         });
         listener.addEventListener(PlayerEventListener.EventType.DODGE_SUCCESS_EVENT, EVENT_UUID, (event) -> {
             EpicFightDamageSource epicFightDamageSource = AnimationEffectManager.getEpicFightDamageSources(event.getDamageSource());
-            if ((epicFightDamageSource != null) && (AnimationEffectManager.isNoGuardAnimation(epicFightDamageSource.getAnimation().get()) || (AnimationEffectManager.isNoParryAnimation(epicFightDamageSource.getAnimation().get()) && !AnimationEffectManager.isSpecialSeeThroughAnimation(epicFightDamageSource.getAnimation().get())))) {
+            if ((epicFightDamageSource != null) && (AnimationEffectManager.isNoGuardParryAnimation(epicFightDamageSource.getAnimation().get()) || (AnimationEffectManager.isNoGuardAnimation(epicFightDamageSource.getAnimation().get()) && !AnimationEffectManager.isSpecialSeeThroughAnimation(epicFightDamageSource.getAnimation().get())))) {
                 container.getDataManager().setDataSync(StarSkillDataKeys.COUNTER_TICK2.get(), 60.0f, event.getPlayerPatch().getOriginal());
                 event.getPlayerPatch().getOriginal().addEffect(new MobEffectInstance(StarsEffect.ORANGE_GLOW.get(), 60, 60, true, true));
             }
@@ -161,7 +161,7 @@ public class SeeThrough2 extends Skill {
             ///////////////////////////////////////
             AdvancedCustomHumanoidMobPatch<?> longpatch = EpicFightCapabilities.getEntityPatch(event.getDamageSource().getDirectEntity(), AdvancedCustomHumanoidMobPatch.class);
             EpicFightDamageSource epicFightDamageSource = AnimationEffectManager.getEpicFightDamageSources(event.getDamageSource());
-            if (epicFightDamageSource != null && AnimationEffectManager.isNoParryAnimation(epicFightDamageSource.getAnimation().get()) && event.isParried()) {
+            if (epicFightDamageSource != null && AnimationEffectManager.isNoGuardAnimation(epicFightDamageSource.getAnimation().get()) && event.isParried()) {
                 container.getDataManager().setDataSync(StarSkillDataKeys.COUNTER_TICK3.get(), 60.0f, event.getPlayerPatch().getOriginal());
                 event.getPlayerPatch().getOriginal().addEffect(new MobEffectInstance(StarsEffect.ORANGE_GLOW.get(), 60, 60, true, true));
             }

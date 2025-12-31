@@ -19,9 +19,9 @@ import java.util.List;
 @SuppressWarnings("removal")
 public class AnimationEffectManager {
 
-    public static final TagKey<DamageType> BYPASS_GUARD_ONLY = create("star_bypass_guard");
+    public static final TagKey<DamageType> BYPASS_GUARD_ONLY = create("star_bypass_guard");     //无视格挡，能招架（黄)
     public static final TagKey<DamageType> BYPASS_PARRY = create("star_bypass_parry");
-    public static final TagKey<DamageType> BYPASS_DODGE = create("star_bypass_dodge");
+    public static final TagKey<DamageType> BYPASS_DODGE = create("star_bypass_dodge");     //无视闪避，能招架(蓝)
     // 可踩刀识破的动画
     private static final List<StaticAnimation> SPECIAL_SEETHROUGH_ANIMATIONS = Arrays.asList(
             CorruptAnimations.SSPEAR_DASH.get(),
@@ -106,46 +106,60 @@ public class AnimationEffectManager {
             CorruptAnimations.YAMATO_DAWN_DAWN.get()
     );
 
+    //
     private static TagKey<DamageType> create(String name) {
         return TagKey.create(Registries.DAMAGE_TYPE, new ResourceLocation("star", name));
     }
 
+
+    // 红危：不可格挡不可招架不可闪避的动画列表
     private static boolean shouldBypassBlock(StaticAnimation animation) {
         return animation != null && NO_BLOCK_ANIMATIONS.contains(animation);
     }
 
+
+    // 黄危：不可格挡的动画列表
     private static boolean shouldBypassGuard(StaticAnimation animation) {
         return animation != null && NO_GUARD_ANIMATIONS.contains(animation);
     }
 
+
+    // 蓝危：不可闪避的动画列表
     static boolean shouldBypassDodge(StaticAnimation animation) {
         return animation != null && NO_DODGE_ANIMATIONS.contains(animation);
     }
 
+    // 紫危：不可闪避不可招架不可格挡的动画列表
     static boolean shouldBypassAll(StaticAnimation animation) {
         return animation != null && NO_DODGE_GUARD_ANIMATIONS.contains(animation);
     }
 
+    //不可闪避不可招架不可防御的动画列表
     static boolean specialSeeThrough(StaticAnimation animation) {
         return animation != null && SPECIAL_SEETHROUGH_ANIMATIONS.contains(animation);
     }
 
+    //不可闪避
     public static boolean isNoDodgeAnimation(StaticAnimation animation) {
         return shouldBypassDodge(animation) || shouldBypassAll(animation);
     }
 
-    public static boolean isNoGuardAnimation(StaticAnimation animation) {
+    //无视防御无视招架
+    public static boolean isNoGuardParryAnimation(StaticAnimation animation) {
         return shouldBypassBlock(animation) || shouldBypassAll(animation);
     }
 
-    public static boolean isNoParryAnimation(StaticAnimation animation) {
+    //只无视防御
+    public static boolean isNoGuardAnimation(StaticAnimation animation) {
         return shouldBypassGuard(animation) || shouldBypassAll(animation);
     }
 
+    //可识破踩刀
     public static boolean isSpecialSeeThroughAnimation(StaticAnimation animation) {
         return specialSeeThrough(animation);
     }
 
+    //
     public static void processDamageSource(EpicFightDamageSource damageSource) {
         if (damageSource.getAnimation() == null) return;
 
