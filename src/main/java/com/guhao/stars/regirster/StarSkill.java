@@ -32,9 +32,12 @@ public class StarSkill {
         SUPER_PUNCH_PASSIVE = modRegistry.build("super_punch_passive", SuperPunchPassive::new, SuperPunchPassive.createSuperPunchPassiveBuilder().setResource(Skill.Resource.NONE).setCategory(SkillCategories.WEAPON_PASSIVE));
         WUSONG_PASSIVE = modRegistry.build("wusong_passive", WuSongPassive::new, WuSongPassive.createWuSongPassiveBuilder().setActivateType(Skill.ActivateType.DURATION).setResource(Skill.Resource.COOLDOWN).setCategory(SkillCategories.WEAPON_PASSIVE));
         /*WUSONG_SKILL = modRegistry.build("wusong_skill", WuSongSkill::new, WeaponInnateSkill.createWeaponInnateBuilder());*/
+        // TODO 破防惩罚
         DOTE = modRegistry.build("dote", DOTEPassive::new, DOTEPassive.createDOTEPassiveBuilder().setActivateType(Skill.ActivateType.DURATION).setResource(Skill.Resource.NONE).setCategory(StarSkillCategories.DOTE));
         SEE_THROUGH_1 = modRegistry.build("counter_danger", SeeThrough1::new, SeeThrough1.createSeeThrough1Builder());
-        SEE_THROUGH_2 = modRegistry.build("counter_danger_reinforce", SeeThrough2::new, SeeThrough2.createSeeThrough2Builder());
+
+        // TODO 招架黄危强力反斩，闪避黄危用体术，暂时禁用，后续再考虑修改反击功能
+//        SEE_THROUGH_2 = modRegistry.build("counter_danger_reinforce", SeeThrough2::new, SeeThrough2.createSeeThrough2Builder());
         /*THE_WORLD = modRegistry.build("the_world", TimeStop::new, WeaponInnateSkill.createWeaponInnateBuilder());
         SUPER_PUNCH = modRegistry.build("super_punch", SuperPunch::new, WeaponInnateSkill.createWeaponInnateBuilder());*/
     }

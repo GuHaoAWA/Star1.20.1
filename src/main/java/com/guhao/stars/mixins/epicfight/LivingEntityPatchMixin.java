@@ -38,6 +38,6 @@ public abstract class LivingEntityPatchMixin<T extends LivingEntity> extends Hur
             }
         }
 
-        return impact * (1.0F + i * 0.08F);
+        return impact * (1.0F + i * 0.09F);
     }
 }

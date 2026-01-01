@@ -34,6 +34,7 @@ import java.util.UUID;
 import static yesman.epicfight.world.entity.eventlistener.PlayerEventListener.EventType.BASIC_ATTACK_EVENT;
 
 @SuppressWarnings("removal")
+// TODO 识破踩刀
 public class SeeThrough1 extends Skill {
     private static final UUID EVENT_UUID = UUID.fromString("550e8400-e29b-41d4-a716-496655470020");
 
@@ -76,19 +77,19 @@ public class SeeThrough1 extends Skill {
             }
         });
 
-        listener.addEventListener(PlayerEventListener.EventType.SKILL_CAST_EVENT, EVENT_UUID, (event) -> {
-            if (event.getSkillContainer() != event.getPlayerPatch().getSkill(SkillSlots.WEAPON_INNATE)) {
-                return;
-            }
-            if (container.getDataManager().getDataValue(StarSkillDataKeys.COUNTER_TICK.get()) > 0.0f) {
-                event.setCanceled(true);
-                if (event.getPlayerPatch().getOriginal() instanceof LocalPlayer serverPlayer) {
-                    event.getPlayerPatch().getSkill(this).getDataManager().setDataSync(StarSkillDataKeys.COUNTER_TICK.get(), 0.0f, serverPlayer);
-                }
-                container.getExecutor().setStamina(container.getExecutor().getStamina() + 1.0f);
-                container.getExecutor().playAnimationSynchronized(Animations.RUSHING_TEMPO2, 0.0f);
-            }
-        }, -10);
+//        listener.addEventListener(PlayerEventListener.EventType.SKILL_CAST_EVENT, EVENT_UUID, (event) -> {
+//            if (event.getSkillContainer() != event.getPlayerPatch().getSkill(SkillSlots.WEAPON_INNATE)) {
+//                return;
+//            }
+//            if (container.getDataManager().getDataValue(StarSkillDataKeys.COUNTER_TICK.get()) > 0.0f) {
+//                event.setCanceled(true);
+//                if (event.getPlayerPatch().getOriginal() instanceof LocalPlayer serverPlayer) {
+//                    event.getPlayerPatch().getSkill(this).getDataManager().setDataSync(StarSkillDataKeys.COUNTER_TICK.get(), 0.0f, serverPlayer);
+//                }
+//                container.getExecutor().setStamina(container.getExecutor().getStamina() + 1.0f);
+//                container.getExecutor().playAnimationSynchronized(Animations.RUSHING_TEMPO2, 0.0f);
+//            }
+//        }, -10);
 
         listener.addEventListener(BASIC_ATTACK_EVENT, EVENT_UUID, (event) -> {
             float stamina = event.getPlayerPatch().getStamina();
@@ -113,10 +114,10 @@ public class SeeThrough1 extends Skill {
             ///////////////////////////////////////
             AdvancedCustomHumanoidMobPatch<?> longpatch = EpicFightCapabilities.getEntityPatch(event.getDamageSource().getDirectEntity(), AdvancedCustomHumanoidMobPatch.class);
             EpicFightDamageSource epicFightDamageSource = AnimationEffectManager.getEpicFightDamageSources(event.getDamageSource());
-            if (epicFightDamageSource != null && AnimationEffectManager.isNoGuardAnimation(epicFightDamageSource.getAnimation().get()) && event.isParried()) {
-                container.getDataManager().setDataSync(StarSkillDataKeys.COUNTER_TICK.get(), 60.0f, event.getPlayerPatch().getOriginal());
-                event.getPlayerPatch().getOriginal().addEffect(new MobEffectInstance(StarsEffect.ORANGE_GLOW.get(), 60, 1, true, true));
-            }
+//            if (epicFightDamageSource != null && AnimationEffectManager.isNoGuardAnimation(epicFightDamageSource.getAnimation().get()) && event.isParried()) {
+//                container.getDataManager().setDataSync(StarSkillDataKeys.COUNTER_TICK.get(), 60.0f, event.getPlayerPatch().getOriginal());
+//                event.getPlayerPatch().getOriginal().addEffect(new MobEffectInstance(StarsEffect.ORANGE_GLOW.get(), 60, 1, true, true));
+//            }
 
 
 ////////////////////////////////////////////////

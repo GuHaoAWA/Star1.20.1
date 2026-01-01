@@ -36,17 +36,17 @@ public class StarSkillDataKeys {
                     SeeThrough1.class
             ));
 
-    public static final RegistryObject<SkillDataKey<Float>> COUNTER_TICK2 =
-            DATA_KEYS.register("counter_tick2", () -> SkillDataKey.createSkillDataKey(
-                    PacketBufferCodec.FLOAT, 0.0f, true,
-                    SeeThrough2.class
-            ));
-
-    public static final RegistryObject<SkillDataKey<Float>> COUNTER_TICK3 =
-            DATA_KEYS.register("counter_tick3", () -> SkillDataKey.createSkillDataKey(
-                    PacketBufferCodec.FLOAT, 0.0f, true,
-                    SeeThrough2.class
-            ));
+//    public static final RegistryObject<SkillDataKey<Float>> COUNTER_TICK2 =
+//            DATA_KEYS.register("counter_tick2", () -> SkillDataKey.createSkillDataKey(
+//                    PacketBufferCodec.FLOAT, 0.0f, true,
+//                    SeeThrough2.class
+//            ));
+//
+//    public static final RegistryObject<SkillDataKey<Float>> COUNTER_TICK3 =
+//            DATA_KEYS.register("counter_tick3", () -> SkillDataKey.createSkillDataKey(
+//                    PacketBufferCodec.FLOAT, 0.0f, true,
+//                    SeeThrough2.class
+//            ));
 
     //雾凇
     public static final RegistryObject<SkillDataKey<Boolean>> WUSONG_SHEATH =

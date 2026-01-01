@@ -62,9 +62,9 @@ public abstract class PlayerPatchMixin<T extends Player> extends LivingEntityPat
         } else if (healthRatio > 0.5) {
             S = 0.8f;
         } else if (healthRatio > 0.25) {
-            S = 0.6f;
+            S = 0.7f;
         } else {
-            S = 0.5f;
+            S = 0.6f;
         }
 
         // 计算耐力恢复速度
