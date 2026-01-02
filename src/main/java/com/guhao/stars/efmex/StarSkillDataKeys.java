@@ -36,6 +36,14 @@ public class StarSkillDataKeys {
                     SeeThrough1.class
             ));
 
+    //紫危高级危反
+    public static final RegistryObject<SkillDataKey<Integer>> AIR_STRIKEKEY =
+            DATA_KEYS.register("air_strike_key", () -> SkillDataKey.createSkillDataKey(
+                    PacketBufferCodec.INTEGER, 0, true,
+                    AirStrike.class
+            ));
+
+
 //    public static final RegistryObject<SkillDataKey<Float>> COUNTER_TICK2 =
 //            DATA_KEYS.register("counter_tick2", () -> SkillDataKey.createSkillDataKey(
 //                    PacketBufferCodec.FLOAT, 0.0f, true,

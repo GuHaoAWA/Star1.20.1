@@ -130,7 +130,7 @@ public class AnimationEffectManager {
     }
 
     // 紫危：不可闪避不可招架不可格挡的动画列表
-    static boolean shouldBypassAll(StaticAnimation animation) {
+    public static boolean shouldBypassAll(StaticAnimation animation) {
         return animation != null && NO_DODGE_GUARD_ANIMATIONS.contains(animation);
     }
 

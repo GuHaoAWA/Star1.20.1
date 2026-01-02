@@ -5,7 +5,11 @@ import yesman.epicfight.skill.SkillSlot;
 
 public enum StarSkillSlots implements SkillSlot {
     DOTE(StarSkillCategories.DOTE),
-    COUNTER(StarSkillCategories.COUNTER);
+    COUNTER(StarSkillCategories.COUNTER),       //黄危危反
+    COUNTER2(StarSkillCategories.COUNTER2),     //红危危反
+    COUNTERATTACK(StarSkillCategories.COUNTERATTACK);     //高冲反斩
+
+
 
     final SkillCategory category;
     final int id;
