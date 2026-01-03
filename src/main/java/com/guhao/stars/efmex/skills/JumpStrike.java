@@ -2,7 +2,6 @@ package com.guhao.stars.efmex.skills;
 
 import com.guhao.stars.efmex.StarAnimations;
 import com.guhao.stars.efmex.StarSkillCategories;
-import com.guhao.stars.utils.dangerAnimSystem.AnimationEffectManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.Input;
 import net.minecraft.nbt.CompoundTag;
@@ -15,19 +14,14 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import yesman.epicfight.api.animation.AnimationManager;
-import yesman.epicfight.api.animation.Animator;
 import yesman.epicfight.api.animation.LivingMotions;
-import yesman.epicfight.api.animation.types.AirSlashAnimation;
 import yesman.epicfight.api.animation.types.StaticAnimation;
 import yesman.epicfight.api.utils.math.OpenMatrix4f;
-import yesman.epicfight.api.utils.math.ValueModifier;
 import yesman.epicfight.api.utils.math.Vec3f;
+import yesman.epicfight.api.utils.math.ValueModifier;
 import yesman.epicfight.client.ClientEngine;
 import yesman.epicfight.gameasset.Animations;
 import yesman.epicfight.skill.*;
-import yesman.epicfight.world.capabilities.EpicFightCapabilities;
-import yesman.epicfight.world.capabilities.entitypatch.EntityPatch;
-import yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch;
 import yesman.epicfight.world.capabilities.entitypatch.player.PlayerPatch;
 import yesman.epicfight.world.entity.eventlistener.DealDamageEvent;
 import yesman.epicfight.world.entity.eventlistener.MovementInputEvent;
@@ -37,40 +31,28 @@ import yesman.epicfight.world.entity.eventlistener.SkillCastEvent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-// TODO 高级的紫危处理，跳a与二段跳踩头功能都有
-public class AirStrike extends Skill {
-    private static final UUID AIR_STRIKE_UUID = UUID.fromString("071dda48-0cdd-4c92-9787-c0efb1524e8b");
+// TODO 低级的紫危处理，只有二段跳踩头功能
+public class JumpStrike extends Skill {
     private static final UUID SKILL_CAST_UUID = UUID.fromString("7776e296-4528-4baf-ab62-fd2f48b93bca");
     private static final UUID PHANTOM_ASCENT_UUID = UUID.fromString("e4893864-ae77-4297-9fb5-92967ef2a69d");
-
 
     private final List<AnimationManager.AnimationAccessor<? extends StaticAnimation>> phantomAnimations = new ArrayList<>(2);
     private int extraJumps = 1; // 默认额外跳跃次数
     private double jumpPower = 0.42; // 默认跳跃力度
     private float consumption = 0.2F; // 技能消耗
 
-
-    private static SkillDataKey<Integer> getAirStrikeKey() {
-        return com.guhao.stars.efmex.StarSkillDataKeys.AIR_STRIKEKEY.get();
-    }
-    private static final int EMPOWERED_TIME = 60; // 40 tick = 2秒
-
-
-    public AirStrike(AirStrike.Builder builder) {
+    public JumpStrike(JumpStrike.Builder builder) {
         super(builder);
-//        初始化二段跳动画
+        //初始化二段跳动画
         this.phantomAnimations.add(StarAnimations.BIPED_PHANTOM_ASCENT_FORWARD_NEW);
         this.phantomAnimations.add(StarAnimations.BIPED_PHANTOM_ASCENT_BACKWARD_NEW);
     }
 
-
-    public static Builder createAirStrikeBuilder() {
-        return (new AirStrike.Builder())
+    public static Builder createJumpStrikeBuilder() {
+        return (new JumpStrike.Builder())
                 .setCategory(SkillCategories.MOVER)
                 .setActivateType(ActivateType.DURATION)
                 .setResource(Resource.NONE);
-
-
     }
 
     @Override
@@ -81,30 +63,10 @@ public class AirStrike extends Skill {
         this.jumpPower = parameters.getDouble("jump_power");
     }
 
-
-
     @Override
     public void onInitiate(SkillContainer container) {
         super.onInitiate(container);
         container.setStack(1);
-//        攻击命中后的事件
-        container.getExecutor().getEventListener().addEventListener(
-                PlayerEventListener.EventType.DEAL_DAMAGE_EVENT_DAMAGE,
-                AIR_STRIKE_UUID,
-                (event) -> {
-                    handleAirStrikeDamage(event, container);
-                },
-                0 // 优先级
-        );
-//        技能施放监听器
-        container.getExecutor().getEventListener().addEventListener(
-                PlayerEventListener.EventType.SKILL_CAST_EVENT,
-                SKILL_CAST_UUID,
-                (event) -> {
-                    handleSkillCast(event, container);
-                },
-                0
-        );
 
         //移动输入事件监听
         container.getExecutor().getEventListener().addEventListener(
@@ -135,7 +97,7 @@ public class AirStrike extends Skill {
                 0
         );
 
-//        重置跳跃计数器
+        //重置跳跃计数器
         container.getExecutor().getEventListener().addEventListener(
                 PlayerEventListener.EventType.FALL_EVENT,
                 PHANTOM_ASCENT_UUID,
@@ -153,86 +115,12 @@ public class AirStrike extends Skill {
         skillDataManager.registerData(SkillDataKeys.JUMP_COUNT.get());
         skillDataManager.registerData(SkillDataKeys.PROTECT_NEXT_FALL.get());
         skillDataManager.registerData(SkillDataKeys.JUMP_KEY_PRESSED_LAST_TICK.get());
-
     }
 
-    private void handleAirStrikeDamage(DealDamageEvent.Damage event, SkillContainer container) {
-        //检查是否是跳A攻击
-//        System.out.println("4444444444");
-        if(!isJumpAttack(event))return;
-//        被攻击实体
-        LivingEntity target = event.getTarget();
-        if(target == null)return;
-//        event.getDamageSource().getEntity()  伤害源实体
-//        检查目标当前是否在播放紫危动画
-        if(!isTargetPlayingBypassAllAnimation(target))return;
-        EntityPatch<?> entityPatch = EpicFightCapabilities.getEntityPatch(target, EntityPatch.class);
-        boolean isEpicFightEntity = entityPatch != null;
-        if(isEpicFightEntity) {
-            if (entityPatch instanceof LivingEntityPatch<?> livingPatch) {
-                livingPatch.playAnimationSynchronized(Animations.BIPED_KNOCKDOWN, 0.1F);
-            }
-        }
-
-
-        //设置强化技能时间
-        container.getDataManager().setDataSync(getAirStrikeKey(), EMPOWERED_TIME);
-
-    }
-
-
-    //技能施放
-    private void handleSkillCast(SkillCastEvent event, SkillContainer container) {
-        Integer remainingTime = container.getDataManager().getDataValue(getAirStrikeKey());
-        if (remainingTime!=null&&remainingTime>0) {
-            PlayerPatch<?> playerPatch = event.getPlayerPatch();
-            playerPatch.playAnimationSynchronized(Animations.GREATSWORD_AIR_SLASH, -0.1F);
-            container.getDataManager().setDataSync(getAirStrikeKey(), 0);
-
-
-//          取消原技能施放
-            event.setCanceled(true);
-
-
-        }
-    }
-
-
-
-    //检测是否是跳A攻击
-    private boolean isJumpAttack(DealDamageEvent.Damage event) {
-        if(!(event.getDamageSource().getEntity() instanceof LivingEntity attacker)) {
-            return false;
-        }
-        LivingEntityPatch<?> attackerPatch = EpicFightCapabilities.getEntityPatch(attacker, LivingEntityPatch.class);
-        if(attackerPatch == null||attackerPatch.getAnimator() == null)return false;
-//        获取当前播放的动画
-        var animPlayer = attackerPatch.getAnimator().getPlayerFor(null);
-        if(animPlayer == null) return false;
-        var animation = animPlayer.getAnimation();
-        if(animation == null)return false;
-        StaticAnimation currentAnim = animation.get().getRealAnimation().get();
-        return currentAnim instanceof AirSlashAnimation;
-    }
-
-
-
-    //检查攻击目标是否在播放紫危动画
-    private boolean isTargetPlayingBypassAllAnimation(LivingEntity target) {
-        LivingEntityPatch<?> entityPatch = EpicFightCapabilities.getEntityPatch(target, LivingEntityPatch.class);
-        if(entityPatch != null && entityPatch.getAnimator() != null) {
-            var currentAnim = entityPatch.getAnimator().getPlayerFor(null).getAnimation().get().getRealAnimation().get();
-            if(currentAnim != null) {
-                return AnimationEffectManager.shouldBypassAll(currentAnim);
-            }
-        }
-        return false;
-    }
 
 
     //二段跳
     private void handleJumpStrike(MovementInputEvent event, SkillContainer container) {
-
         if (event.getPlayerPatch().getOriginal().getVehicle() != null ||
                 !event.getPlayerPatch().isEpicFightMode() ||
                 event.getPlayerPatch().getOriginal().getAbilities().flying ||
@@ -240,7 +128,6 @@ public class AirStrike extends Skill {
                 event.getPlayerPatch().getEntityState().inaction()) {
             return;
         }
-
 
         boolean jumpPressed = Minecraft.getInstance().options.keyJump.isDown();
         boolean jumpPressedPrev = container.getDataManager().getDataValue(SkillDataKeys.JUMP_KEY_PRESSED_LAST_TICK.get());
@@ -259,7 +146,7 @@ public class AirStrike extends Skill {
 
                     container.setResource(0.0F);
 
-//                    更新跳跃计数器
+                    //更新跳跃计数器
                     if (jumpCounter == 0 && event.getPlayerPatch().currentLivingMotion == LivingMotions.FALL) {
                         container.getDataManager().setData(SkillDataKeys.JUMP_COUNT.get(), 2);
                     } else {
@@ -268,7 +155,7 @@ public class AirStrike extends Skill {
 
                     container.getDataManager().setDataSync(SkillDataKeys.PROTECT_NEXT_FALL.get(), true);
 
-//                    计算跳跃方向
+                    //计算跳跃方向
                     Input input = event.getMovementInput();
                     float f = Mth.clamp(0.3F + EnchantmentHelper.getSneakingSpeedBonus(container.getExecutor().getOriginal()), 0.0F, 1.0F);
                     input.tick(false, f);
@@ -312,25 +199,11 @@ public class AirStrike extends Skill {
         return false;
     }
 
-
-
     //移除技能
     @Override
     public void onRemoved(SkillContainer container) {
         super.onRemoved(container);
-        //移除事件监听器
-        container.getExecutor().getEventListener().removeListener(
-                PlayerEventListener.EventType.DEAL_DAMAGE_EVENT_DAMAGE,
-                AIR_STRIKE_UUID
-        );
-//        移除技能施放监听器
-        container.getExecutor().getEventListener().removeListener(
-                PlayerEventListener.EventType.SKILL_CAST_EVENT,
-                SKILL_CAST_UUID
-        );
-
-
-        // 移除二段跳事件监听器
+        //移除二段跳事件监听器
         container.getExecutor().getEventListener().removeListener(
                 PlayerEventListener.EventType.MOVEMENT_INPUT_EVENT,
                 PHANTOM_ASCENT_UUID
@@ -346,29 +219,15 @@ public class AirStrike extends Skill {
                 PHANTOM_ASCENT_UUID
         );
 
-
-
-        container.getDataManager().setData(getAirStrikeKey(), 0);
         container.getDataManager().setData(SkillDataKeys.JUMP_COUNT.get(), 0);
         container.getDataManager().setData(SkillDataKeys.PROTECT_NEXT_FALL.get(), false);
         container.getDataManager().setData(SkillDataKeys.JUMP_KEY_PRESSED_LAST_TICK.get(), false);
-
-
     }
 
     @Override
     public void updateContainer(SkillContainer container) {
         super.updateContainer(container);
-        Integer remainingTime = container.getDataManager().getDataValue(getAirStrikeKey());
-        if(remainingTime != null && remainingTime > 0) {
-            int newTime = remainingTime - 1;
-            container.getDataManager().setDataSync(getAirStrikeKey(), newTime);
-            if(newTime <= 0) {
-                container.getDataManager().setDataSync(getAirStrikeKey(), 0);
-            }
-        }
     }
-
 
     @OnlyIn(Dist.CLIENT)
     @Override
@@ -378,5 +237,5 @@ public class AirStrike extends Skill {
     }
 
     //构建器类
-    public static class Builder extends SkillBuilder<AirStrike> {}
+    public static class Builder extends SkillBuilder<JumpStrike> {}
 }

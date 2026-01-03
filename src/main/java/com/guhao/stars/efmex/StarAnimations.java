@@ -1,20 +1,32 @@
 package com.guhao.stars.efmex;
 
 import com.guhao.stars.StarsMod;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import yesman.epicfight.api.animation.AnimationManager;
+import yesman.epicfight.api.animation.AnimationManager.AnimationAccessor;
+import yesman.epicfight.api.animation.property.AnimationEvent;
+import yesman.epicfight.api.animation.property.AnimationEvent.SimpleEvent;
+import yesman.epicfight.api.animation.property.AnimationEvent.Side;
+import yesman.epicfight.api.animation.property.AnimationProperty;
+import yesman.epicfight.api.animation.property.AnimationProperty.StaticAnimationProperty;
+import yesman.epicfight.api.animation.types.ActionAnimation;
+import yesman.epicfight.api.animation.types.EntityState;
 import yesman.epicfight.api.animation.types.StaticAnimation;
 import yesman.epicfight.gameasset.Armatures;
-import yesman.epicfight.model.armature.HumanoidArmature;
+import yesman.epicfight.gameasset.EpicFightSounds;
+import yesman.epicfight.particle.EpicFightParticles;
+
+import java.util.UUID;
 
 @Mod.EventBusSubscriber(
         modid = StarsMod.MODID,
         bus = Mod.EventBusSubscriber.Bus.MOD
 )
 public class StarAnimations {
-    public static StaticAnimation BIPED_PHANTOM_ASCENT_FORWARD_NEW;
-    public static StaticAnimation BIPED_PHANTOM_ASCENT_BACKWARD_NEW;
+    public static AnimationAccessor<ActionAnimation> BIPED_PHANTOM_ASCENT_FORWARD_NEW;
+    public static AnimationAccessor<ActionAnimation> BIPED_PHANTOM_ASCENT_BACKWARD_NEW;
     public static StaticAnimation FIRE_BALL;
     public static StaticAnimation AB_FIRE_BALL;
     public static StaticAnimation SCRATCH;
@@ -38,7 +50,49 @@ public class StarAnimations {
     }
 
     private static void build(AnimationManager.AnimationBuilder builder) {
-        HumanoidArmature biped = Armatures.BIPED.get();
+//        HumanoidArmature biped = Armatures.BIPED.get();
+
+        BIPED_PHANTOM_ASCENT_FORWARD_NEW = builder.nextAccessor("biped/skill/phantom_ascent_forward_new", (accessor) ->
+                new ActionAnimation(0.05F, 0.7F, accessor, Armatures.BIPED)
+                        .addStateRemoveOld(EntityState.MOVEMENT_LOCKED, false)
+                        .newTimePair(0.0F, 0.5F)
+                        .addStateRemoveOld(EntityState.INACTION, true)
+                        .addEvents(AnimationProperty.StaticAnimationProperty.ON_BEGIN_EVENTS,
+                                AnimationEvent.SimpleEvent.create((entitypatch, animation, params) -> {
+                                    Vec3 pos = entitypatch.getOriginal().position();
+                                    entitypatch.playSound(EpicFightSounds.TUMBLE.get(), 0.0F, 0.0F);
+                                    entitypatch.getOriginal().level().addAlwaysVisibleParticle(
+                                            EpicFightParticles.AIR_BURST.get(),
+                                            pos.x,
+                                            pos.y + entitypatch.getOriginal().getBbHeight() * 0.5D,
+                                            pos.z,
+                                            0, -1, 2
+                                    );
+                                }, AnimationEvent.Side.CLIENT))
+        );
+
+
+
+        BIPED_PHANTOM_ASCENT_BACKWARD_NEW = builder.nextAccessor("biped/skill/phantom_ascent_backward_new", (accessor) ->
+                new ActionAnimation(0.05F, 0.7F, accessor, Armatures.BIPED)
+                        .addStateRemoveOld(EntityState.MOVEMENT_LOCKED, false)
+                        .newTimePair(0.0F, 0.5F)
+                        .addStateRemoveOld(EntityState.INACTION, true)
+                        .addEvents(AnimationProperty.StaticAnimationProperty.ON_BEGIN_EVENTS,
+                                AnimationEvent.SimpleEvent.create((entitypatch, animation, params) -> {
+                                    Vec3 pos = entitypatch.getOriginal().position();
+                                    entitypatch.playSound(EpicFightSounds.TUMBLE.get(), 0.0F, 0.0F);
+                                    entitypatch.getOriginal().level().addAlwaysVisibleParticle(
+                                            EpicFightParticles.AIR_BURST.get(),
+                                            pos.x,
+                                            pos.y + entitypatch.getOriginal().getBbHeight() * 0.5D,
+                                            pos.z,
+                                            0, -1, 2
+                                    );
+                                }, AnimationEvent.Side.CLIENT))
+        );
+    }
+
         /*HANGDANG = (new SpecialAttackAnimation(0.2F, 0.35F, 0.35F, 0.75F, 1.05F, WOMWeaponColliders.FATAL_DRAW_DASH, biped.rootJoint, "biped/hangdang", biped))
                 .addProperty(AnimationProperty.AttackPhaseProperty.SWING_SOUND, EpicFightSounds.WHOOSH_SHARP.get())
                 .addProperty(AnimationProperty.AttackPhaseProperty.IMPACT_MODIFIER, ValueModifier.multiplier(2.0F))
@@ -169,5 +223,5 @@ public class StarAnimations {
                 .addStateRemoveOld(EntityState.MOVEMENT_LOCKED,true);
     }*/
 
-    }
+
 }

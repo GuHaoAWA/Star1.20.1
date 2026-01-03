@@ -22,6 +22,7 @@ public class StarSkill {
     public static Skill SUPER_PUNCH;
     public static Skill SUPER_PUNCH_PASSIVE;
     public static Skill  AIR_STRIKE;
+    public static Skill JUMP_STRIKE;
     public StarSkill() {
     }
 
@@ -35,12 +36,12 @@ public class StarSkill {
         /*WUSONG_SKILL = modRegistry.build("wusong_skill", WuSongSkill::new, WeaponInnateSkill.createWeaponInnateBuilder());*/
         // TODO 破防回满耐力，无惩罚
         DOTE = modRegistry.build("dote", DOTEPassive::new, DOTEPassive.createDOTEPassiveBuilder().setActivateType(Skill.ActivateType.DURATION).setResource(Skill.Resource.NONE).setCategory(StarSkillCategories.DOTE));
-        //识破
+//        识破
         SEE_THROUGH_1 = modRegistry.build("counter_danger", SeeThrough1::new, SeeThrough1.createSeeThrough1Builder());
-        //紫危跳a
+//        高级紫危危反
         AIR_STRIKE = modRegistry.build("air_strike", AirStrike::new, AirStrike.createAirStrikeBuilder());
-
-
+//        踩头，低级紫危危反
+        JUMP_STRIKE = modRegistry.build("jump_strike", JumpStrike::new, JumpStrike.createJumpStrikeBuilder());
 
         // TODO 招架黄危强力反斩，闪避黄危用体术，暂时禁用，后续再考虑修改反击功能
 //        SEE_THROUGH_2 = modRegistry.build("counter_danger_reinforce", SeeThrough2::new, SeeThrough2.createSeeThrough2Builder());
