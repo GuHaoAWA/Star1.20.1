@@ -33,8 +33,31 @@
   "item.star.blood_battle": "星陨战图章",
 
   "attribute.name.star.parry_stamina_lose": "招架耐力削减",
-  "attribute.name.star.parry_stamina_lose.desc": "描述：招架敌方攻击后额外削减敌方的耐力值"
+  "attribute.name.star.parry_stamina_lose.desc": "描述：招架敌方攻击后额外削减敌方的耐力值",
+  "attribute.name.star.burden": "锐利",
+  "attribute.name.star.burden.desc": "描述：穿透普通格挡造成部分伤害",
+  "attribute.name.star.seethrough_regen": "识破回耐",
+  "attribute.name.star.seethrough_regen.desc": "描述：使用识破后，恢复自身耐力值",
+  "attribute.name.star.looting": "更多实体掉落物",
+  "attribute.name.star.looting.desc": "描述：击杀生物后增加凋落物的数量",
+  "attribute.name.star.hit_stamina_lose": "坚韧",
+  "attribute.name.star.hit_stamina_lose.desc": "描述：减少受击后耐力的减少值，对玩家无增益效果，只对敌对生物生效",
+  "attribute.name.star.fortune": "挖矿大师",
+  "attribute.name.star.fortune.desc": "描述：增加矿物掉落数量",
+  "attribute.name.star.burden": "负重",
+  "attribute.name.star.burden.desc": "描述：减少重量惩罚",
 
+
+
+  "skill.star.dote": "终焉的加护",
+  "skill.star.dote.tooltip": "破防时立刻回满耐力。",
+
+  "skill.star.air_strike": "空中袭击",
+  "skill.star.air_strike.tooltip": "跳跃打击的升级，跳跃攻击使用下段攻击的敌人时击倒敌人并在3秒内按武器技能按键可释放一个额外的强力攻击",
+  "skill.star.jump_strike": "跳跃打击",
+  "skill.star.jump_strike.tooltip": "获得二段跳能力，使用二段跳时对周围敌人造成较低伤害。对在使用下段攻击的敌人造成生活时，额外扣除其耐力并造成长硬直。（维吉尔学不会的招式+1）",
+  "skill.star.counter_danger": "水平突刺识破",
+  "skill.star.counter_danger.tooltip": "闪避水平突刺可对敌人进行识破，削减敌人大量耐力值。成功招架水平突刺后按武器技能按键可使用强力的反斩。"
 
 
 

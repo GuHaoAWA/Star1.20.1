@@ -2,6 +2,7 @@ package com.guhao.stars.efmex.skills;
 
 import com.guhao.stars.efmex.StarSkillCategories;
 import com.guhao.stars.efmex.StarSkillDataKeys;
+import com.guhao.stars.entity.StarAttributes;
 import com.guhao.stars.regirster.StarsEffect;
 import com.guhao.stars.utils.dangerAnimSystem.AnimationEffectManager;
 import com.nameless.indestructible.world.capability.AdvancedCustomHumanoidMobPatch;
@@ -9,12 +10,14 @@ import net.corruptdog.cdm.gameasset.CorruptAnimations;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
+import yesman.epicfight.api.animation.AnimationManager;
 import yesman.epicfight.api.animation.types.DynamicAnimation;
 import yesman.epicfight.api.animation.types.StaticAnimation;
 import yesman.epicfight.api.utils.AttackResult;
@@ -25,18 +28,25 @@ import yesman.epicfight.skill.SkillContainer;
 import yesman.epicfight.skill.SkillSlots;
 import yesman.epicfight.world.capabilities.EpicFightCapabilities;
 import yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch;
+import yesman.epicfight.world.capabilities.entitypatch.player.PlayerPatch;
+import yesman.epicfight.world.capabilities.item.CapabilityItem;
+import yesman.epicfight.world.capabilities.item.WeaponCategory;
 import yesman.epicfight.world.damagesource.EpicFightDamageSource;
 import yesman.epicfight.world.entity.eventlistener.PlayerEventListener;
+import yesman.epicfight.world.entity.eventlistener.SkillCastEvent;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.function.BiFunction;
 
 import static yesman.epicfight.world.entity.eventlistener.PlayerEventListener.EventType.BASIC_ATTACK_EVENT;
 
 @SuppressWarnings("removal")
-// TODO 识破踩刀
+// TODO 低级识破踩刀
 public class SeeThrough1 extends Skill {
     private static final UUID EVENT_UUID = UUID.fromString("550e8400-e29b-41d4-a716-496655470020");
+
 
     public SeeThrough1(Builder builder) {
         super(builder);
@@ -53,7 +63,6 @@ public class SeeThrough1 extends Skill {
         container.getExecutor().getEventListener().removeListener(PlayerEventListener.EventType.TAKE_DAMAGE_EVENT_ATTACK, EVENT_UUID);
         container.getExecutor().getEventListener().removeListener(PlayerEventListener.EventType.TARGET_INDICATOR_ALERT_CHECK_EVENT, EVENT_UUID);
         container.getExecutor().getEventListener().removeListener(PlayerEventListener.EventType.SKILL_CAST_EVENT, EVENT_UUID);
-
     }
 
     @Override
@@ -77,35 +86,28 @@ public class SeeThrough1 extends Skill {
             }
         });
 
-//        listener.addEventListener(PlayerEventListener.EventType.SKILL_CAST_EVENT, EVENT_UUID, (event) -> {
-//            if (event.getSkillContainer() != event.getPlayerPatch().getSkill(SkillSlots.WEAPON_INNATE)) {
-//                return;
-//            }
-//            if (container.getDataManager().getDataValue(StarSkillDataKeys.COUNTER_TICK.get()) > 0.0f) {
-//                event.setCanceled(true);
-//                if (event.getPlayerPatch().getOriginal() instanceof LocalPlayer serverPlayer) {
-//                    event.getPlayerPatch().getSkill(this).getDataManager().setDataSync(StarSkillDataKeys.COUNTER_TICK.get(), 0.0f, serverPlayer);
-//                }
-//                container.getExecutor().setStamina(container.getExecutor().getStamina() + 1.0f);
-//                container.getExecutor().playAnimationSynchronized(Animations.RUSHING_TEMPO2, 0.0f);
-//            }
-//        }, -10);
-
-        listener.addEventListener(BASIC_ATTACK_EVENT, EVENT_UUID, (event) -> {
-            float stamina = event.getPlayerPatch().getStamina();
-            int costStamina = 3;
-            ResourceLocation rl = event.getPlayerPatch().getAnimator().getPlayerFor(null).getAnimation().get().getRegistryName();
-            if (stamina < 3) {
-                if (rl == CorruptAnimations.RECOGNITION.get().getRegistryName()) {
-                    event.setCanceled(true);
+        container.getExecutor().getEventListener().addEventListener(
+                PlayerEventListener.EventType.SKILL_CAST_EVENT,
+                EVENT_UUID,
+                (SkillCastEvent event) -> {
+                    carryout(event, container);
                 }
-            }
-            if (rl == CorruptAnimations.RECOGNITION.get().getRegistryName()) {
-                event.setCanceled(true);
-                event.getPlayerPatch().playAnimationSynchronized(CorruptAnimations.LETHAL_SLICING_ONCE, 0.1F);
-                event.getPlayerPatch().setStamina(stamina - costStamina);
-            }
-        });
+        );
+
+
+        // 危反攻击
+//        listener.addEventListener(BASIC_ATTACK_EVENT, EVENT_UUID, (event) -> {
+////            获取玩家当前正在播放的动画的资源位置
+//            ResourceLocation rl = event.getPlayerPatch().getAnimator().getPlayerFor(null).getAnimation().get().getRegistryName();
+//            if (rl == CorruptAnimations.PARRY_BREAK1.get().getRegistryName()) { //特殊招架硬直
+//                event.setCanceled(true);        // 取消普通攻击
+//                System.out.println("2222222222222");
+//                //使用强化攻击
+//                event.getPlayerPatch().playAnimationSynchronized(CorruptAnimations.LETHAL_SLICING_ONCE, 0.1F);
+//            }
+//        });
+
+        //踩刀
         listener.addEventListener(PlayerEventListener.EventType.TAKE_DAMAGE_EVENT_ATTACK, EVENT_UUID, (event) -> {
             LivingEntityPatch<?> entitypatch = EpicFightCapabilities.getEntityPatch(event.getDamageSource().getDirectEntity(), LivingEntityPatch.class);
             if (entitypatch == null || entitypatch.getAnimator() == null) {
@@ -113,13 +115,6 @@ public class SeeThrough1 extends Skill {
             }
             ///////////////////////////////////////
             AdvancedCustomHumanoidMobPatch<?> longpatch = EpicFightCapabilities.getEntityPatch(event.getDamageSource().getDirectEntity(), AdvancedCustomHumanoidMobPatch.class);
-            EpicFightDamageSource epicFightDamageSource = AnimationEffectManager.getEpicFightDamageSources(event.getDamageSource());
-//            if (epicFightDamageSource != null && AnimationEffectManager.isNoGuardAnimation(epicFightDamageSource.getAnimation().get()) && event.isParried()) {
-//                container.getDataManager().setDataSync(StarSkillDataKeys.COUNTER_TICK.get(), 60.0f, event.getPlayerPatch().getOriginal());
-//                event.getPlayerPatch().getOriginal().addEffect(new MobEffectInstance(StarsEffect.ORANGE_GLOW.get(), 60, 1, true, true));
-//            }
-
-
 ////////////////////////////////////////////////
             DynamicAnimation animation = Objects.requireNonNull(event.getPlayerPatch().getAnimator().getPlayerFor(null)).getAnimation().get();
             DynamicAnimation targetanimation = Objects.requireNonNull(entitypatch.getAnimator().getPlayerFor(null)).getAnimation().get();
@@ -151,9 +146,9 @@ public class SeeThrough1 extends Skill {
                                     event.setResult(AttackResult.ResultType.MISSED);
                                     entitypatch.playAnimationSynchronized(CorruptAnimations.RECOGNIZED, 0.1F);
                                     ////////////////////////////////////////////////////////////
-                                    container.getExecutor().setStamina(container.getExecutor().getStamina() + 2.5f);
+                                    container.getExecutor().setStamina(container.getExecutor().getStamina() + (float)event.getPlayerPatch().getOriginal().getAttributeValue(StarAttributes.SEETHROUGH_REGEN.get()));
                                     if (longpatch != null) {
-                                        longpatch.setStamina(longpatch.getStamina() - 2.0f - longpatch.getMaxStamina() * 0.02f);
+                                        longpatch.setStamina(longpatch.getStamina() - 2.0f - longpatch.getMaxStamina() * 0.08f);
                                     }
 ////////////////////////////////////////////////////////////
                                     break;
@@ -165,6 +160,19 @@ public class SeeThrough1 extends Skill {
                 }
             }
         });
+    }
+
+    //执行招架危反
+    private void carryout(SkillCastEvent event, SkillContainer container) {
+        //按下武器技能键时触发强化技能
+        if(event.getSkillContainer() != event.getPlayerPatch().getSkill(SkillSlots.WEAPON_INNATE))return;
+        ResourceLocation rl = event.getPlayerPatch().getAnimator().getPlayerFor(null).getAnimation().get().getRegistryName();
+        if(rl == CorruptAnimations.PARRY_BREAK2.get().getRegistryName()) { //特殊招架硬直
+//            取消技能
+            event.setCanceled(true);
+            // 使用强化技能
+            event.getPlayerPatch().playAnimationSynchronized(CorruptAnimations.LETHAL_SLICING_ONCE, 0.1F);
+        }
     }
 
     public static class Builder extends SkillBuilder<SeeThrough1> {

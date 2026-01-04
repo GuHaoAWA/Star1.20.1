@@ -17,14 +17,21 @@ import net.minecraftforge.registries.RegistryObject;
 )
 public class StarAttributes {
     public static final DeferredRegister<Attribute> ATTRIBUTES = DeferredRegister.create(ForgeRegistries.ATTRIBUTES, "star");
+    //招架削耐
     public static final RegistryObject<Attribute> PARRY_STAMINA_LOSE = ATTRIBUTES.register("parry_stamina_lose", () -> (new RangedAttribute("attribute.name.star.parry_stamina_lose", 2.5, 0.0, 1024.0)).setSyncable(true));
+    //坚韧
     public static final RegistryObject<Attribute> HIT_STAMINA_LOSE = ATTRIBUTES.register("hit_stamina_lose", () -> (new RangedAttribute("attribute.name.star.hit_stamina_lose", 0.0, 0.0, 1024.0)).setSyncable(true));
+    //识破恢复耐力值
     public static final RegistryObject<Attribute> SEETHROUGH_REGEN = ATTRIBUTES.register("seethrough_regen", () -> (new RangedAttribute("attribute.name.star.seethrough_regen", 2.0, 0.0, 1024.0)).setSyncable(true));
+    //更多实体掉落物
     public static final RegistryObject<Attribute> LOOTING = ATTRIBUTES.register("looting", () -> (new RangedAttribute("attribute.name.star.looting", 1.0, 0.0, 1024)).setSyncable(true));
+    //挖矿大师
     public static final RegistryObject<Attribute> FORTUNE = ATTRIBUTES.register("fortune", () -> (new RangedAttribute("attribute.name.star.fortune", 1.0, 0.0, 1024)).setSyncable(true));
     public static final RegistryObject<Attribute> BLOCK_RATE = ATTRIBUTES.register("block_rate", () -> (new RangedAttribute("attribute.name.star.block_rate", 1.0, 0.0, 1024.0)).setSyncable(true));
+    //负重，待删除
     public static final RegistryObject<Attribute> BURDEN = ATTRIBUTES.register("burden", () -> (new RangedAttribute("attribute.name.star.burden", 1.0, 0.0, 1024)).setSyncable(true));
-
+    //锐利
+    public static final RegistryObject<Attribute> SHARPNESS = ATTRIBUTES.register("sharpness", () -> (new RangedAttribute("attribute.name.star.sharpness", 1.0, 0.0, 1024.0)).setSyncable(true));
     @SubscribeEvent
     public static void onEntityAttributeModification(EntityAttributeModificationEvent event) {
         for (EntityType<? extends LivingEntity> entityType : event.getTypes()) {
@@ -35,6 +42,7 @@ public class StarAttributes {
             event.add(entityType, FORTUNE.get());
             event.add(entityType, BLOCK_RATE.get());
             event.add(entityType, BURDEN.get());
+            event.add(entityType, SHARPNESS.get());
         }
     }
 }

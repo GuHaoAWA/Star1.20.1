@@ -36,7 +36,7 @@ public class StarSkill {
         /*WUSONG_SKILL = modRegistry.build("wusong_skill", WuSongSkill::new, WeaponInnateSkill.createWeaponInnateBuilder());*/
         // TODO 破防回满耐力，无惩罚
         DOTE = modRegistry.build("dote", DOTEPassive::new, DOTEPassive.createDOTEPassiveBuilder().setActivateType(Skill.ActivateType.DURATION).setResource(Skill.Resource.NONE).setCategory(StarSkillCategories.DOTE));
-//        识破
+//        水平突刺识破
         SEE_THROUGH_1 = modRegistry.build("counter_danger", SeeThrough1::new, SeeThrough1.createSeeThrough1Builder());
 //        高级紫危危反
         AIR_STRIKE = modRegistry.build("air_strike", AirStrike::new, AirStrike.createAirStrikeBuilder());

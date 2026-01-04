@@ -1,6 +1,11 @@
 package com.guhao.stars.efmex;
 
 import com.guhao.stars.StarsMod;
+import com.guhao.stars.utils.dangerAnimSystem.AnimationEffectManager;
+import com.nameless.indestructible.world.capability.AdvancedCustomHumanoidMobPatch;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -14,10 +19,17 @@ import yesman.epicfight.api.animation.property.AnimationProperty.StaticAnimation
 import yesman.epicfight.api.animation.types.ActionAnimation;
 import yesman.epicfight.api.animation.types.EntityState;
 import yesman.epicfight.api.animation.types.StaticAnimation;
+import yesman.epicfight.gameasset.Animations;
 import yesman.epicfight.gameasset.Armatures;
 import yesman.epicfight.gameasset.EpicFightSounds;
 import yesman.epicfight.particle.EpicFightParticles;
+import yesman.epicfight.world.capabilities.EpicFightCapabilities;
+import yesman.epicfight.world.capabilities.entitypatch.EntityPatch;
+import yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch;
+import yesman.epicfight.world.damagesource.EpicFightDamageSource;
+import yesman.epicfight.world.damagesource.StunType;
 
+import java.util.List;
 import java.util.UUID;
 
 @Mod.EventBusSubscriber(
@@ -59,18 +71,66 @@ public class StarAnimations {
                         .addStateRemoveOld(EntityState.INACTION, true)
                         .addEvents(AnimationProperty.StaticAnimationProperty.ON_BEGIN_EVENTS,
                                 AnimationEvent.SimpleEvent.create((entitypatch, animation, params) -> {
-                                    Vec3 pos = entitypatch.getOriginal().position();
-                                    entitypatch.playSound(EpicFightSounds.TUMBLE.get(), 0.0F, 0.0F);
-                                    entitypatch.getOriginal().level().addAlwaysVisibleParticle(
-                                            EpicFightParticles.AIR_BURST.get(),
-                                            pos.x,
-                                            pos.y + entitypatch.getOriginal().getBbHeight() * 0.5D,
-                                            pos.z,
-                                            0, -1, 2
-                                    );
-                                }, AnimationEvent.Side.CLIENT))
-        );
+                                    if(!entitypatch.getOriginal().level().isClientSide()) {
+                                        var player = entitypatch.getOriginal();
+                                        Vec3 footPos = player.position();
+                                        double radius = 2.5;
+                                        AABB boundingBox = new AABB(
+                                                footPos.x - radius, footPos.y - radius, footPos.z - radius,
+                                                footPos.x + radius, footPos.y + radius, footPos.z + radius
+                                        );
+                                        List<LivingEntity> entitiesInRange = player.level()
+                                                .getEntitiesOfClass(LivingEntity.class, boundingBox);
 
+                                        for(LivingEntity entity : entitiesInRange) {
+                                            if (entity == player) continue;
+                                            double dx = entity.getX() - footPos.x;
+                                            double dy = entity.getY() - footPos.y;
+                                            double dz = entity.getZ() - footPos.z;
+                                            double distanceSq = dx * dx + dy * dy + dz * dz;
+                                            if(distanceSq <= radius * radius) {
+                                                //创建史诗战斗伤害源
+                                                EpicFightDamageSource epicDamage = new EpicFightDamageSource(
+                                                        player.level().damageSources().playerAttack((Player)player).typeHolder(),
+                                                        (Player)player,
+                                                        (Player)player,
+                                                        entity.position()
+                                                );
+                                                epicDamage.setStunType(StunType.LONG);
+                                                epicDamage.setBasicAttack(true);
+                                                epicDamage.setBaseImpact(18.0F);
+                                                //对实体造成伤害
+                                                entity.hurt(epicDamage, 1.2F);
+                                                EntityPatch<?> entityPatch = EpicFightCapabilities.getEntityPatch(entity, EntityPatch.class);
+                                                if(entityPatch != null && entityPatch instanceof LivingEntityPatch<?> livingPatch) {
+                                                    var currentAnim = livingPatch.getAnimator().getPlayerFor(null).getAnimation().get().getRealAnimation().get();
+                                                    if(currentAnim!= null&&AnimationEffectManager.shouldBypassAll(currentAnim)) {
+                                                        AdvancedCustomHumanoidMobPatch<?> attackerPatch = EpicFightCapabilities.getEntityPatch(entity, AdvancedCustomHumanoidMobPatch.class);
+                                                        float currentStamina = attackerPatch.getStamina();
+                                                        float maxStamina = attackerPatch.getMaxStamina();
+                                                        float staminaDecrease = maxStamina *0.06F+6.0F;
+                                                        attackerPatch.setStamina(Math.max(0.1f, currentStamina - staminaDecrease));
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }, AnimationEvent.Side.SERVER),
+                                AnimationEvent.SimpleEvent.create((entitypatch, animation, params) -> {
+                                    if (entitypatch.getOriginal().level().isClientSide()) {
+                                        Vec3 pos = entitypatch.getOriginal().position();
+                                        entitypatch.playSound(EpicFightSounds.TUMBLE.get(), 0.0F, 0.0F);
+                                        entitypatch.getOriginal().level().addAlwaysVisibleParticle(
+                                                EpicFightParticles.AIR_BURST.get(),
+                                                pos.x,
+                                                pos.y + entitypatch.getOriginal().getBbHeight() * 0.5D,
+                                                pos.z,
+                                                0, -1, 2
+                                        );
+                                    }
+                                }, AnimationEvent.Side.CLIENT)
+                        )
+        );
 
 
         BIPED_PHANTOM_ASCENT_BACKWARD_NEW = builder.nextAccessor("biped/skill/phantom_ascent_backward_new", (accessor) ->
@@ -80,16 +140,65 @@ public class StarAnimations {
                         .addStateRemoveOld(EntityState.INACTION, true)
                         .addEvents(AnimationProperty.StaticAnimationProperty.ON_BEGIN_EVENTS,
                                 AnimationEvent.SimpleEvent.create((entitypatch, animation, params) -> {
-                                    Vec3 pos = entitypatch.getOriginal().position();
-                                    entitypatch.playSound(EpicFightSounds.TUMBLE.get(), 0.0F, 0.0F);
-                                    entitypatch.getOriginal().level().addAlwaysVisibleParticle(
-                                            EpicFightParticles.AIR_BURST.get(),
-                                            pos.x,
-                                            pos.y + entitypatch.getOriginal().getBbHeight() * 0.5D,
-                                            pos.z,
-                                            0, -1, 2
-                                    );
-                                }, AnimationEvent.Side.CLIENT))
+                                    if(!entitypatch.getOriginal().level().isClientSide()) {
+                                        var player = entitypatch.getOriginal();
+                                        Vec3 footPos = player.position();
+                                        double radius = 2.5;
+                                        AABB boundingBox = new AABB(
+                                                footPos.x - radius, footPos.y - radius, footPos.z - radius,
+                                                footPos.x + radius, footPos.y + radius, footPos.z + radius
+                                        );
+                                        List<LivingEntity> entitiesInRange = player.level()
+                                                .getEntitiesOfClass(LivingEntity.class, boundingBox);
+
+                                        for(LivingEntity entity : entitiesInRange) {
+                                            if (entity == player) continue;
+                                            double dx = entity.getX() - footPos.x;
+                                            double dy = entity.getY() - footPos.y;
+                                            double dz = entity.getZ() - footPos.z;
+                                            double distanceSq = dx * dx + dy * dy + dz * dz;
+                                            if(distanceSq <= radius * radius) {
+                                                //创建史诗战斗伤害源
+                                                EpicFightDamageSource epicDamage = new EpicFightDamageSource(
+                                                        player.level().damageSources().playerAttack((Player)player).typeHolder(),
+                                                        (Player)player,
+                                                        (Player)player,
+                                                        entity.position()
+                                                );
+                                                epicDamage.setStunType(StunType.LONG);
+                                                epicDamage.setBasicAttack(true);
+                                                epicDamage.setBaseImpact(18.0F);
+                                                //对实体造成伤害
+                                                entity.hurt(epicDamage, 1.2F);
+                                                EntityPatch<?> entityPatch = EpicFightCapabilities.getEntityPatch(entity, EntityPatch.class);
+                                                if(entityPatch != null && entityPatch instanceof LivingEntityPatch<?> livingPatch) {
+                                                    var currentAnim = livingPatch.getAnimator().getPlayerFor(null).getAnimation().get().getRealAnimation().get();
+                                                    if(currentAnim!= null&&AnimationEffectManager.shouldBypassAll(currentAnim)) {
+                                                        AdvancedCustomHumanoidMobPatch<?> attackerPatch = EpicFightCapabilities.getEntityPatch(entity, AdvancedCustomHumanoidMobPatch.class);
+                                                        float currentStamina = attackerPatch.getStamina();
+                                                        float maxStamina = attackerPatch.getMaxStamina();
+                                                        float staminaDecrease = maxStamina *0.06F+6.0F;
+                                                        attackerPatch.setStamina(Math.max(0.1f, currentStamina - staminaDecrease));
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }, AnimationEvent.Side.SERVER),
+                                AnimationEvent.SimpleEvent.create((entitypatch, animation, params) -> {
+                                    if (entitypatch.getOriginal().level().isClientSide()) {
+                                        Vec3 pos = entitypatch.getOriginal().position();
+                                        entitypatch.playSound(EpicFightSounds.TUMBLE.get(), 0.0F, 0.0F);
+                                        entitypatch.getOriginal().level().addAlwaysVisibleParticle(
+                                                EpicFightParticles.AIR_BURST.get(),
+                                                pos.x,
+                                                pos.y + entitypatch.getOriginal().getBbHeight() * 0.5D,
+                                                pos.z,
+                                                0, -1, 2
+                                        );
+                                    }
+                                }, AnimationEvent.Side.CLIENT)
+                        )
         );
     }
 

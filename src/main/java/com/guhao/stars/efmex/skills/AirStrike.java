@@ -293,7 +293,7 @@ public class AirStrike extends Skill {
                     );
 
                     event.getPlayerPatch().setModelYRot(container.getExecutor().getOriginal().getYRot() + degree, true);
-                    event.getPlayerPatch().playAnimationInClientSide(this.phantomAnimations.get(vertic < 0 ? 1 : 0), 0.0F);
+                    event.getPlayerPatch().playAnimationSynchronized(this.phantomAnimations.get(vertic < 0 ? 1 : 0), 0.0F);
 
                     //释放所有按下的键
                     ClientEngine.getInstance().controlEngine.releaseAllServedKeys();
