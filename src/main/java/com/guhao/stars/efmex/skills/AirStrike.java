@@ -1,7 +1,6 @@
 package com.guhao.stars.efmex.skills;
 
 import com.guhao.stars.efmex.StarAnimations;
-import com.guhao.stars.efmex.StarSkillCategories;
 import com.guhao.stars.utils.dangerAnimSystem.AnimationEffectManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.Input;
@@ -15,7 +14,6 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import yesman.epicfight.api.animation.AnimationManager;
-import yesman.epicfight.api.animation.Animator;
 import yesman.epicfight.api.animation.LivingMotions;
 import yesman.epicfight.api.animation.types.AirSlashAnimation;
 import yesman.epicfight.api.animation.types.StaticAnimation;

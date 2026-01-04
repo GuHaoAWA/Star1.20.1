@@ -7,7 +7,6 @@ import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageType;
-
 import yesman.epicfight.api.animation.types.StaticAnimation;
 import yesman.epicfight.gameasset.Animations;
 import yesman.epicfight.world.damagesource.EpicFightDamageSource;
@@ -19,6 +18,7 @@ import java.util.List;
 @SuppressWarnings("removal")
 public class AnimationEffectManager {
 
+    public static final TagKey<DamageType> PIERCE_GUARD = create("pierce_guard");     //穿刺
     public static final TagKey<DamageType> BYPASS_GUARD_ONLY = create("star_bypass_guard");     //无视格挡，能招架（黄)
     public static final TagKey<DamageType> BYPASS_PARRY = create("star_bypass_parry");
     public static final TagKey<DamageType> BYPASS_DODGE = create("star_bypass_dodge");     //无视闪避，能招架(蓝)

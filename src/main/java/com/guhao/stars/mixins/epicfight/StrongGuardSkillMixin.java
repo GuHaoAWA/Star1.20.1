@@ -34,8 +34,8 @@ public class StrongGuardSkillMixin {
     private float setImpact(float impact) {
         float blockrate = 1.0F - Math.min((float) this.event.getPlayerPatch().getOriginal().getAttributeValue(StarAttributes.BLOCK_RATE.get()) / 100.0F, 0.9F);
         Object var4 = this.event.getDamageSource();
-        if (var4 instanceof EpicFightDamageSource epicdamagesource) {
-            float k = epicdamagesource.calculateImpact(); // 修复：getImpact() -> calculateImpact()
+        if (var4 instanceof EpicFightDamageSource epicFightDamageSource) {
+            float k = epicFightDamageSource.calculateImpact(); // 修复：getImpact() -> calculateImpact()
             return this.event.getDamage() * (1.0F + k / 5F) * blockrate; // 修复：getAmount() -> getDamage()
         } else {
             return this.event.getDamage() / 3.0F * blockrate; // 修复：getAmount() -> getDamage()

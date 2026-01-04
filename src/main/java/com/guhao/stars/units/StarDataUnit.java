@@ -4,7 +4,6 @@ import com.guhao.stars.StarsMod;
 import com.guhao.stars.client.particle.par.SparkParticle;
 import com.guhao.stars.network.ParticlePacket;
 import com.guhao.stars.regirster.StarsParticleType;
-import net.corruptdog.cdm.gameasset.CorruptAnimations;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.LivingEntity;

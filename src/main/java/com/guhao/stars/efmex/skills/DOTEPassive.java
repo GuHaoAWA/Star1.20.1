@@ -3,27 +3,20 @@ package com.guhao.stars.efmex.skills;
 import com.guhao.stars.efmex.StarSkillDataKeys;
 import com.guhao.stars.regirster.StarSkill;
 import com.guhao.stars.utils.dangerAnimSystem.AnimationEffectManager;
-import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.entity.ai.attributes.AttributeInstance;
-import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraft.world.entity.LivingEntity;
 import yesman.epicfight.api.utils.AttackResult;
-import yesman.epicfight.client.gui.BattleModeGui;
 import yesman.epicfight.gameasset.Animations;
 import yesman.epicfight.gameasset.EpicFightSounds;
 import yesman.epicfight.skill.Skill;
 import yesman.epicfight.skill.SkillBuilder;
 import yesman.epicfight.skill.SkillContainer;
+import yesman.epicfight.world.capabilities.entitypatch.player.ServerPlayerPatch;
 import yesman.epicfight.world.damagesource.EpicFightDamageSource;
 import yesman.epicfight.world.damagesource.StunType;
 import yesman.epicfight.world.effect.EpicFightMobEffects;
-import yesman.epicfight.world.entity.ai.attribute.EpicFightAttributes;
 import yesman.epicfight.world.entity.eventlistener.PlayerEventListener;
 
 import java.util.UUID;
@@ -34,6 +27,7 @@ import java.util.UUID;
 @SuppressWarnings("removal")
 public class DOTEPassive extends Skill {
     private static final UUID EVENT_UUID = UUID.fromString("071dda48-0cdd-4c92-9787-c0efb1524e8b");
+    private static final UUID DAMAGE_EVENT_UUID = UUID.fromString("071dda48-0cdd-4c92-9787-c1efb1524e8b");
 //    private static final UUID DAMAGE_MODIFIER_UUID = UUID.fromString("4f2c9273-c7d1-46cb-8de8-4571c686c2e4");
 //    private static final UUID IMPACT_MODIFIER_UUID = UUID.fromString("0385cf99-5c63-4121-b229-e8f13339ef94");
 
@@ -98,6 +92,33 @@ public class DOTEPassive extends Skill {
 //                container.getDataManager().setDataSync(StarSkillDataKeys.WEAKNESS.get(), container.getDataManager().getDataValue(StarSkillDataKeys.WEAKNESS.get()) - 20.0f, (ServerPlayer) container.getExecutor().getOriginal());
 //            }
         }, 999);
+        container.getExecutor().getEventListener().addEventListener(PlayerEventListener.EventType.DEAL_DAMAGE_EVENT_ATTACK, DAMAGE_EVENT_UUID, (event) -> {
+            ServerPlayerPatch serverPlayerPatch = event.getPlayerPatch();
+            ServerPlayer attacker = serverPlayerPatch.getOriginal();
+            LivingEntity target = event.getTarget();
+            EpicFightDamageSource epicFightDamageSource = event.getDamageSource();
+            if (!epicFightDamageSource.is(AnimationEffectManager.PIERCE_GUARD)) {
+                float baseDamage = event.getDamageSource().calculateDamageAgainst(serverPlayerPatch.getOriginal(), target, event.getAttackDamage());
+                float pierceDamage = baseDamage * 0.1F;
+                AttackResult attackResult = serverPlayerPatch.attack(epicFightDamageSource, target, InteractionHand.MAIN_HAND);
+                boolean blocked = !attackResult.resultType.dealtDamage() && attackResult.resultType.shouldCount();
+                if (blocked) {
+                    //方法1：直接设置
+                    serverPlayerPatch.setLastAttackResult(AttackResult.blocked(pierceDamage));
+                    //方法2：手动额外hurt
+                    /*DamageSource damageSource = EpicFightDamageSources.playerAttack(attacker)
+                            .setAnimation(event.getDamageSource().getAnimation())
+                            .setInitialPosition(attacker.position())
+                            .setStunType(StunType.NONE)
+                            .setBaseImpact(event.getDamageSource().getBaseImpact())
+                            .addRuntimeTag(AnimationEffectManager.PIERCE_GUARD)
+                            .addRuntimeTag(EpicFightDamageTypeTags.UNBLOCKALBE)
+                            .addRuntimeTag(EpicFightDamageTypeTags.FINISHER);
+
+                    target.hurt(damageSource, pierceDamage);*/
+                }
+            }
+        }, 999);
         container.getExecutor().getEventListener().addEventListener(PlayerEventListener.EventType.SERVER_ITEM_USE_EVENT, EVENT_UUID, (e) -> {
             if (container.getDataManager().getDataValue(StarSkillDataKeys.WEAKNESS_COUNT_2.get()) > 0f) {
                 e.setCanceled(true);
@@ -110,6 +131,7 @@ public class DOTEPassive extends Skill {
 
 //        container.getExecutor().getEventListener().removeListener(PlayerEventListener.EventType.DODGE_SUCCESS_EVENT, EVENT_UUID);
         container.getExecutor().getEventListener().removeListener(PlayerEventListener.EventType.TAKE_DAMAGE_EVENT_ATTACK, EVENT_UUID);
+        container.getExecutor().getEventListener().removeListener(PlayerEventListener.EventType.DEAL_DAMAGE_EVENT_ATTACK, DAMAGE_EVENT_UUID);
         container.getExecutor().getEventListener().removeListener(PlayerEventListener.EventType.TAKE_DAMAGE_EVENT_DAMAGE, EVENT_UUID);
         container.getExecutor().getEventListener().removeListener(PlayerEventListener.EventType.SERVER_ITEM_USE_EVENT, EVENT_UUID);
     }
