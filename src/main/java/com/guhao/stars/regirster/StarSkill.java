@@ -16,6 +16,8 @@ public class StarSkill {
     public static Skill DOTE;
     public static Skill SEE_THROUGH_1;
     public static Skill SEE_THROUGH_2;
+    public static Skill SEE_THROUGH_3;
+
     public static Skill WUSONG_PASSIVE;
     public static Skill WUSONG_SKILL;
     public static Skill THE_WORLD;
@@ -38,6 +40,13 @@ public class StarSkill {
         DOTE = modRegistry.build("dote", DOTEPassive::new, DOTEPassive.createDOTEPassiveBuilder().setActivateType(Skill.ActivateType.DURATION).setResource(Skill.Resource.NONE).setCategory(StarSkillCategories.DOTE));
 //        水平突刺识破
         SEE_THROUGH_1 = modRegistry.build("counter_danger", SeeThrough1::new, SeeThrough1.createSeeThrough1Builder());
+//      水平+向下突刺识破
+        SEE_THROUGH_2 = modRegistry.build("counter_danger2", SeeThrough2::new, SeeThrough2.createSeeThrough2Builder());
+        // T高级识破，水平下砸突刺，下砸
+        SEE_THROUGH_3 = modRegistry.build("counter_danger3", SeeThrough3::new, SeeThrough3.createSeeThrough3Builder());
+
+
+
 //        高级紫危危反
         AIR_STRIKE = modRegistry.build("air_strike", AirStrike::new, AirStrike.createAirStrikeBuilder());
 //        踩头，低级紫危危反

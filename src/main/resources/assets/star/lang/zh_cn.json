@@ -48,16 +48,23 @@
   "attribute.name.star.burden.desc": "描述：减少重量惩罚",
 
 
-
+  "epicfight.skill_slot.dote": "加护",
+  "epicfight.skill_slot.counter": "突刺危反",
+  "epicfight.skill_slot.counter2": "红危危反",
+  "epicfight.skill_slot.counterattack": "高冲反斩",
   "skill.star.dote": "终焉的加护",
   "skill.star.dote.tooltip": "破防时立刻回满耐力。",
-
   "skill.star.air_strike": "空中袭击",
   "skill.star.air_strike.tooltip": "跳跃打击的升级，跳跃攻击使用下段攻击的敌人时击倒敌人并在3秒内按武器技能按键可释放一个额外的强力攻击",
   "skill.star.jump_strike": "跳跃打击",
   "skill.star.jump_strike.tooltip": "获得二段跳能力，使用二段跳时对周围敌人造成较低伤害。对在使用下段攻击的敌人造成生活时，额外扣除其耐力并造成长硬直。（维吉尔学不会的招式+1）",
   "skill.star.counter_danger": "水平突刺识破",
-  "skill.star.counter_danger.tooltip": "闪避水平突刺可对敌人进行识破，削减敌人大量耐力值。成功招架水平突刺后按武器技能按键可使用强力的反斩。"
+  "skill.star.counter_danger.tooltip": "闪避水平突刺可对敌人进行识破，削减敌人大量耐力值。成功招架水平突刺后按武器技能按键可使用强力的反斩。",
+  "skill.star.counter_danger2": "突刺识破",
+  "skill.star.counter_danger2.tooltip": "闪避水平突刺可对敌人进行识破，削减敌人大量耐力值。成功招架水平突刺、下砸突刺后按武器技能按键可使用强力的反斩。",
+  "skill.star.counter_danger3": "高级识破",
+  "skill.star.counter_danger3.tooltip": "闪避水平突刺可对敌人进行识破，削减敌人大量耐力值。成功招架水平突刺、下砸后按武器技能按键可使用强力的反斩。"
+
 
 
 

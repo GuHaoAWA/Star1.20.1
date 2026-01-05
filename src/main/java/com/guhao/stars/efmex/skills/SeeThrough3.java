@@ -6,7 +6,6 @@ import com.guhao.stars.entity.StarAttributes;
 import com.guhao.stars.utils.dangerAnimSystem.AnimationEffectManager;
 import com.nameless.indestructible.world.capability.AdvancedCustomHumanoidMobPatch;
 import net.corruptdog.cdm.gameasset.CorruptAnimations;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -31,16 +30,16 @@ import java.util.Objects;
 import java.util.UUID;
 
 @SuppressWarnings("removal")
-// TODO 低级识破踩刀
-public class SeeThrough1 extends Skill {
-    private static final UUID EVENT_UUID = UUID.fromString("550e8400-e29b-41d4-a716-496655470020");
+// TODO 高级识破
+public class SeeThrough3 extends Skill {
+    private static final UUID EVENT_UUID = UUID.fromString("3dc31176-8f3a-4d95-a7ef-bc7f23f00418");
 
 
-    public SeeThrough1(Builder builder) {
+    public SeeThrough3(Builder builder) {
         super(builder);
     }
 
-    public static Builder createSeeThrough1Builder() {
+    public static Builder createSeeThrough3Builder() {
         return (new Builder())
                 .setCategory(StarSkillCategories.COUNTER)
                 .setActivateType(ActivateType.DURATION)
@@ -64,10 +63,13 @@ public class SeeThrough1 extends Skill {
     @Override
     public void onInitiate(SkillContainer container) {
         PlayerEventListener listener = container.getExecutor().getEventListener();
+
+
         if (!container.getDataManager().hasData(StarSkillDataKeys.COUNTER_TICK.get())) {
             container.getDataManager().registerData(StarSkillDataKeys.COUNTER_TICK.get());
             container.getDataManager().setData(StarSkillDataKeys.COUNTER_TICK.get(), 0.0f);
         }
+
 
         listener.addEventListener(PlayerEventListener.EventType.TARGET_INDICATOR_ALERT_CHECK_EVENT, EVENT_UUID, (event) -> {
             DynamicAnimation animation = event.getPlayerPatch().getAnimator().getPlayerFor(null).getAnimation().get();
@@ -164,8 +166,20 @@ public class SeeThrough1 extends Skill {
             // 使用强化技能
             event.getPlayerPatch().playAnimationSynchronized(CorruptAnimations.LETHAL_SLICING_ONCE, 0.1F);
         }
+        else if(rl == CorruptAnimations.PARRY_BREAK3) { //特殊招架硬直
+//            取消技能
+            event.setCanceled(true);
+            // 使用强化技能
+            event.getPlayerPatch().playAnimationSynchronized(CorruptAnimations.LETHAL_SLICING_TWICE, 0.1F);
+        }
+        else if(rl == CorruptAnimations.PARRY_BREAK4) { //特殊招架硬直
+//            取消技能
+            event.setCanceled(true);
+            // 使用强化技能
+            event.getPlayerPatch().playAnimationSynchronized(CorruptAnimations.LETHAL_SLICING_TWICE, 0.1F);
+        }
     }
 
-    public static class Builder extends SkillBuilder<SeeThrough1> {
+    public static class Builder extends SkillBuilder<SeeThrough3> {
     }
 }

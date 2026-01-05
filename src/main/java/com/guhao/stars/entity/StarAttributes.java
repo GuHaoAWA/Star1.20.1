@@ -31,7 +31,7 @@ public class StarAttributes {
     //负重，待删除
     public static final RegistryObject<Attribute> BURDEN = ATTRIBUTES.register("burden", () -> (new RangedAttribute("attribute.name.star.burden", 1.0, 0.0, 1024)).setSyncable(true));
     //锐利
-    public static final RegistryObject<Attribute> SHARPNESS = ATTRIBUTES.register("sharpness", () -> (new RangedAttribute("attribute.name.star.sharpness", 1.0, 0.0, 1024.0)).setSyncable(true));
+    public static final RegistryObject<Attribute> SHARPNESS = ATTRIBUTES.register("sharpness", () -> (new RangedAttribute("attribute.name.star.sharpness", 0.0, 0.0, 1024.0)).setSyncable(true));
     @SubscribeEvent
     public static void onEntityAttributeModification(EntityAttributeModificationEvent event) {
         for (EntityType<? extends LivingEntity> entityType : event.getTypes()) {
