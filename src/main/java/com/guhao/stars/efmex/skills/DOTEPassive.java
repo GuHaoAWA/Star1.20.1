@@ -83,7 +83,7 @@ public class DOTEPassive extends Skill {
                 }
             }
         }, 999);
-        container.getExecutor().getEventListener().addEventListener(PlayerEventListener.EventType.DODGE_SUCCESS_EVENT, EVENT_UUID, (e) -> {
+//        container.getExecutor().getEventListener().addEventListener(PlayerEventListener.EventType.DODGE_SUCCESS_EVENT, EVENT_UUID, (e) -> {
 //            if (container.getDataManager().getDataValue(StarSkillDataKeys.WEAKNESS_COUNT_2.get()) > 0f && container.getExecutor().getOriginal() instanceof ServerPlayer) {
 //                container.getDataManager().setDataSync(StarSkillDataKeys.WEAKNESS.get(), 600f, (ServerPlayer) container.getExecutor().getOriginal());
 //                return;
@@ -91,34 +91,34 @@ public class DOTEPassive extends Skill {
 //            if (container.getDataManager().getDataValue(StarSkillDataKeys.WEAKNESS.get()) > 0f && container.getExecutor().getOriginal() instanceof ServerPlayer) {
 //                container.getDataManager().setDataSync(StarSkillDataKeys.WEAKNESS.get(), container.getDataManager().getDataValue(StarSkillDataKeys.WEAKNESS.get()) - 20.0f, (ServerPlayer) container.getExecutor().getOriginal());
 //            }
-        }, 999);
-        container.getExecutor().getEventListener().addEventListener(PlayerEventListener.EventType.DEAL_DAMAGE_EVENT_ATTACK, DAMAGE_EVENT_UUID, (event) -> {
-            ServerPlayerPatch serverPlayerPatch = event.getPlayerPatch();
-            ServerPlayer attacker = serverPlayerPatch.getOriginal();
-            LivingEntity target = event.getTarget();
-            EpicFightDamageSource epicFightDamageSource = event.getDamageSource();
-            if (!epicFightDamageSource.is(AnimationEffectManager.PIERCE_GUARD)) {
-                float baseDamage = event.getDamageSource().calculateDamageAgainst(serverPlayerPatch.getOriginal(), target, event.getAttackDamage());
-                float pierceDamage = baseDamage * 0.1F;
-                AttackResult attackResult = serverPlayerPatch.attack(epicFightDamageSource, target, InteractionHand.MAIN_HAND);
-                boolean blocked = !attackResult.resultType.dealtDamage() && attackResult.resultType.shouldCount();
-                if (blocked) {
-                    //方法1：直接设置
-                    serverPlayerPatch.setLastAttackResult(AttackResult.blocked(pierceDamage));
-                    //方法2：手动额外hurt
-                    /*DamageSource damageSource = EpicFightDamageSources.playerAttack(attacker)
-                            .setAnimation(event.getDamageSource().getAnimation())
-                            .setInitialPosition(attacker.position())
-                            .setStunType(StunType.NONE)
-                            .setBaseImpact(event.getDamageSource().getBaseImpact())
-                            .addRuntimeTag(AnimationEffectManager.PIERCE_GUARD)
-                            .addRuntimeTag(EpicFightDamageTypeTags.UNBLOCKALBE)
-                            .addRuntimeTag(EpicFightDamageTypeTags.FINISHER);
-
-                    target.hurt(damageSource, pierceDamage);*/
-                }
-            }
-        }, 999);
+//        }, 999);
+//        container.getExecutor().getEventListener().addEventListener(PlayerEventListener.EventType.DEAL_DAMAGE_EVENT_ATTACK, DAMAGE_EVENT_UUID, (event) -> {
+//            ServerPlayerPatch serverPlayerPatch = event.getPlayerPatch();
+//            ServerPlayer attacker = serverPlayerPatch.getOriginal();
+//            LivingEntity target = event.getTarget();
+//            EpicFightDamageSource epicFightDamageSource = event.getDamageSource();
+//            if (!epicFightDamageSource.is(AnimationEffectManager.PIERCE_GUARD)) {
+//                float baseDamage = event.getDamageSource().calculateDamageAgainst(serverPlayerPatch.getOriginal(), target, event.getAttackDamage());
+//                float pierceDamage = baseDamage * 0.1F;
+//                AttackResult attackResult = serverPlayerPatch.attack(epicFightDamageSource, target, InteractionHand.MAIN_HAND);
+//                boolean blocked = !attackResult.resultType.dealtDamage() && attackResult.resultType.shouldCount();
+//                if (blocked) {
+//                    //方法1：直接设置
+//                    serverPlayerPatch.setLastAttackResult(AttackResult.blocked(pierceDamage));
+//                    //方法2：手动额外hurt
+//                    /*DamageSource damageSource = EpicFightDamageSources.playerAttack(attacker)
+//                            .setAnimation(event.getDamageSource().getAnimation())
+//                            .setInitialPosition(attacker.position())
+//                            .setStunType(StunType.NONE)
+//                            .setBaseImpact(event.getDamageSource().getBaseImpact())
+//                            .addRuntimeTag(AnimationEffectManager.PIERCE_GUARD)
+//                            .addRuntimeTag(EpicFightDamageTypeTags.UNBLOCKALBE)
+//                            .addRuntimeTag(EpicFightDamageTypeTags.FINISHER);
+//
+//                    target.hurt(damageSource, pierceDamage);*/
+//                }
+//            }
+//        }, 999);
         container.getExecutor().getEventListener().addEventListener(PlayerEventListener.EventType.SERVER_ITEM_USE_EVENT, EVENT_UUID, (e) -> {
             if (container.getDataManager().getDataValue(StarSkillDataKeys.WEAKNESS_COUNT_2.get()) > 0f) {
                 e.setCanceled(true);
@@ -131,7 +131,7 @@ public class DOTEPassive extends Skill {
 
 //        container.getExecutor().getEventListener().removeListener(PlayerEventListener.EventType.DODGE_SUCCESS_EVENT, EVENT_UUID);
         container.getExecutor().getEventListener().removeListener(PlayerEventListener.EventType.TAKE_DAMAGE_EVENT_ATTACK, EVENT_UUID);
-        container.getExecutor().getEventListener().removeListener(PlayerEventListener.EventType.DEAL_DAMAGE_EVENT_ATTACK, DAMAGE_EVENT_UUID);
+//        container.getExecutor().getEventListener().removeListener(PlayerEventListener.EventType.DEAL_DAMAGE_EVENT_ATTACK, DAMAGE_EVENT_UUID);
         container.getExecutor().getEventListener().removeListener(PlayerEventListener.EventType.TAKE_DAMAGE_EVENT_DAMAGE, EVENT_UUID);
         container.getExecutor().getEventListener().removeListener(PlayerEventListener.EventType.SERVER_ITEM_USE_EVENT, EVENT_UUID);
     }

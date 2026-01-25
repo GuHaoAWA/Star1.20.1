@@ -20,7 +20,6 @@
     "epicfight.dangerAnimSystem.StarGuardSkillMixin",
     "epicfight.dangerAnimSystem.StarParryingSkillMixin",
     "epicfight.CapabilityItemMixin",
-    "minimap.HudRendererMixin",
     "time.LevelMixin",
     "time.LivingEntityMixin",
     "time.MixinProjectile",

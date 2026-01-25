@@ -47,6 +47,7 @@ public class SeeThrough1 extends Skill {
                 .setResource(Resource.NONE);
     }
 
+    @Override
     public void onRemoved(SkillContainer container) {
         container.getExecutor().getEventListener().removeListener(PlayerEventListener.EventType.TAKE_DAMAGE_EVENT_ATTACK, EVENT_UUID);
         container.getExecutor().getEventListener().removeListener(PlayerEventListener.EventType.TARGET_INDICATOR_ALERT_CHECK_EVENT, EVENT_UUID);
