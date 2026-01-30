@@ -1,18 +1,25 @@
 package com.guhao.stars.efmex.skills;
 
 import com.guhao.stars.efmex.StarSkillDataKeys;
+import com.guhao.stars.entity.StarAttributes;
 import com.guhao.stars.regirster.StarSkill;
 import com.guhao.stars.utils.dangerAnimSystem.AnimationEffectManager;
+import io.redspace.ironsspellbooks.api.magic.MagicData;
+import io.redspace.ironsspellbooks.api.registry.AttributeRegistry;
+import io.redspace.ironsspellbooks.network.ClientboundSyncMana;
+import io.redspace.ironsspellbooks.setup.Messages;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import yesman.epicfight.api.utils.AttackResult;
 import yesman.epicfight.gameasset.Animations;
 import yesman.epicfight.gameasset.EpicFightSounds;
 import yesman.epicfight.skill.Skill;
 import yesman.epicfight.skill.SkillBuilder;
 import yesman.epicfight.skill.SkillContainer;
+import yesman.epicfight.world.capabilities.entitypatch.player.PlayerPatch;
 import yesman.epicfight.world.capabilities.entitypatch.player.ServerPlayerPatch;
 import yesman.epicfight.world.damagesource.EpicFightDamageSource;
 import yesman.epicfight.world.damagesource.StunType;
@@ -83,6 +90,14 @@ public class DOTEPassive extends Skill {
                 }
             }
         }, 999);
+
+
+        container.getExecutor().getEventListener().addEventListener(PlayerEventListener.EventType.DODGE_SUCCESS_EVENT, EVENT_UUID, (event) -> {
+            PlayerPatch playerPatch = container.getExecutor();
+            float maxStamina = playerPatch.getMaxStamina();
+            playerPatch.setStamina(playerPatch.getStamina() +0.05F*maxStamina);
+        });
+
 //        container.getExecutor().getEventListener().addEventListener(PlayerEventListener.EventType.DODGE_SUCCESS_EVENT, EVENT_UUID, (e) -> {
 //            if (container.getDataManager().getDataValue(StarSkillDataKeys.WEAKNESS_COUNT_2.get()) > 0f && container.getExecutor().getOriginal() instanceof ServerPlayer) {
 //                container.getDataManager().setDataSync(StarSkillDataKeys.WEAKNESS.get(), 600f, (ServerPlayer) container.getExecutor().getOriginal());
@@ -129,7 +144,7 @@ public class DOTEPassive extends Skill {
     @Override
     public void onRemoved(SkillContainer container) {
 
-//        container.getExecutor().getEventListener().removeListener(PlayerEventListener.EventType.DODGE_SUCCESS_EVENT, EVENT_UUID);
+        container.getExecutor().getEventListener().removeListener(PlayerEventListener.EventType.DODGE_SUCCESS_EVENT, EVENT_UUID);
         container.getExecutor().getEventListener().removeListener(PlayerEventListener.EventType.TAKE_DAMAGE_EVENT_ATTACK, EVENT_UUID);
 //        container.getExecutor().getEventListener().removeListener(PlayerEventListener.EventType.DEAL_DAMAGE_EVENT_ATTACK, DAMAGE_EVENT_UUID);
         container.getExecutor().getEventListener().removeListener(PlayerEventListener.EventType.TAKE_DAMAGE_EVENT_DAMAGE, EVENT_UUID);
