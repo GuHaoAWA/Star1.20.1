@@ -96,25 +96,23 @@ public class AirStrike extends Skill {
                 },
                 0 // 优先级
         );
-//        技能施放监听器
-//        container.getExecutor().getEventListener().addEventListener(
-//                PlayerEventListener.EventType.SKILL_CAST_EVENT,
-//                SKILL_CAST_UUID,
-//                (event) -> {
-//                    handleSkillCast(event, container);
-//                },
-//                0
-//        );
 
 
 
+        //空袭技能释放
         container.getExecutor().getEventListener().addEventListener(PlayerEventListener.EventType.SKILL_CAST_EVENT, EVENT_UUID, (event) -> {
             if (container.getExecutor().isLogicalClient()) {
                 Skill skill = event.getSkillContainer().getSkill();
                 if (skill.getCategory() == SkillCategories.WEAPON_INNATE) {
-                    handleSkillCast(event, container);
-                    event.setCanceled(true);
+                    Integer remainingTime = container.getDataManager().getDataValue(getAirStrikeKey());
+                    if(remainingTime!=null&&remainingTime>0) {
+                        PlayerPatch<?> playerPatch = event.getPlayerPatch();
+                        playerPatch.playAnimationSynchronized(EFNGreatSwordAnimations.NG_GREATSWORD_AIRSLASH, 0.0F);
+                        container.getDataManager().setDataSync(getAirStrikeKey(), 0);
+                        event.setCanceled(true);
+                    }
                 }
+
 
             }
         });
@@ -196,19 +194,6 @@ public class AirStrike extends Skill {
         //设置强化技能时间
         container.getDataManager().setDataSync(getAirStrikeKey(), EMPOWERED_TIME);
 
-    }
-
-
-    //技能施放
-    private void handleSkillCast(SkillCastEvent event, SkillContainer container) {
-        Integer remainingTime = container.getDataManager().getDataValue(getAirStrikeKey());
-        if(remainingTime!=null&&remainingTime>0) {
-            PlayerPatch<?> playerPatch = event.getPlayerPatch();
-            playerPatch.playAnimationSynchronized(EFNGreatSwordAnimations.NG_GREATSWORD_AIRSLASH, 0.0F);
-            container.getDataManager().setDataSync(getAirStrikeKey(), 0);
-//          取消原技能施放
-//            event.setCanceled(true);
-        }
     }
 
 
