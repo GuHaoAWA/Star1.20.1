@@ -1,7 +1,9 @@
 package com.guhao.stars.efmex.skills;
 
 import com.guhao.stars.efmex.StarAnimations;
+import com.guhao.stars.efmex.StarSkillDataKeys;
 import com.guhao.stars.utils.dangerAnimSystem.AnimationEffectManager;
+import com.hm.efn.gameasset.animations.EFNGreatSwordAnimations;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.Input;
 import net.minecraft.nbt.CompoundTag;
@@ -49,7 +51,7 @@ public class AirStrike extends Skill {
 
 
     private static SkillDataKey<Integer> getAirStrikeKey() {
-        return com.guhao.stars.efmex.StarSkillDataKeys.AIR_STRIKEKEY.get();
+        return StarSkillDataKeys.AIR_STRIKEKEY.get();
     }
     private static final int EMPOWERED_TIME = 60; // 40 tick = 2秒
 
@@ -156,22 +158,26 @@ public class AirStrike extends Skill {
 
     private void handleAirStrikeDamage(DealDamageEvent.Damage event, SkillContainer container) {
         //检查是否是跳A攻击
-//        System.out.println("4444444444");
+        System.out.println("11111111     ");
         if(!isJumpAttack(event))return;
 //        被攻击实体
         LivingEntity target = event.getTarget();
         if(target == null)return;
+        System.out.println("222222222222     ");
 //        event.getDamageSource().getEntity()  伤害源实体
 //        检查目标当前是否在播放紫危动画
-        if(!isTargetPlayingBypassAllAnimation(target))return;
+        if(isTargetPlayingBypassAllAnimation(target))return;
+        System.out.println("55555555     ");
         EntityPatch<?> entityPatch = EpicFightCapabilities.getEntityPatch(target, EntityPatch.class);
         boolean isEpicFightEntity = entityPatch != null;
         if(isEpicFightEntity) {
+            System.out.println("333333333333     ");
             if (entityPatch instanceof LivingEntityPatch<?> livingPatch) {
+                //击倒目标
+                System.out.println("444444444444     ");
                 livingPatch.playAnimationSynchronized(Animations.BIPED_KNOCKDOWN, 0.1F);
             }
         }
-
 
         //设置强化技能时间
         container.getDataManager().setDataSync(getAirStrikeKey(), EMPOWERED_TIME);
@@ -184,14 +190,12 @@ public class AirStrike extends Skill {
         Integer remainingTime = container.getDataManager().getDataValue(getAirStrikeKey());
         if (remainingTime!=null&&remainingTime>0) {
             PlayerPatch<?> playerPatch = event.getPlayerPatch();
-            playerPatch.playAnimationSynchronized(Animations.GREATSWORD_AIR_SLASH, -0.1F);
+            playerPatch.playAnimationSynchronized(EFNGreatSwordAnimations.NG_GREATSWORD_AIRSLASH, 0.0F);
             container.getDataManager().setDataSync(getAirStrikeKey(), 0);
 
 
 //          取消原技能施放
             event.setCanceled(true);
-
-
         }
     }
 
