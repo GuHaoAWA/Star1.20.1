@@ -4,6 +4,7 @@ import com.guhao.stars.efmex.StarAnimations;
 import com.guhao.stars.efmex.StarSkillDataKeys;
 import com.guhao.stars.utils.dangerAnimSystem.AnimationEffectManager;
 import com.hm.efn.gameasset.animations.EFNGreatSwordAnimations;
+import com.p1nero.invincible.api.animation.types.MultiPhaseAirSlashAnimation;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.Input;
 import net.minecraft.nbt.CompoundTag;
@@ -170,27 +171,21 @@ public class AirStrike extends Skill {
 
     private void handleAirStrikeDamage(DealDamageEvent.Damage event, SkillContainer container) {
         //检查是否是跳A攻击
-        System.out.println("11111111     ");
         if(!isJumpAttack(event))return;
-//        被攻击实体
         LivingEntity target = event.getTarget();
         if(target == null)return;
-        System.out.println("222222222222     ");
 //        event.getDamageSource().getEntity()  伤害源实体
 //        检查目标当前是否在播放紫危动画
-        if(isTargetPlayingBypassAllAnimation(target))return;
-        System.out.println("55555555     ");
+        if(!isTargetPlayingBypassAllAnimation(target))return;
         EntityPatch<?> entityPatch = EpicFightCapabilities.getEntityPatch(target, EntityPatch.class);
         boolean isEpicFightEntity = entityPatch != null;
         if(isEpicFightEntity) {
-            System.out.println("333333333333     ");
+//            System.out.println("3333333333     ");
             if (entityPatch instanceof LivingEntityPatch<?> livingPatch) {
                 //击倒目标
-                System.out.println("444444444444     ");
                 livingPatch.playAnimationSynchronized(Animations.BIPED_KNOCKDOWN, 0.1F);
             }
         }
-
         //设置强化技能时间
         container.getDataManager().setDataSync(getAirStrikeKey(), EMPOWERED_TIME);
 
@@ -200,18 +195,20 @@ public class AirStrike extends Skill {
 
     //检测是否是跳A攻击
     private boolean isJumpAttack(DealDamageEvent.Damage event) {
-        if(!(event.getDamageSource().getEntity() instanceof LivingEntity attacker)) {
-            return false;
-        }
-        LivingEntityPatch<?> attackerPatch = EpicFightCapabilities.getEntityPatch(attacker, LivingEntityPatch.class);
-        if(attackerPatch == null||attackerPatch.getAnimator() == null)return false;
+        if(event.getDamageSource().getEntity() instanceof LivingEntity attacker) {
+            LivingEntityPatch<?> attackerPatch = EpicFightCapabilities.getEntityPatch(attacker, LivingEntityPatch.class);
+            if(attackerPatch == null||attackerPatch.getAnimator() == null)return false;
 //        获取当前播放的动画
-        var animPlayer = attackerPatch.getAnimator().getPlayerFor(null);
-        if(animPlayer == null) return false;
-        var animation = animPlayer.getAnimation();
-        if(animation == null)return false;
-        StaticAnimation currentAnim = animation.get().getRealAnimation().get();
-        return currentAnim instanceof AirSlashAnimation;
+            var animPlayer = attackerPatch.getAnimator().getPlayerFor(null);
+            if(animPlayer == null) return false;
+            var animation = animPlayer.getAnimation();
+            if(animation == null)return false;
+            StaticAnimation currentAnim = animation.get().getRealAnimation().get();
+            boolean p=(currentAnim instanceof AirSlashAnimation)||(currentAnim instanceof  MultiPhaseAirSlashAnimation);
+            return p;
+        }
+        return false;
+
     }
 
 

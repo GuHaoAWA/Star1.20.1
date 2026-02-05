@@ -1,8 +1,10 @@
 package com.guhao.stars.efmex;
 
+import com.asanginxst.epicfightx.client.sound.EFXSounds;
 import com.guhao.stars.StarsMod;
 import com.guhao.stars.utils.dangerAnimSystem.AnimationEffectManager;
 import com.nameless.indestructible.world.capability.AdvancedCustomHumanoidMobPatch;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.AABB;
@@ -14,10 +16,13 @@ import yesman.epicfight.api.animation.AnimationManager.AnimationAccessor;
 import yesman.epicfight.api.animation.property.AnimationEvent;
 import yesman.epicfight.api.animation.property.AnimationProperty;
 import yesman.epicfight.api.animation.types.ActionAnimation;
+import yesman.epicfight.api.animation.types.AirSlashAnimation;
 import yesman.epicfight.api.animation.types.EntityState;
 import yesman.epicfight.api.animation.types.StaticAnimation;
+import yesman.epicfight.api.collider.Collider;
 import yesman.epicfight.gameasset.Armatures;
 import yesman.epicfight.gameasset.EpicFightSounds;
+import yesman.epicfight.model.armature.HumanoidArmature;
 import yesman.epicfight.particle.EpicFightParticles;
 import yesman.epicfight.world.capabilities.EpicFightCapabilities;
 import yesman.epicfight.world.capabilities.entitypatch.EntityPatch;
@@ -34,6 +39,10 @@ import java.util.List;
 public class StarAnimations {
     public static AnimationAccessor<ActionAnimation> BIPED_PHANTOM_ASCENT_FORWARD_NEW;
     public static AnimationAccessor<ActionAnimation> BIPED_PHANTOM_ASCENT_BACKWARD_NEW;
+    public static AnimationManager.AnimationAccessor<StaticAnimation> JUMP;
+
+
+
     public static StaticAnimation FIRE_BALL;
     public static StaticAnimation AB_FIRE_BALL;
     public static StaticAnimation SCRATCH;
@@ -59,7 +68,12 @@ public class StarAnimations {
     private static void build(AnimationManager.AnimationBuilder builder) {
 //        HumanoidArmature biped = Armatures.BIPED.get();
 
-        BIPED_PHANTOM_ASCENT_FORWARD_NEW = builder.nextAccessor("biped/skill/phantom_ascent_forward_new", (accessor) ->
+        JUMP = builder.nextAccessor("biped/living/jump", (accessor) ->
+                new StaticAnimation(0.1F, false, accessor, Armatures.BIPED)
+                        .addProperty(AnimationProperty.ActionAnimationProperty.MOVE_VERTICAL, true));
+
+
+        BIPED_PHANTOM_ASCENT_FORWARD_NEW = builder.nextAccessor("biped/living/phantom_ascent_forward_new", (accessor) ->
                 new ActionAnimation(0.05F, 0.7F, accessor, Armatures.BIPED)
                         .addStateRemoveOld(EntityState.MOVEMENT_LOCKED, false)
                         .newTimePair(0.0F, 0.5F)
@@ -128,11 +142,13 @@ public class StarAnimations {
         );
 
 
-        BIPED_PHANTOM_ASCENT_BACKWARD_NEW = builder.nextAccessor("biped/skill/phantom_ascent_backward_new", (accessor) ->
-                new ActionAnimation(0.05F, 0.7F, accessor, Armatures.BIPED)
+        BIPED_PHANTOM_ASCENT_BACKWARD_NEW = builder.nextAccessor("biped/living/phantom_ascent_backward_new", (accessor) ->
+                new ActionAnimation(0.05F, 2.7F, accessor, Armatures.BIPED)
                         .addStateRemoveOld(EntityState.MOVEMENT_LOCKED, false)
                         .newTimePair(0.0F, 0.5F)
                         .addStateRemoveOld(EntityState.INACTION, true)
+//                        .addProperty(AnimationProperty.ActionAnimationProperty.STOP_MOVEMENT, false)
+                        .addProperty(AnimationProperty.ActionAnimationProperty.MOVE_VERTICAL, true)
                         .addEvents(AnimationProperty.StaticAnimationProperty.ON_BEGIN_EVENTS,
                                 AnimationEvent.SimpleEvent.create((entitypatch, animation, params) -> {
                                     if(!entitypatch.getOriginal().level().isClientSide()) {
@@ -195,6 +211,31 @@ public class StarAnimations {
                                 }, AnimationEvent.Side.CLIENT)
                         )
         );
+
+//        BIPED_PHANTOM_ASCENT_BACKWARD = builder.nextAccessor("biped/skill/phantom_ascent_backward", (accessor) ->
+//                new ActionAnimation(0.05F, 0.7F, accessor, Armatures.BIPED)
+//                        .addStateRemoveOld(EntityState.MOVEMENT_LOCKED, false)
+//                        .newTimePair(0.0F, 0.5F)
+//                        .addStateRemoveOld(EntityState.INACTION, true)
+//                        .addEvents(AnimationProperty.StaticAnimationProperty.ON_BEGIN_EVENTS, AnimationEvent.SimpleEvent.create((entitypatch, animation, params) -> {
+//                            Vec3 pos = entitypatch.getOriginal().position();
+//
+//                            entitypatch.playSound(EpicFightSounds.TUMBLE.get(), 0, 0);
+//                            entitypatch.getOriginal().level().addAlwaysVisibleParticle(EpicFightParticles.AIR_BURST.get(), pos.x, pos.y + entitypatch.getOriginal().getBbHeight() * 0.5D, pos.z, 0, -1, 2);
+//                        }, AnimationEvent.Side.CLIENT)));
+//
+//
+//
+//        TACHI_AIR_SLASH = builder.nextAccessor("biped/combat/tachi_airslash", (accessor) -> (AirSlashAnimation)
+//                (new AirSlashAnimation(0.1F, 0.425F, 0.5F, 1.0F, (Collider)null, ((HumanoidArmature)Armatures.BIPED.get()).toolR, accessor, Armatures.BIPED))
+//                        .addProperty(AnimationProperty.AttackPhaseProperty.SWING_SOUND, (SoundEvent) EFXSounds.TACHI_SWING_5.get())
+//                        .newTimePair(0.5F, Float.MAX_VALUE).addProperty(AnimationProperty.ActionAnimationProperty.MOVE_VERTICAL, false).newTimePair(0.0F, 0.7F).addStateRemoveOld(EntityState.CAN_BASIC_ATTACK, false)
+//                        .addProperty(AnimationProperty.AttackAnimationProperty.BASIS_ATTACK_SPEED, 1.2F));
+
+
+
+
+
     }
 
         /*HANGDANG = (new SpecialAttackAnimation(0.2F, 0.35F, 0.35F, 0.75F, 1.05F, WOMWeaponColliders.FATAL_DRAW_DASH, biped.rootJoint, "biped/hangdang", biped))
