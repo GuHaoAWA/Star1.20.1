@@ -17,6 +17,7 @@ import com.guhao.stars.regirster.StarsSounds;
 import com.guhao.stars.units.StarDataUnit;
 import com.guhao.stars.units.TransformUtils;
 import com.guhao.stars.units.data.TimeContext;
+import com.merlin204.avalon.main.AvalonMOD;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
@@ -30,6 +31,7 @@ import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.DistExecutor;
+import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -71,6 +73,9 @@ public class StarsMod {
         StarSkillDataKeys.DATA_KEYS.register(bus);
         MinecraftForge.EVENT_BUS.register(this);
         MinecraftForge.EVENT_BUS.register(new BlockBreakEvent());
+        if(ModList.get().isLoaded("epic_fight_avalon")) {
+            AvalonMOD.beMerlin = false;
+        }
         int packetId = 0;
         PACKET_HANDLER.registerMessage(
                 packetId++,
