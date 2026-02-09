@@ -21,4 +21,7 @@ public class StarsEffect {
     public static final RegistryObject<MobEffect> IMPACT_ENHANCE = REGISTRY.register("impact_enhance", ImpactEnhance::new);
     public static final RegistryObject<MobEffect> ORANGE_GLOW = REGISTRY.register("orange_glow", Orange_Glow::new);
     public static final RegistryObject<MobEffect> RED_GLOW = REGISTRY.register("red_glow", Red_Glow::new);
+
+    //失稳
+    public static final RegistryObject<MobEffect> INSTABILITY = REGISTRY.register("instability", Instability::new);
 }

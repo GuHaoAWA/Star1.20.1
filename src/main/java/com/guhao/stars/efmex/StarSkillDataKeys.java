@@ -43,6 +43,7 @@ public class StarSkillDataKeys {
                     AirStrike.class
             ));
 
+    //
 
 //    public static final RegistryObject<SkillDataKey<Float>> COUNTER_TICK2 =
 //            DATA_KEYS.register("counter_tick2", () -> SkillDataKey.createSkillDataKey(

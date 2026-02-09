@@ -74,7 +74,7 @@ public class StarsParticleType {
         event.registerSpriteSet(DANGER_BLUE.get(), Dangers_Blue.Dangers_BlueParticleProvider::new);
         event.registerSpriteSet(DANGER_PURPLE.get(), Dangers_Purple.Dangers_PurpleProvider::new);
         event.registerSpriteSet(DING.get(), Ding.DangerParticleProvider::new);
-        event.registerSpriteSet(CAI.get(), Cai.CaiParticleProvider::new);
+//        event.registerSpriteSet(CAI.get(), Cai.CaiParticleProvider::new);
 /*        event.registerSpriteSet(FIRE_BALL.get(), Fire_Ball.Provider::new);
         event.registerSpriteSet(EX_LASER.get(), EX_Laser.Provider::new);
         event.registerSpriteSet(AIR_PUNCH_BURST_PARTICLE.get(), AirPunchBurstParticle.Provider::new);*/

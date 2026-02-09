@@ -1,24 +1,33 @@
 package com.guhao.stars.efmex.skills;
 
+import com.guhao.stars.efmex.StarAnimations;
 import com.guhao.stars.efmex.StarSkillDataKeys;
 import com.guhao.stars.entity.StarAttributes;
 import com.guhao.stars.regirster.StarSkill;
+import com.guhao.stars.regirster.StarsEffect;
+import com.guhao.stars.regirster.StarsSounds;
 import com.guhao.stars.utils.dangerAnimSystem.AnimationEffectManager;
-import io.redspace.ironsspellbooks.api.magic.MagicData;
-import io.redspace.ironsspellbooks.api.registry.AttributeRegistry;
-import io.redspace.ironsspellbooks.network.ClientboundSyncMana;
-import io.redspace.ironsspellbooks.setup.Messages;
+import com.hm.efn.gameasset.animations.EFNSkillAnimations;
+import com.hm.efn.particle.EFNParticles;
+import com.nameless.indestructible.world.capability.AdvancedCustomMobPatch;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.phys.Vec3;
+import org.joml.Vector3d;
 import yesman.epicfight.api.utils.AttackResult;
 import yesman.epicfight.gameasset.Animations;
 import yesman.epicfight.gameasset.EpicFightSounds;
+import yesman.epicfight.particle.HitParticleType;
 import yesman.epicfight.skill.Skill;
 import yesman.epicfight.skill.SkillBuilder;
 import yesman.epicfight.skill.SkillContainer;
+import yesman.epicfight.world.capabilities.EpicFightCapabilities;
+import yesman.epicfight.world.capabilities.entitypatch.EntityPatch;
+import yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch;
 import yesman.epicfight.world.capabilities.entitypatch.player.PlayerPatch;
 import yesman.epicfight.world.capabilities.entitypatch.player.ServerPlayerPatch;
 import yesman.epicfight.world.damagesource.EpicFightDamageSource;
@@ -26,6 +35,7 @@ import yesman.epicfight.world.damagesource.StunType;
 import yesman.epicfight.world.effect.EpicFightMobEffects;
 import yesman.epicfight.world.entity.eventlistener.PlayerEventListener;
 
+import java.util.List;
 import java.util.UUID;
 
 
@@ -35,8 +45,6 @@ import java.util.UUID;
 public class DOTEPassive extends Skill {
     private static final UUID EVENT_UUID = UUID.fromString("071dda48-0cdd-4c92-9787-c0efb1524e8b");
     private static final UUID DAMAGE_EVENT_UUID = UUID.fromString("071dda48-0cdd-4c92-9787-c1efb1524e8b");
-//    private static final UUID DAMAGE_MODIFIER_UUID = UUID.fromString("4f2c9273-c7d1-46cb-8de8-4571c686c2e4");
-//    private static final UUID IMPACT_MODIFIER_UUID = UUID.fromString("0385cf99-5c63-4121-b229-e8f13339ef94");
 
     public DOTEPassive(DOTEPassive.Builder builder) {
         super(builder);
@@ -51,8 +59,6 @@ public class DOTEPassive extends Skill {
         container.getExecutor().setStamina(container.getExecutor().getMaxStamina());
         SkillContainer targetContainer = container.getExecutor().getSkill(StarSkill.DOTE);
         if (container.getExecutor().getOriginal() instanceof ServerPlayer serverPlayer) {
-//            虚弱状态，删除
-//            targetContainer.getDataManager().setDataSync(StarSkillDataKeys.WEAKNESS.get(), 1280.0f, serverPlayer);
             targetContainer.getDataManager().setDataSync(StarSkillDataKeys.WEAKNESS_COUNT_2.get(), 30.0f, serverPlayer);
         }
     }
@@ -61,14 +67,10 @@ public class DOTEPassive extends Skill {
     public void onInitiate(SkillContainer container) {
         super.onInitiate(container);
 
+
+
         container.getExecutor().getEventListener().addEventListener(PlayerEventListener.EventType.TAKE_DAMAGE_EVENT_ATTACK, EVENT_UUID, (e) -> {
             EpicFightDamageSource efd = AnimationEffectManager.getEpicFightDamageSources(e.getDamageSource());
-//            if (e.getResult() == AttackResult.ResultType.BLOCKED && e.isParried()) {
-//                if (container.getDataManager().getDataValue(StarSkillDataKeys.WEAKNESS.get()) > 0.0f && container.getExecutor().getOriginal() instanceof ServerPlayer) {
-//                    container.getDataManager().setDataSync(StarSkillDataKeys.WEAKNESS.get(), container.getDataManager().getDataValue(StarSkillDataKeys.WEAKNESS.get()) - 20.0f, (ServerPlayer) container.getExecutor().getOriginal());
-//                }
-//            }
-
             float impact = 0.0f;
             if (efd != null) impact = efd.getBaseImpact();
             if (container.getExecutor().getStamina() <= container.getExecutor().getMaxStamina() * 0.25f) {
@@ -93,52 +95,87 @@ public class DOTEPassive extends Skill {
 
 
         container.getExecutor().getEventListener().addEventListener(PlayerEventListener.EventType.DODGE_SUCCESS_EVENT, EVENT_UUID, (event) -> {
-            PlayerPatch playerPatch = container.getExecutor();
+            PlayerPatch<?> playerPatch = container.getExecutor();
             float maxStamina = playerPatch.getMaxStamina();
             playerPatch.setStamina(playerPatch.getStamina() +0.05F*maxStamina);
         });
-
-//        container.getExecutor().getEventListener().addEventListener(PlayerEventListener.EventType.DODGE_SUCCESS_EVENT, EVENT_UUID, (e) -> {
-//            if (container.getDataManager().getDataValue(StarSkillDataKeys.WEAKNESS_COUNT_2.get()) > 0f && container.getExecutor().getOriginal() instanceof ServerPlayer) {
-//                container.getDataManager().setDataSync(StarSkillDataKeys.WEAKNESS.get(), 600f, (ServerPlayer) container.getExecutor().getOriginal());
-//                return;
-//            }
-//            if (container.getDataManager().getDataValue(StarSkillDataKeys.WEAKNESS.get()) > 0f && container.getExecutor().getOriginal() instanceof ServerPlayer) {
-//                container.getDataManager().setDataSync(StarSkillDataKeys.WEAKNESS.get(), container.getDataManager().getDataValue(StarSkillDataKeys.WEAKNESS.get()) - 20.0f, (ServerPlayer) container.getExecutor().getOriginal());
-//            }
-//        }, 999);
-//        container.getExecutor().getEventListener().addEventListener(PlayerEventListener.EventType.DEAL_DAMAGE_EVENT_ATTACK, DAMAGE_EVENT_UUID, (event) -> {
-//            ServerPlayerPatch serverPlayerPatch = event.getPlayerPatch();
-//            ServerPlayer attacker = serverPlayerPatch.getOriginal();
-//            LivingEntity target = event.getTarget();
-//            EpicFightDamageSource epicFightDamageSource = event.getDamageSource();
-//            if (!epicFightDamageSource.is(AnimationEffectManager.PIERCE_GUARD)) {
-//                float baseDamage = event.getDamageSource().calculateDamageAgainst(serverPlayerPatch.getOriginal(), target, event.getAttackDamage());
-//                float pierceDamage = baseDamage * 0.1F;
-//                AttackResult attackResult = serverPlayerPatch.attack(epicFightDamageSource, target, InteractionHand.MAIN_HAND);
-//                boolean blocked = !attackResult.resultType.dealtDamage() && attackResult.resultType.shouldCount();
-//                if (blocked) {
-//                    //方法1：直接设置
-//                    serverPlayerPatch.setLastAttackResult(AttackResult.blocked(pierceDamage));
-//                    //方法2：手动额外hurt
-//                    /*DamageSource damageSource = EpicFightDamageSources.playerAttack(attacker)
-//                            .setAnimation(event.getDamageSource().getAnimation())
-//                            .setInitialPosition(attacker.position())
-//                            .setStunType(StunType.NONE)
-//                            .setBaseImpact(event.getDamageSource().getBaseImpact())
-//                            .addRuntimeTag(AnimationEffectManager.PIERCE_GUARD)
-//                            .addRuntimeTag(EpicFightDamageTypeTags.UNBLOCKALBE)
-//                            .addRuntimeTag(EpicFightDamageTypeTags.FINISHER);
-//
-//                    target.hurt(damageSource, pierceDamage);*/
-//                }
-//            }
-//        }, 999);
         container.getExecutor().getEventListener().addEventListener(PlayerEventListener.EventType.SERVER_ITEM_USE_EVENT, EVENT_UUID, (e) -> {
             if (container.getDataManager().getDataValue(StarSkillDataKeys.WEAKNESS_COUNT_2.get()) > 0f) {
                 e.setCanceled(true);
             }
         }, 999);
+//        ATTACK_PHASE_END_EVENT
+        //对撞
+        container.getExecutor().getEventListener().addEventListener(PlayerEventListener.EventType.DEAL_DAMAGE_EVENT_ATTACK, EVENT_UUID, (event) -> {
+            if(event.getTarget()!=null) {
+                LivingEntity livingEntity=event.getTarget();
+                //有失稳buff
+                if (livingEntity.hasEffect(StarsEffect.INSTABILITY.get())) {
+                    EntityPatch<?> entityPatch = EpicFightCapabilities.getEntityPatch(livingEntity, EntityPatch.class);
+                    if (entityPatch != null && entityPatch instanceof LivingEntityPatch<?> livingEntityPatch) {
+//                        System.out.println("4444444444    "+ livingEntityPatch.getEntityState().getLevel());
+                        int phaseLevelLiving = livingEntityPatch.getEntityState().getLevel();
+                        if(phaseLevelLiving<3&&phaseLevelLiving>0){
+                            event.getPlayerPatch().playSound(StarsSounds.BIGBONG.get(), -0.05F, 0.1F);
+                            if(container.getExecutor().getOriginal() instanceof ServerPlayer serverPlayer){
+                                spawnParryFlashParticle(serverPlayer,livingEntity);
+                            }
+                            livingEntityPatch.playAnimationSynchronized(StarAnimations.EFN_GUARD_ACTIVE_HIT3, 0);
+                            container.getExecutor().playAnimationSynchronized(EFNSkillAnimations.EFN_GUARD_ACTIVE_HIT3, 0);
+//                            if(livingEntityPatch instanceof AdvancedCustomMobPatch<?> advancedCustomMobPatch){
+//                                executeBossStunEvent(advancedCustomMobPatch, StunType.LONG, 3.0f);
+//                            }
+                            livingEntity.removeEffect(StarsEffect.INSTABILITY.get());
+                        }
+                    }
+                }
+            }
+
+        });
+    }
+
+    public static void executeBossStunEvent(AdvancedCustomMobPatch<?> advancedCustomMobPatch, StunType stunType, float stunTime) {
+        advancedCustomMobPatch.applyStun(stunType, stunTime);
+    }
+
+
+    private void spawnParryFlashParticle(ServerPlayer serverPlayer, Entity target) {
+        if (target == null) return;
+        EFNParticles.EFN_PARRY_FLASH_MAIN.get().spawnParticleWithArgument(
+                serverPlayer.serverLevel(),
+                (player, entity) -> {
+                    Vec3 pos = this.getParticlePositionForAnimation(player, entity);
+                    return new Vector3d(pos.x, pos.y, pos.z);
+                },
+                (player, entity) -> {
+                    Vec3 args = this.getParticleArgumentsForAnimation();
+                    return new Vector3d(args.x, args.y, args.z);
+                },
+                serverPlayer,
+                target
+        );
+        EFNParticles.ALL_SPARK.get().spawnParticleWithArgument(
+                serverPlayer.serverLevel(),
+                (player, entity) -> {
+                    Vec3 pos = getParticlePositionForAnimation(player, entity);
+                    return new Vector3d(pos.x, pos.y, pos.z);
+                },
+                HitParticleType.ZERO,
+                serverPlayer,
+                target
+        );
+    }
+
+
+    private Vec3 getParticleArgumentsForAnimation() {
+        return new Vec3(1.2F, 0.0F, 0.0F);
+    }
+
+    private Vec3 getParticlePositionForAnimation(Entity player, Entity target) {
+        Vec3 playerPos = player.position().add(0.0F, player.getBbHeight() * 0.6, 0.0F);
+        Vec3 targetPos = target.position().add(0.0F, target.getBbHeight() * 0.6, 0.0F);
+        Vec3 middlePos = playerPos.add(targetPos.subtract(playerPos).scale(0.5F));
+        return middlePos;
     }
 
     @Override
@@ -149,87 +186,20 @@ public class DOTEPassive extends Skill {
 //        container.getExecutor().getEventListener().removeListener(PlayerEventListener.EventType.DEAL_DAMAGE_EVENT_ATTACK, DAMAGE_EVENT_UUID);
         container.getExecutor().getEventListener().removeListener(PlayerEventListener.EventType.TAKE_DAMAGE_EVENT_DAMAGE, EVENT_UUID);
         container.getExecutor().getEventListener().removeListener(PlayerEventListener.EventType.SERVER_ITEM_USE_EVENT, EVENT_UUID);
+        container.getExecutor().getEventListener().removeListener(PlayerEventListener.EventType.DEAL_DAMAGE_EVENT_ATTACK, EVENT_UUID);
     }
 
     @Override
     public void updateContainer(SkillContainer container) {
-//        if (!container.getDataManager().hasData(StarSkillDataKeys.WEAKNESS.get())) {
-//            container.getDataManager().registerData(StarSkillDataKeys.WEAKNESS.get());
-//        }
         if (!container.getDataManager().hasData(StarSkillDataKeys.WEAKNESS_COUNT_2.get())) {
             container.getDataManager().registerData(StarSkillDataKeys.WEAKNESS_COUNT_2.get());
         }
 
-//        if (container.getDataManager().getDataValue(StarSkillDataKeys.WEAKNESS.get()) > 0 && container.getExecutor().getOriginal() instanceof ServerPlayer) {
-//            container.getDataManager().setDataSync(StarSkillDataKeys.WEAKNESS.get(), container.getDataManager().getDataValue(StarSkillDataKeys.WEAKNESS.get()) - 1.0f, (ServerPlayer) container.getExecutor().getOriginal());
-//        }
         if (container.getDataManager().getDataValue(StarSkillDataKeys.WEAKNESS_COUNT_2.get()) > 0 && container.getExecutor().getOriginal() instanceof ServerPlayer) {
             container.getDataManager().setDataSync(StarSkillDataKeys.WEAKNESS_COUNT_2.get(), container.getDataManager().getDataValue(StarSkillDataKeys.WEAKNESS_COUNT_2.get()) - 1.0f, (ServerPlayer) container.getExecutor().getOriginal());
         }
-//        if (container.getDataManager().getDataValue(StarSkillDataKeys.WEAKNESS.get()) > 0) {
-//            float remainingTicks = container.getDataManager().getDataValue(StarSkillDataKeys.WEAKNESS.get());
-//            applyWeaknessEffects(container, remainingTicks);
-//        } else {
-//            removeWeaknessEffects(container);
-//        }
-//        removeWeaknessEffects(container);
     }
 
-//    @Override
-//    @OnlyIn(Dist.CLIENT)
-//    public void drawOnGui(BattleModeGui gui, SkillContainer container, GuiGraphics guiGraphics, float x, float y, float partialTick) {
-//        if (container.getDataManager().getDataValue(StarSkillDataKeys.WEAKNESS.get()) > 0f) {
-//            PoseStack poseStack = guiGraphics.pose();
-//            poseStack.pushPose();
-//            poseStack.translate(0.0F, (float) gui.getSlidingProgression(), 0.0F);
-//            guiGraphics.blit(new ResourceLocation("star", "textures/gui/skills/weakness.png"), (int) x, (int) y, 24, 24, 0.0F, 0.0F, 1, 1, 1, 1);
-//            float second = (container.getDataManager().getDataValue(StarSkillDataKeys.WEAKNESS.get())) / 20.0f;
-//            guiGraphics.drawString(gui.getFont(), String.format("%.1f", second), x + 3.0F, y + 6.0F, 16777215, true);
-//            poseStack.popPose();
-//        }
-//    }
-
-//    private void applyWeaknessEffects(SkillContainer container, float remainingTicks) {
-//        float remainingSeconds = remainingTicks / 20f;
-//
-//        float damageReduction = 0.4f * remainingSeconds;
-//
-//        AttributeInstance attackDamage = container.getExecutor().getOriginal().getAttribute(Attributes.ATTACK_DAMAGE);
-//        if (attackDamage != null) {
-//            attackDamage.removeModifier(DAMAGE_MODIFIER_UUID);
-//            AttributeModifier modifier = new AttributeModifier(
-//                    DAMAGE_MODIFIER_UUID,
-//                    "weakness_attack_damage",
-//                    -damageReduction / 100f,
-//                    AttributeModifier.Operation.MULTIPLY_TOTAL
-//            );
-//            attackDamage.addTransientModifier(modifier);
-//        }
-//
-//        AttributeInstance impact = container.getExecutor().getOriginal().getAttribute(EpicFightAttributes.IMPACT.get());
-//        if (impact != null) {
-//            impact.removeModifier(IMPACT_MODIFIER_UUID);
-//            AttributeModifier modifier = new AttributeModifier(
-//                    IMPACT_MODIFIER_UUID,
-//                    "weakness_impact",
-//                    -remainingSeconds / 100f,
-//                    AttributeModifier.Operation.MULTIPLY_TOTAL
-//            );
-//            impact.addTransientModifier(modifier);
-//        }
-//    }
-
-//    private void removeWeaknessEffects(SkillContainer container) {
-//        AttributeInstance attackDamage = container.getExecutor().getOriginal().getAttribute(Attributes.ATTACK_DAMAGE);
-//        if (attackDamage != null) {
-//            attackDamage.removeModifier(DAMAGE_MODIFIER_UUID);
-//        }
-//
-//        AttributeInstance impact = container.getExecutor().getOriginal().getAttribute(EpicFightAttributes.IMPACT.get());
-//        if (impact != null) {
-//            impact.removeModifier(IMPACT_MODIFIER_UUID);
-//        }
-//    }
 
     public static class Builder extends SkillBuilder<DOTEPassive> {
     }

@@ -2,6 +2,7 @@ package com.guhao.stars.efmex;
 
 import com.guhao.stars.StarsMod;
 import com.guhao.stars.utils.dangerAnimSystem.AnimationEffectManager;
+import com.hm.efn.animations.types.EFNGuardAnimation;
 import com.nameless.indestructible.world.capability.AdvancedCustomHumanoidMobPatch;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -38,7 +39,7 @@ public class StarAnimations {
     public static AnimationAccessor<ActionAnimation> BIPED_PHANTOM_ASCENT_FORWARD_NEW;
     public static AnimationAccessor<ActionAnimation> BIPED_PHANTOM_ASCENT_BACKWARD_NEW;
     public static AnimationManager.AnimationAccessor<StaticAnimation> JUMP;
-
+    public static AnimationManager.AnimationAccessor<EFNGuardAnimation> EFN_GUARD_ACTIVE_HIT3;
 
 
     public static StaticAnimation FIRE_BALL;
@@ -65,6 +66,17 @@ public class StarAnimations {
 
     private static void build(AnimationManager.AnimationBuilder builder) {
 //        HumanoidArmature biped = Armatures.BIPED.get();
+
+
+
+        EFN_GUARD_ACTIVE_HIT3 = builder.nextAccessor("biped/nf_skill/biped_flashblock3", (accessor) ->
+                new EFNGuardAnimation(0.1F, 1.1F, accessor, Armatures.BIPED)
+                        .addProperty(AnimationProperty.ActionAnimationProperty.MOVE_VERTICAL, true)
+                        .addProperty(AnimationProperty.ActionAnimationProperty.NO_GRAVITY_TIME, TimePairList.create(new float[]{0.05F, 0.4F}))
+                        .setResourceLocation("efn", "biped/nf_skill/biped_flashblock3"));
+//                        .addEvents(new AnimationEvent[]{AvalonEventUtils.simpleCameraShake(3, 11, 6.0F, 3.0F, 6.0F)}));
+
+
 
         JUMP = builder.nextAccessor("biped/living/jump", (accessor) ->
                 new StaticAnimation(0.1F, false, accessor, Armatures.BIPED)
