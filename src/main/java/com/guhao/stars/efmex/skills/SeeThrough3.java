@@ -160,24 +160,24 @@ public class SeeThrough3 extends Skill {
         //按下武器技能键时触发强化技能
         if(event.getSkillContainer() != event.getPlayerPatch().getSkill(SkillSlots.WEAPON_INNATE))return;
         var rl = event.getPlayerPatch().getAnimator().getPlayerFor(null).getAnimation().get().getRealAnimation();
-        if(rl == CorruptAnimations.PARRY_BREAK2) { //特殊招架硬直
-//            取消技能
-            event.setCanceled(true);
-            // 使用强化技能
-            event.getPlayerPatch().playAnimationSynchronized(CorruptAnimations.LETHAL_SLICING_ONCE, 0.1F);
-        }
-        else if(rl == CorruptAnimations.PARRY_BREAK3) { //特殊招架硬直
-//            取消技能
-            event.setCanceled(true);
-            // 使用强化技能
-            event.getPlayerPatch().playAnimationSynchronized(CorruptAnimations.LETHAL_SLICING_TWICE, 0.1F);
-        }
-        else if(rl == CorruptAnimations.PARRY_BREAK4) { //特殊招架硬直
-//            取消技能
-            event.setCanceled(true);
-            // 使用强化技能
-            event.getPlayerPatch().playAnimationSynchronized(CorruptAnimations.LETHAL_SLICING_TWICE, 0.1F);
-        }
+//        if(rl == CorruptAnimations.PARRY_BREAK2) { //特殊招架硬直
+////            取消技能
+//            event.setCanceled(true);
+//            // 使用强化技能
+//            event.getPlayerPatch().playAnimationSynchronized(CorruptAnimations.LETHAL_SLICING_ONCE, 0.1F);
+//        }
+//        else if(rl == CorruptAnimations.PARRY_BREAK3) { //特殊招架硬直
+////            取消技能
+//            event.setCanceled(true);
+//            // 使用强化技能
+//            event.getPlayerPatch().playAnimationSynchronized(CorruptAnimations.LETHAL_SLICING_TWICE, 0.1F);
+//        }
+//        else if(rl == CorruptAnimations.PARRY_BREAK4) { //特殊招架硬直
+////            取消技能
+//            event.setCanceled(true);
+//            // 使用强化技能
+//            event.getPlayerPatch().playAnimationSynchronized(CorruptAnimations.LETHAL_SLICING_TWICE, 0.1F);
+//        }
     }
 
     public static class Builder extends SkillBuilder<SeeThrough3> {

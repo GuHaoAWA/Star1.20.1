@@ -16,6 +16,8 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Vector3d;
 import yesman.epicfight.api.utils.AttackResult;
@@ -122,6 +124,21 @@ public class DOTEPassive extends Skill {
                             }
                             livingEntityPatch.playAnimationSynchronized(StarAnimations.EFN_GUARD_ACTIVE_HIT3, 0);
                             container.getExecutor().playAnimationSynchronized(EFNSkillAnimations.EFN_GUARD_ACTIVE_HIT3, 0);
+
+
+                            Player player = container.getExecutor().getOriginal();
+                            if(hasImbuement(player.getMainHandItem())){
+                                clearImbuement(player.getMainHandItem());
+                            }
+                            int level = livingEntity.getEffect(StarsEffect.INSTABILITY.get()).getAmplifier();
+                            String string="";
+                            if(level==0)string="venom";
+                            if(level==1)string="flame";
+                            if(level==2)string="freeze";
+                            if(level==3)string="spark";
+                            setWeaponImbuement(player.level(), player.getMainHandItem(), string, 300);
+
+
 //                            if(livingEntityPatch instanceof AdvancedCustomMobPatch<?> advancedCustomMobPatch){
 //                                executeBossStunEvent(advancedCustomMobPatch, StunType.LONG, 3.0f);
 //                            }
@@ -133,6 +150,38 @@ public class DOTEPassive extends Skill {
 
         });
     }
+
+    // 清除武器附魔
+    public static void clearImbuement(ItemStack weapon) {
+        if (weapon == null || weapon.isEmpty()) {
+            return;
+        }
+        weapon.getOrCreateTag().remove("imbueType");
+        weapon.getOrCreateTag().remove("imbueExpire");
+        weapon.getOrCreateTag().remove("maxImbueTime");
+    }
+    //设置武器附魔
+    public static void setWeaponImbuement(Level world, ItemStack weapon, String imbueType, int durationTicks) {
+        if (weapon == null || imbueType == null || imbueType.isEmpty()) {
+            return;
+        }
+        weapon.getOrCreateTag().putString("imbueType", imbueType);
+        long expireTime = world.getGameTime() + durationTicks;
+        weapon.getOrCreateTag().putLong("imbueExpire", expireTime);
+        weapon.getOrCreateTag().putInt("maxImbueTime", durationTicks);
+    }
+
+    // 检查武器是否有附魔
+    public static boolean hasImbuement(ItemStack weapon) {
+        if (weapon == null || weapon.isEmpty()) {
+            return false;
+        }
+        return weapon.getOrCreateTag().contains("imbueType") &&
+                !weapon.getOrCreateTag().getString("imbueType").isEmpty();
+    }
+
+
+
 
     public static void executeBossStunEvent(AdvancedCustomMobPatch<?> advancedCustomMobPatch, StunType stunType, float stunTime) {
         advancedCustomMobPatch.applyStun(stunType, stunTime);
