@@ -150,7 +150,9 @@ public class StarAnimations {
 
         BIPED_PHANTOM_ASCENT_BACKWARD_NEW = builder.nextAccessor("biped/living/phantom_ascent_backward_new", (accessor) ->
                 new ActionAnimation(0.05F, 2.7F, accessor, Armatures.BIPED)
+//                        .addStateRemoveOld(EntityState.MOVEMENT_LOCKED, false)
                         .addProperty(AnimationProperty.ActionAnimationProperty.MOVE_VERTICAL, true)
+                        .addStateRemoveOld(EntityState.INACTION, true)
                         .addProperty(AnimationProperty.ActionAnimationProperty.NO_GRAVITY_TIME, TimePairList.create(0F, 1F))
                         .addEvents(AnimationEvent.InTimeEvent.create(0.7F, (entityPatch, animation, params) -> {
                                     LivingEntity livingEntity = entityPatch.getOriginal();
@@ -174,7 +176,7 @@ public class StarAnimations {
                                                     .mobAttack(livingEntity)
                                                     .setStunType(StunType.LONG)
                                                     .setBasicAttack(true)
-                                                    .setBaseImpact(18.0F)
+                                                    .setBaseImpact(1.0F)
                                                     .setInitialPosition(livingEntity.position())
                                                     .setAnimation(accessor);
 

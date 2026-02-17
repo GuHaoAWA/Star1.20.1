@@ -10,6 +10,7 @@ import com.guhao.stars.utils.dangerAnimSystem.AnimationEffectManager;
 import com.hm.efn.gameasset.animations.EFNSkillAnimations;
 import com.hm.efn.particle.EFNParticles;
 import com.nameless.indestructible.world.capability.AdvancedCustomMobPatch;
+import net.corruptdog.cdm.gameasset.CorruptAnimations;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -117,28 +118,38 @@ public class DOTEPassive extends Skill {
                     if (entityPatch != null && entityPatch instanceof LivingEntityPatch<?> livingEntityPatch) {
 //                        System.out.println("4444444444    "+ livingEntityPatch.getEntityState().getLevel());
                         int phaseLevelLiving = livingEntityPatch.getEntityState().getLevel();
-                        if(phaseLevelLiving<3&&phaseLevelLiving>0){
+                        if(phaseLevelLiving<=3&&phaseLevelLiving>0){
                             event.getPlayerPatch().playSound(StarsSounds.BIGBONG.get(), -0.05F, 0.1F);
                             if(container.getExecutor().getOriginal() instanceof ServerPlayer serverPlayer){
                                 spawnParryFlashParticle(serverPlayer,livingEntity);
                             }
-                            livingEntityPatch.playAnimationSynchronized(StarAnimations.EFN_GUARD_ACTIVE_HIT3, 0);
-                            container.getExecutor().playAnimationSynchronized(EFNSkillAnimations.EFN_GUARD_ACTIVE_HIT3, 0);
-
 
                             Player player = container.getExecutor().getOriginal();
                             if(hasImbuement(player.getMainHandItem())){
                                 clearImbuement(player.getMainHandItem());
                             }
                             int level = livingEntity.getEffect(StarsEffect.INSTABILITY.get()).getAmplifier();
-                            String string="";
-                            if(level==0)string="venom";
-                            if(level==1)string="flame";
-                            if(level==2)string="freeze";
-                            if(level==3)string="spark";
-                            setWeaponImbuement(player.level(), player.getMainHandItem(), string, 300);
-
-
+                            if(level>=4){
+                                level%=4;
+                                String string="";
+                                if(level==0)string="venom";
+                                if(level==1)string="flame";
+                                if(level==2)string="freeze";
+                                if(level==3)string="spark";
+                                setWeaponImbuement(player.level(), player.getMainHandItem(), string, 300);
+                                livingEntityPatch.playAnimationSynchronized(StarAnimations.EFN_GUARD_ACTIVE_HIT3, 0);
+                                container.getExecutor().playAnimationSynchronized(StarAnimations.EFN_GUARD_ACTIVE_HIT3, 0);
+                            }
+                            else {
+                                livingEntityPatch.playAnimationSynchronized(StarAnimations.EFN_GUARD_ACTIVE_HIT3, 0);
+                                container.getExecutor().playAnimationSynchronized(EFNSkillAnimations.EFN_GUARD_ACTIVE_HIT3, 0);
+                                String string="";
+                                if(level==0)string="venom";
+                                if(level==1)string="flame";
+                                if(level==2)string="freeze";
+                                if(level==3)string="spark";
+                                setWeaponImbuement(player.level(), player.getMainHandItem(), string, 300);
+                            }
 //                            if(livingEntityPatch instanceof AdvancedCustomMobPatch<?> advancedCustomMobPatch){
 //                                executeBossStunEvent(advancedCustomMobPatch, StunType.LONG, 3.0f);
 //                            }
