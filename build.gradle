@@ -121,8 +121,8 @@ dependencies {
     implementation fg.deobf("libs:dummmmmmy-1.20-2.0.6:1.1")
     implementation fg.deobf("libs:ldlib-forge-1.20.1-1.0.39:1.1")
     implementation fg.deobf("libs:photon-forge-1.20.1-1.1.7:1.1")
-    implementation fg.deobf("libs:efn:3.0")
-    implementation fg.deobf("libs:epicfight-extra:1.20.1-1.0.0-beta")
+    implementation fg.deobf("libs:EpicFight-Nightfall:3.0.2")
+    implementation fg.deobf("libs:epicfightx-mc1.20.1:1.0.0-all")
     implementation fg.deobf("libs:tactical_imbuements:2.1_Fix")
 
     implementation fg.deobf("curse.maven:epic-fight-invincible-1184379:7445318")

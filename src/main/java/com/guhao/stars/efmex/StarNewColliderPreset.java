@@ -17,10 +17,11 @@ public class StarNewColliderPreset {
     public static final Collider YAMATO_DASH_FINISH = new OBBCollider(1.7D, 1.0D, 3.5D, 0.0D, 1.0D, 1.0D);
     public static final Collider YAMATO = new MultiOBBCollider(3, 0.4D, 0.4D, 1.0D, 0.0D, 0.0D, -0.5D);
     public static final Collider FATAL_DRAW_DASH = new OBBCollider(0.7, 0.7, 4.0, 0.0, 1.0, -4.0);
-
     public static final Collider EXECUTE = new MultiOBBCollider(3, 0.4D, 0.4D, 1.5D, 0.0D, 0.0D, -0.5D);
     public static final Collider EXECUTE_SECOND = new MultiOBBCollider(2, 0.8, 0.8, 2.0, 0.0, 1.0D, -1.0D);
     public static final Collider EXECUTE_SECOND_GREATSWORD = new MultiOBBCollider(2, 0.8, 1.0, 3.0, 0.0, 1.0D, 2.0D);
-
     public static final Collider SUPER_FIST = new MultiOBBCollider(4, 0.8, 0.8, 0.8, 0.0, 0.0, 0.0);
+
+
+    public static final Collider MOONVEIL_HORIZONTAL_BOSS =  new OBBCollider( 2.0, 0.15, 1.8, 0.0, 0.0, -1.8);
 }

@@ -34,8 +34,8 @@
 
   "attribute.name.star.parry_stamina_lose": "招架耐力削减",
   "attribute.name.star.parry_stamina_lose.desc": "描述：招架敌方攻击后额外削减敌方的耐力值",
-  "attribute.name.star.burden": "锐利",
-  "attribute.name.star.burden.desc": "描述：穿透普通格挡造成部分伤害",
+  "attribute.name.star.sharpness": "锐利",
+  "attribute.name.star.sharpness.desc": "描述：穿透普通格挡造成部分伤害",
   "attribute.name.star.seethrough_regen": "识破回耐",
   "attribute.name.star.seethrough_regen.desc": "描述：使用识破后，恢复自身耐力值",
   "attribute.name.star.looting": "更多实体掉落物",

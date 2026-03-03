@@ -15,9 +15,11 @@ import yesman.epicfight.api.animation.AnimationManager.AnimationAccessor;
 import yesman.epicfight.api.animation.property.AnimationEvent;
 import yesman.epicfight.api.animation.property.AnimationProperty;
 import yesman.epicfight.api.animation.types.ActionAnimation;
+import yesman.epicfight.api.animation.types.AttackAnimation;
 import yesman.epicfight.api.animation.types.EntityState;
 import yesman.epicfight.api.animation.types.StaticAnimation;
 import yesman.epicfight.api.utils.TimePairList;
+import yesman.epicfight.api.utils.math.ValueModifier;
 import yesman.epicfight.gameasset.Armatures;
 import yesman.epicfight.gameasset.EpicFightSounds;
 import yesman.epicfight.particle.EpicFightParticles;
@@ -40,7 +42,8 @@ public class StarAnimations {
     public static AnimationAccessor<ActionAnimation> BIPED_PHANTOM_ASCENT_BACKWARD_NEW;
     public static AnimationManager.AnimationAccessor<StaticAnimation> JUMP;
     public static AnimationManager.AnimationAccessor<EFNGuardAnimation> EFN_GUARD_ACTIVE_HIT3;
-
+    //名刀横居合boss专用(下段)
+    public static AnimationManager.AnimationAccessor<AttackAnimation> MOONVEIL_HORIZONTAL_BOSS;
 
     public static StaticAnimation FIRE_BALL;
     public static StaticAnimation AB_FIRE_BALL;
@@ -66,6 +69,16 @@ public class StarAnimations {
 
     private static void build(AnimationManager.AnimationBuilder builder) {
 //        HumanoidArmature biped = Armatures.BIPED.get();
+
+
+        MOONVEIL_HORIZONTAL_BOSS = builder.nextAccessor("biped/boss/moonveil_horizontal_boss", (accessor) ->
+                new AttackAnimation(0.01F, 0.01F, 0.19F, 0.51F, 1.05F, StarNewColliderPreset.MOONVEIL_HORIZONTAL_BOSS, Armatures.BIPED.get().rootJoint, accessor, Armatures.BIPED)
+                        .addProperty(AnimationProperty.AttackPhaseProperty.SWING_SOUND, EpicFightSounds.WHOOSH_SHARP.get())
+                        .addProperty(AnimationProperty.AttackPhaseProperty.DAMAGE_MODIFIER, ValueModifier.multiplier(1.95F))         //伤害倍率
+                        .addProperty(AnimationProperty.AttackPhaseProperty.IMPACT_MODIFIER, ValueModifier.adder(1.5F))
+                        .addProperty(AnimationProperty.AttackPhaseProperty.STUN_TYPE, StunType.HOLD)
+                        .addProperty(AnimationProperty.StaticAnimationProperty.PLAY_SPEED_MODIFIER, ((dynamicAnimation, livingEntityPatch, v, v1, v2) -> 1.1F)));
+
 
 
 
@@ -154,6 +167,7 @@ public class StarAnimations {
                         .addProperty(AnimationProperty.ActionAnimationProperty.MOVE_VERTICAL, true)
                         .addStateRemoveOld(EntityState.INACTION, true)
                         .addProperty(AnimationProperty.ActionAnimationProperty.NO_GRAVITY_TIME, TimePairList.create(0F, 1F))
+                        .addProperty(AnimationProperty.StaticAnimationProperty.PLAY_SPEED_MODIFIER, (animation, entitypatch, speed, prevElapsed, elapsed) -> 2.0F)
                         .addEvents(AnimationEvent.InTimeEvent.create(0.7F, (entityPatch, animation, params) -> {
                                     LivingEntity livingEntity = entityPatch.getOriginal();
                                     Vec3 footPos = livingEntity.position();

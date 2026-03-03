@@ -34,7 +34,7 @@ public class StarSkill {
         SHADOW_PASSIVE = modRegistry.build("shadow_passive", ShadowPassive::new, ShadowPassive.createShadowPassiveBuilder().setResource(Skill.Resource.NONE).setCategory(SkillCategories.WEAPON_PASSIVE));
         TIME_STOP_PASSIVE = modRegistry.build("time_stop_passive", TimeStopPassive::new, TimeStopPassive.createTimeStopPassiveBuilder().setResource(Skill.Resource.NONE).setCategory(SkillCategories.WEAPON_PASSIVE));
         SUPER_PUNCH_PASSIVE = modRegistry.build("super_punch_passive", SuperPunchPassive::new, SuperPunchPassive.createSuperPunchPassiveBuilder().setResource(Skill.Resource.NONE).setCategory(SkillCategories.WEAPON_PASSIVE));
-        WUSONG_PASSIVE = modRegistry.build("wusong_passive", WuSongPassive::new, WuSongPassive.createWuSongPassiveBuilder().setActivateType(Skill.ActivateType.DURATION).setResource(Skill.Resource.COOLDOWN).setCategory(SkillCategories.WEAPON_PASSIVE));
+//        WUSONG_PASSIVE = modRegistry.build("wusong_passive", WuSongPassive::new, WuSongPassive.createWuSongPassiveBuilder().setActivateType(Skill.ActivateType.DURATION).setResource(Skill.Resource.COOLDOWN).setCategory(SkillCategories.WEAPON_PASSIVE));
         /*WUSONG_SKILL = modRegistry.build("wusong_skill", WuSongSkill::new, WeaponInnateSkill.createWeaponInnateBuilder());*/
         // TODO 破防回满耐力，无惩罚
         DOTE = modRegistry.build("dote", DOTEPassive::new, DOTEPassive.createDOTEPassiveBuilder().setActivateType(Skill.ActivateType.DURATION).setResource(Skill.Resource.NONE).setCategory(StarSkillCategories.DOTE));

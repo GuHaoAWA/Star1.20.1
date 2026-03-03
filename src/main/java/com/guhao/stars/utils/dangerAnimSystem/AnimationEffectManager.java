@@ -1,5 +1,9 @@
 package com.guhao.stars.utils.dangerAnimSystem;
 
+import com.asanginxst.epicfightx.gameassets.animations.AnimationsX;
+import com.guhao.stars.efmex.StarAnimations;
+import com.hm.efn.gameasset.animations.EFNFalchionAnimations;
+import com.hm.efn.gameasset.animations.EFNSekiroAnimations;
 import net.corruptdog.cdm.gameasset.CorruptAnimations;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
@@ -24,6 +28,8 @@ public class AnimationEffectManager {
     public static final TagKey<DamageType> BYPASS_DODGE = create("star_bypass_dodge");     //无视闪避，能招架(蓝)
     // 可踩刀识破的动画
     private static final List<StaticAnimation> SPECIAL_SEETHROUGH_ANIMATIONS = Arrays.asList(
+            EFNSekiroAnimations.SHADOW_RUSH.get(),
+            AnimationsX.RUSHING_TEMPO2.get(),
             CorruptAnimations.SSPEAR_DASH.get(),
             CorruptAnimations.LONGSWORD_OLD_DASH.get(),
             CorruptAnimations.UCHIGATANA_DASH.get(),
@@ -67,9 +73,12 @@ public class AnimationEffectManager {
 //            AnimsRuine.RUINE_REDEMPTION.get(),
 //            AnimsRuine.RUINE_COMET.get(),
 //            AnimsAgony.AGONY_AUTO_1.get(),
+            EFNFalchionAnimations.FALCHION_DASHATTACK.get(),
+            EFNSekiroAnimations.SHADOW_RUSH.get(),
             Animations.SPEAR_DASH.get(),
             Animations.LONGSWORD_DASH.get(),
             Animations.REVELATION_ONEHAND.get(),
+            AnimationsX.RUSHING_TEMPO2.get(),
             CorruptAnimations.SSPEAR_DASH.get(),
             CorruptAnimations.LONGSWORD_OLD_DASH.get(),
             CorruptAnimations.UCHIGATANA_DASH.get(),
@@ -98,6 +107,8 @@ public class AnimationEffectManager {
 //            AnimsEnderblaster.ENDERBLASTER_TWOHAND_SHOOT_LAYED_LEFT.get(),
 //            AnimsEnderblaster.ENDERBLASTER_TWOHAND_SHOOT_LAYED_RIGHT.get(),
 //            AnimsEnderblaster.ENDERBLASTER_ONEHAND_SHOOT_DASH.get(),
+            StarAnimations.MOONVEIL_HORIZONTAL_BOSS.get(),
+            EFNFalchionAnimations.FALCHION_EX2.get(),
             CorruptAnimations.LETHAL_SLICING_ONCE1.get(),
             CorruptAnimations.KATANA_SHEATHING_DASH_DAWN.get(),
             CorruptAnimations.FATAL_DRAW_DAWN.get(),
