@@ -10,7 +10,6 @@ import com.guhao.stars.utils.dangerAnimSystem.AnimationEffectManager;
 import com.hm.efn.gameasset.animations.EFNSkillAnimations;
 import com.hm.efn.particle.EFNParticles;
 import com.nameless.indestructible.world.capability.AdvancedCustomMobPatch;
-import net.corruptdog.cdm.gameasset.CorruptAnimations;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.effect.MobEffectInstance;

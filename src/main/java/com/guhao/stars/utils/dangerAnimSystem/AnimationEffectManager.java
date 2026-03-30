@@ -4,7 +4,6 @@ import com.asanginxst.epicfightx.gameassets.animations.AnimationsX;
 import com.guhao.stars.efmex.StarAnimations;
 import com.hm.efn.gameasset.animations.EFNFalchionAnimations;
 import com.hm.efn.gameasset.animations.EFNSekiroAnimations;
-import net.corruptdog.cdm.gameasset.CorruptAnimations;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.DamageTypeTags;
@@ -29,92 +28,32 @@ public class AnimationEffectManager {
     // 可踩刀识破的动画
     private static final List<StaticAnimation> SPECIAL_SEETHROUGH_ANIMATIONS = Arrays.asList(
             EFNSekiroAnimations.SHADOW_RUSH.get(),
-            AnimationsX.RUSHING_TEMPO2.get(),
-            CorruptAnimations.SSPEAR_DASH.get(),
-            CorruptAnimations.LONGSWORD_OLD_DASH.get(),
-            CorruptAnimations.UCHIGATANA_DASH.get(),
-            CorruptAnimations.UCHIGATANA_HEAVY1.get(),
-            CorruptAnimations.DUAL_TACHI_DASH.get(),
-            CorruptAnimations.BLADE_RUSH4.get(),
-            CorruptAnimations.BLADE_RUSH_FINISHER.get()
+            AnimationsX.RUSHING_TEMPO2.get()
     );
     // 红危:不可防御，不可招架的动画列表
     private static final List<StaticAnimation> NO_BLOCK_ANIMATIONS = Arrays.asList(
-//            WOMAnimations.STRONG_KICK.get(),
-//            AnimsHerrscher.GESETZ_SPRENGKOPF.get(),
-//            AnimsSolar.SOLAR_BRASERO_CREMATORIO.get(),
-//            AnimsSolar.SOLAR_BRASERO_INFIERNO.get(),
-//            AnimsRuine.RUINE_CHATIMENT.get(),
-//            AnimsSolar.SOLAR_QUEMADURA.get(),
-//            AnimsSolar.SOLAR_AUTO_2_POLVORA.get(),
-//            AnimsEnderblaster.ENDERBLASTER_ONEHAND_SHOOT_LAYED.get(),
-//            AnimsEnderblaster.ENDERBLASTER_TWOHAND_SHOOT_LAYED_LEFT.get(),
-//            AnimsEnderblaster.ENDERBLASTER_TWOHAND_SHOOT_LAYED_RIGHT.get(),
-//            AnimsEnderblaster.ENDERBLASTER_ONEHAND_SHOOT_DASH.get(),
             Animations.TSUNAMI_REINFORCED.get(),
             Animations.WRATHFUL_LIGHTING.get(),
-            Animations.REVELATION_TWOHAND.get(),
-            CorruptAnimations.LETHAL_SLICING_ONCE1.get(),
-            CorruptAnimations.KATANA_SHEATHING_DASH_DAWN.get(),
-            CorruptAnimations.FATAL_DRAW_DAWN.get(),
-            CorruptAnimations.BLADE_RUSH1_DAWN.get(),
-            CorruptAnimations.BLADE_RUSH3_DAWN.get(),
-            CorruptAnimations.YAMATO_DAWN_DAWN.get()
+            Animations.REVELATION_TWOHAND.get()
     );
     // 黄危:不可防御的动画列表
     private static final List<StaticAnimation> NO_GUARD_ANIMATIONS = Arrays.asList(
-//            WOMAnimations.STAFF_KINKONG.get(),
-//            WOMAnimations.STRONG_PUNCH.get(),
-//            AnimsHerrscher.HERRSCHER_AUTO_2.get(),
-//            AnimsHerrscher.GESETZ_AUTO_3.get(),
-//            AnimsSolar.SOLAR_HORNO.get(),
-//            AnimsEnderblaster.ENDERBLASTER_ONEHAND_SHOOT_3.get(),
-//            AnimsEnderblaster.ENDERBLASTER_TWOHAND_SHOOT_4.get(),
-//            AnimsRuine.RUINE_REDEMPTION.get(),
-//            AnimsRuine.RUINE_COMET.get(),
-//            AnimsAgony.AGONY_AUTO_1.get(),
             EFNFalchionAnimations.FALCHION_DASHATTACK.get(),
             EFNSekiroAnimations.SHADOW_RUSH.get(),
             Animations.SPEAR_DASH.get(),
             Animations.LONGSWORD_DASH.get(),
             Animations.REVELATION_ONEHAND.get(),
             AnimationsX.RUSHING_TEMPO2.get(),
-            CorruptAnimations.SSPEAR_DASH.get(),
-            CorruptAnimations.LONGSWORD_OLD_DASH.get(),
-            CorruptAnimations.UCHIGATANA_DASH.get(),
-            CorruptAnimations.UCHIGATANA_HEAVY1.get(),
-            CorruptAnimations.DUAL_TACHI_DASH.get(),
-            CorruptAnimations.BLADE_RUSH4.get(),
-            CorruptAnimations.BLADE_RUSH_FINISHER.get(),
-            CorruptAnimations.YAMATO_POWER3_FINISH.get()
+            StarAnimations.NF_MEEN_CHARGE2.get()
     );
     // 蓝危:不可闪避的动画列表
     private static final List<StaticAnimation> NO_DODGE_ANIMATIONS = Arrays.asList(
-            CorruptAnimations.LETHAL_SLICING_ONCE1.get(),
-            CorruptAnimations.KATANA_SHEATHING_DASH_DAWN.get(),
-            CorruptAnimations.FATAL_DRAW_DAWN.get(),
-            CorruptAnimations.BLADE_RUSH1_DAWN.get(),
-            CorruptAnimations.BLADE_RUSH3_DAWN.get(),
-            CorruptAnimations.YAMATO_DAWN_DAWN.get()
+
     );
     // 紫危：不可闪避不可招架不可防御的动画列表
     private static final List<StaticAnimation> NO_DODGE_GUARD_ANIMATIONS = Arrays.asList(
-//            WOMAnimations.TORMENT_AUTO_1.get(),
-//            AnimsRuine.RUINE_CHATIMENT.get(),
-//            AnimsSolar.SOLAR_QUEMADURA.get(),
-//            AnimsSolar.SOLAR_AUTO_2_POLVORA.get(),
-//            AnimsEnderblaster.ENDERBLASTER_ONEHAND_SHOOT_LAYED.get(),
-//            AnimsEnderblaster.ENDERBLASTER_TWOHAND_SHOOT_LAYED_LEFT.get(),
-//            AnimsEnderblaster.ENDERBLASTER_TWOHAND_SHOOT_LAYED_RIGHT.get(),
-//            AnimsEnderblaster.ENDERBLASTER_ONEHAND_SHOOT_DASH.get(),
             StarAnimations.MOONVEIL_HORIZONTAL_BOSS.get(),
-            EFNFalchionAnimations.FALCHION_EX2.get(),
-            CorruptAnimations.LETHAL_SLICING_ONCE1.get(),
-            CorruptAnimations.KATANA_SHEATHING_DASH_DAWN.get(),
-            CorruptAnimations.FATAL_DRAW_DAWN.get(),
-            CorruptAnimations.BLADE_RUSH1_DAWN.get(),
-            CorruptAnimations.BLADE_RUSH3_DAWN.get(),
-            CorruptAnimations.YAMATO_DAWN_DAWN.get()
+            StarAnimations.FALCHION_EX2.get()
     );
 
     //

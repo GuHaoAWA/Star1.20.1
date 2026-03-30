@@ -23,5 +23,6 @@ public class StarNewColliderPreset {
     public static final Collider SUPER_FIST = new MultiOBBCollider(4, 0.8, 0.8, 0.8, 0.0, 0.0, 0.0);
 
 
-    public static final Collider MOONVEIL_HORIZONTAL_BOSS =  new OBBCollider( 2.0, 0.15, 1.8, 0.0, 0.0, -1.8);
+    public static final Collider MOONVEIL_HORIZONTAL_BOSS =  new OBBCollider( 2.0, 0.1, 1.8, 0.0, 0.0, -1.8);
+    public static final Collider FALCHION_EX2 =  new OBBCollider( 2.5, 0.1, 2.5, 0.0, 0.0, 0.0);
 }

@@ -5,7 +5,6 @@ import com.guhao.stars.efmex.StarSkillDataKeys;
 import com.guhao.stars.entity.StarAttributes;
 import com.guhao.stars.utils.dangerAnimSystem.AnimationEffectManager;
 import com.nameless.indestructible.world.capability.AdvancedCustomHumanoidMobPatch;
-import net.corruptdog.cdm.gameasset.CorruptAnimations;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -74,7 +73,7 @@ public class SeeThrough3 extends Skill {
         listener.addEventListener(PlayerEventListener.EventType.TARGET_INDICATOR_ALERT_CHECK_EVENT, EVENT_UUID, (event) -> {
             DynamicAnimation animation = event.getPlayerPatch().getAnimator().getPlayerFor(null).getAnimation().get();
             LivingEntity target = event.getPlayerPatch().getTarget();
-            if (animation instanceof StaticAnimation staticAnimation && staticAnimation == CorruptAnimations.RECOGNITION && target != null) {
+            if (animation instanceof StaticAnimation staticAnimation && false && target != null) {
                 event.setCanceled(false);
             }
         });
@@ -116,9 +115,7 @@ public class SeeThrough3 extends Skill {
             Vec3 sourceLocation = damagesource.getSourcePosition();
             StaticAnimation[] attackAnimations = AnimationEffectManager.getSpecialSeethroughAnimations().toArray(new StaticAnimation[0]);
             StaticAnimation[] dodgeAnimations = new StaticAnimation[]{
-                    Animations.BIPED_STEP_FORWARD.get(),
-                    CorruptAnimations.STEP_FORWARD.get(),
-                    CorruptAnimations.SSTEP_FORWARD.get()
+                    Animations.BIPED_STEP_FORWARD.get()
             };
             for (StaticAnimation attackAnim : attackAnimations) {
                 if (targetanimation == attackAnim) {
@@ -134,10 +131,8 @@ public class SeeThrough3 extends Skill {
                                     Player player = event.getPlayerPatch().getOriginal();
                                     Vec3 entityViewVector = entitypatch.getOriginal().getViewVector(1.0F);
                                     player.teleportTo(entitypatch.getOriginal().getX() + entityViewVector.x() * 2.0, entitypatch.getOriginal().getY(), entitypatch.getOriginal().getZ() + entityViewVector.z() * 2.0);
-                                    event.getPlayerPatch().playAnimationSynchronized(CorruptAnimations.RECOGNITION, 0F);
                                     event.getPlayerPatch().getOriginal().addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 20, 3));
                                     event.setResult(AttackResult.ResultType.MISSED);
-                                    entitypatch.playAnimationSynchronized(CorruptAnimations.RECOGNIZED, 0.1F);
                                     ////////////////////////////////////////////////////////////
                                     container.getExecutor().setStamina(container.getExecutor().getStamina() + (float)event.getPlayerPatch().getOriginal().getAttributeValue(StarAttributes.SEETHROUGH_REGEN.get()));
                                     if (longpatch != null) {

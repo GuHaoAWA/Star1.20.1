@@ -1,9 +1,21 @@
 package com.guhao.stars.efmex;
 
 import com.guhao.stars.StarsMod;
+import com.guhao.stars.regirster.StarsSounds;
 import com.guhao.stars.utils.dangerAnimSystem.AnimationEffectManager;
 import com.hm.efn.animations.types.EFNGuardAnimation;
+import com.hm.efn.gameasset.EFNAnimations;
+import com.hm.efn.gameasset.EFNExtraDamageInstance;
+import com.hm.efn.registries.EFNMobEffectRegistry;
+import com.hm.efn.util.EffectEntityInvoker;
+import com.merlin204.avalon.epicfight.animations.AvalonAttackAnimation;
+import com.merlin204.avalon.util.AvalonAnimationUtils;
+import com.merlin204.avalon.util.AvalonEventUtils;
 import com.nameless.indestructible.world.capability.AdvancedCustomHumanoidMobPatch;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.AABB;
@@ -14,24 +26,27 @@ import yesman.epicfight.api.animation.AnimationManager;
 import yesman.epicfight.api.animation.AnimationManager.AnimationAccessor;
 import yesman.epicfight.api.animation.property.AnimationEvent;
 import yesman.epicfight.api.animation.property.AnimationProperty;
-import yesman.epicfight.api.animation.types.ActionAnimation;
-import yesman.epicfight.api.animation.types.AttackAnimation;
-import yesman.epicfight.api.animation.types.EntityState;
-import yesman.epicfight.api.animation.types.StaticAnimation;
+import yesman.epicfight.api.animation.types.*;
+import yesman.epicfight.api.collider.Collider;
 import yesman.epicfight.api.utils.TimePairList;
 import yesman.epicfight.api.utils.math.ValueModifier;
+import yesman.epicfight.gameasset.Animations;
 import yesman.epicfight.gameasset.Armatures;
 import yesman.epicfight.gameasset.EpicFightSounds;
+import yesman.epicfight.model.armature.HumanoidArmature;
 import yesman.epicfight.particle.EpicFightParticles;
 import yesman.epicfight.world.capabilities.EpicFightCapabilities;
 import yesman.epicfight.world.capabilities.entitypatch.EntityPatch;
 import yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch;
 import yesman.epicfight.world.damagesource.EpicFightDamageSource;
 import yesman.epicfight.world.damagesource.EpicFightDamageSources;
+import yesman.epicfight.world.damagesource.ExtraDamageInstance;
 import yesman.epicfight.world.damagesource.StunType;
+import yesman.epicfight.world.effect.EpicFightMobEffects;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 @Mod.EventBusSubscriber(
         modid = StarsMod.MODID,
@@ -44,6 +59,9 @@ public class StarAnimations {
     public static AnimationManager.AnimationAccessor<EFNGuardAnimation> EFN_GUARD_ACTIVE_HIT3;
     //名刀横居合boss专用(下段)
     public static AnimationManager.AnimationAccessor<AttackAnimation> MOONVEIL_HORIZONTAL_BOSS;
+    //关刀下段
+    public static AnimationManager.AnimationAccessor<AttackAnimation> FALCHION_EX2;
+    public static AnimationManager.AnimationAccessor<AvalonAttackAnimation> NF_MEEN_CHARGE2;
 
     public static StaticAnimation FIRE_BALL;
     public static StaticAnimation AB_FIRE_BALL;
@@ -59,6 +77,7 @@ public class StarAnimations {
     public static StaticAnimation FIST_AUTO_3;
     public static StaticAnimation FIST_AUTO_4;
     public static StaticAnimation OLA;
+
     public StarAnimations() {
     }
 
@@ -69,6 +88,17 @@ public class StarAnimations {
 
     private static void build(AnimationManager.AnimationBuilder builder) {
 //        HumanoidArmature biped = Armatures.BIPED.get();
+        FALCHION_EX2 = builder.nextAccessor("biped/falchion/falchion_ex2", (accessor) ->
+                new AttackAnimation(0.05F, 0.05F, 0.95F, 1.05F, 1.2F, StarNewColliderPreset.FALCHION_EX2, Armatures.BIPED.get().rootJoint, accessor, Armatures.BIPED)
+                        .addProperty(AnimationProperty.AttackPhaseProperty.HIT_SOUND, EpicFightSounds.BLADE_RUSH_FINISHER.get())
+                        .addProperty(AnimationProperty.AttackPhaseProperty.PARTICLE, EpicFightParticles.BLADE_RUSH_SKILL)
+                        .addProperty(AnimationProperty.AttackPhaseProperty.DAMAGE_MODIFIER, ValueModifier.multiplier(1.6F))
+                        .addProperty(AnimationProperty.AttackAnimationProperty.EXTRA_COLLIDERS, 5)
+                        .addProperty(AnimationProperty.AttackAnimationProperty.BASIS_ATTACK_SPEED, 1.05F)
+                        .addProperty(AnimationProperty.AttackAnimationProperty.ATTACK_SPEED_FACTOR, 0.5F)
+                        .addProperty(AnimationProperty.StaticAnimationProperty.POSE_MODIFIER, Animations.ReusableSources.COMBO_ATTACK_DIRECTION_MODIFIER)
+                        .setResourceLocation("efn", "biped/falchion/falchion_ex2"));
+
 
 
         MOONVEIL_HORIZONTAL_BOSS = builder.nextAccessor("biped/boss/moonveil_horizontal_boss", (accessor) ->
@@ -105,7 +135,7 @@ public class StarAnimations {
                                 AnimationEvent.SimpleEvent.create((entityPatch, animation, params) -> {
                                     LivingEntity original = entityPatch.getOriginal();
                                     Vec3 footPos = original.position();
-                                    double radius = 2.5;
+                                    double radius = 5.5;
                                     AABB boundingBox = new AABB(
                                             footPos.x - radius, footPos.y - radius, footPos.z - radius,
                                             footPos.x + radius, footPos.y + radius, footPos.z + radius
@@ -124,21 +154,28 @@ public class StarAnimations {
                                                     .mobAttack(original)
                                                     .setStunType(StunType.LONG)
                                                     .setBasicAttack(true)
-                                                    .setBaseImpact(18.0F)
+                                                    .setBaseImpact(0.1F)
                                                     .setInitialPosition(original.position())
                                                     .setAnimation(accessor);
 
                                             //对实体造成伤害
-                                            entity.hurt(epicFightDamageSource, 1.2F);
+//                                            entity.hurt(epicFightDamageSource, 0.1F);
+
                                             LivingEntityPatch<?> livingEntityPatch = EpicFightCapabilities.getEntityPatch(entity, LivingEntityPatch.class);
+
                                             if (livingEntityPatch != null) {
                                                 StaticAnimation currentAnim = Objects.requireNonNull(livingEntityPatch.getAnimator().getPlayerFor(null)).getAnimation().get().getRealAnimation().get();
                                                 if(AnimationEffectManager.shouldBypassAll(currentAnim)) {
+                                                    if(entity.hasEffect(EpicFightMobEffects.STUN_IMMUNITY.get())){
+                                                        entity.removeEffect(EpicFightMobEffects.STUN_IMMUNITY.get());
+                                                    }
+                                                    livingEntityPatch.applyStun(StunType.LONG, 10.0f);
+                                                    entityPatch.getOriginal().level().playSound(null, entityPatch.getOriginal().blockPosition(), StarsSounds.PENG.get(), SoundSource.BLOCKS, 10.0f, 1.0f);
                                                     AdvancedCustomHumanoidMobPatch<?> attackerPatch = EpicFightCapabilities.getEntityPatch(entity, AdvancedCustomHumanoidMobPatch.class);
                                                     if (attackerPatch != null) {
                                                         float currentStamina = attackerPatch.getStamina();
                                                         float maxStamina = attackerPatch.getMaxStamina();
-                                                        float staminaDecrease = maxStamina * 0.06F + 6.0F;
+                                                        float staminaDecrease = maxStamina * 0.06F + 8.0F;
                                                         attackerPatch.setStamina(Math.max(0.1f, currentStamina - staminaDecrease));
                                                     }
                                                 }
@@ -171,7 +208,7 @@ public class StarAnimations {
                         .addEvents(AnimationEvent.InTimeEvent.create(0.7F, (entityPatch, animation, params) -> {
                                     LivingEntity livingEntity = entityPatch.getOriginal();
                                     Vec3 footPos = livingEntity.position();
-                                    double radius = 2.5;
+                                    double radius = 5.5;
                                     AABB boundingBox = new AABB(
                                             footPos.x - radius, footPos.y - radius, footPos.z - radius,
                                             footPos.x + radius, footPos.y + radius, footPos.z + radius
@@ -195,16 +232,22 @@ public class StarAnimations {
                                                     .setAnimation(accessor);
 
                                             //对实体造成伤害
-                                            entity.hurt(epicFightDamageSource, 1.2F);
+//                                            entity.hurt(epicFightDamageSource, 1.2F);
                                             LivingEntityPatch<?> livingEntityPatch = EpicFightCapabilities.getEntityPatch(entity, LivingEntityPatch.class);
                                             if (livingEntityPatch != null) {
                                                 StaticAnimation currentAnim = Objects.requireNonNull(livingEntityPatch.getAnimator().getPlayerFor(null)).getAnimation().get().getRealAnimation().get();
                                                 if(AnimationEffectManager.shouldBypassAll(currentAnim)) {
+                                                    if(entity.hasEffect(EpicFightMobEffects.STUN_IMMUNITY.get())){
+                                                        entity.removeEffect(EpicFightMobEffects.STUN_IMMUNITY.get());
+                                                    }
+                                                    entityPatch.getOriginal().level().playSound(null, entityPatch.getOriginal().blockPosition(), StarsSounds.PENG.get(), SoundSource.BLOCKS, 10.0f, 1.0f);
+                                                    livingEntityPatch.applyStun(StunType.LONG, 10.0f);
                                                     AdvancedCustomHumanoidMobPatch<?> attackerPatch = EpicFightCapabilities.getEntityPatch(entity, AdvancedCustomHumanoidMobPatch.class);
                                                     if (attackerPatch != null) {
                                                         float currentStamina = attackerPatch.getStamina();
                                                         float maxStamina = attackerPatch.getMaxStamina();
-                                                        float staminaDecrease = maxStamina * 0.06F + 6.0F;
+                                                        float staminaDecrease = maxStamina * 0.06F + 8.0F;
+
                                                         attackerPatch.setStamina(Math.max(0.1f, currentStamina - staminaDecrease));
                                                     }
                                                 }
@@ -225,6 +268,52 @@ public class StarAnimations {
                                 }, AnimationEvent.Side.CLIENT)
                         )
         );
+
+
+
+        NF_MEEN_CHARGE2 = builder.nextAccessor("biped/nf_meen/nf_meen_charge2", (accessor) ->
+                (new AvalonAttackAnimation(0.1F, accessor, Armatures.BIPED, 1.1F, 1.0F, new AvalonAttackAnimation.AvalonPhase[]{
+                        AvalonAnimationUtils.createSimplePhase(38, 56, 75, InteractionHand.MAIN_HAND, 2.0F, 2.0F, Armatures.BIPED.get().toolR, null)}))
+                        .addProperty(AnimationProperty.AttackPhaseProperty.SWING_SOUND,  EpicFightSounds.WHOOSH_BIG.get())
+                        .addProperty(AnimationProperty.AttackPhaseProperty.STUN_TYPE, StunType.LONG)
+                        .addProperty(AnimationProperty.AttackPhaseProperty.ARMOR_NEGATION_MODIFIER, ValueModifier.setter(100.0F))
+                        .addProperty(AnimationProperty.AttackPhaseProperty.MAX_STRIKES_MODIFIER, ValueModifier.setter(10.0F))
+                        .addProperty(AnimationProperty.AttackPhaseProperty.PARTICLE, EpicFightParticles.EVISCERATE)
+                        .addProperty(AnimationProperty.AttackPhaseProperty.HIT_SOUND, EpicFightSounds.BLADE_RUSH_FINISHER.get())
+                        .addProperty(AnimationProperty.AttackPhaseProperty.EXTRA_DAMAGE, Set.of(ExtraDamageInstance.SWEEPING_EDGE_ENCHANTMENT.create(), EFNExtraDamageInstance.LOST_HEALTH_DAMAGE_WITH_SCALING_CAP.create(new float[]{0.15F, 40.0F, 100.0F})))
+                        .newTimePair(0.0F, Float.MAX_VALUE)
+                        .addProperty(AnimationProperty.StaticAnimationProperty.PLAY_SPEED_MODIFIER, EFNAnimations.ATTACK_SPEED_CAP_MEEN)
+                        .newTimePair(0.0F, 0.2F)
+                        .addStateRemoveOld(EntityState.ATTACK_RESULT, DodgeAnimation.DODGEABLE_SOURCE_VALIDATOR)
+                        .addEvents(
+                                new AnimationEvent[]{EffectEntityInvoker.clearFireWind(75), AnimationEvent.InTimeEvent.create(0.1F, (entitypatch, self, params) ->
+                                        (
+                                                entitypatch.getOriginal()).addEffect(new MobEffectInstance(EFNMobEffectRegistry.SIN_STUN_IMMUNITY.get(), 20, 10, false, false, false)), AnimationEvent.Side.SERVER), AnimationEvent.InTimeEvent.create(0.1F, (entitypatch, animation, params) -> {
+                                            LivingEntity entity =entitypatch.getOriginal();
+                                            entity.level().addParticle(EpicFightParticles.WHITE_AFTERIMAGE.get(), entity.getX(), entity.getY(), entity.getZ(), Double.longBitsToDouble(entity.getId()),0.0F,0.0F);
+                                        },
+                                        AnimationEvent.Side.CLIENT),
+                                        AvalonEventUtils.simpleCameraShake(43, 40, 3.0F, 3.0F, 3.0F)})
+        );
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 //        BIPED_PHANTOM_ASCENT_BACKWARD = builder.nextAccessor("biped/skill/phantom_ascent_backward", (accessor) ->
 //                new ActionAnimation(0.05F, 0.7F, accessor, Armatures.BIPED)
