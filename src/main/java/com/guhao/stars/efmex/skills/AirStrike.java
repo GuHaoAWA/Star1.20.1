@@ -98,17 +98,17 @@ public class AirStrike extends Skill {
         );
 
         //空袭技能释放
-        container.getExecutor().getEventListener().addEventListener(PlayerEventListener.EventType.SKILL_CAST_EVENT, EVENT_UUID, (event) -> {
-            if (event.getSkillContainer().getSkill().getCategory() == SkillCategories.WEAPON_INNATE) {
-                Integer remainingTime = container.getDataManager().getDataValue(getAirStrikeKey());
-                if (remainingTime != null && remainingTime > 0) {
-                    PlayerPatch<?> playerPatch = event.getPlayerPatch();
-                    playerPatch.playAnimationSynchronized(EFNGreatSwordAnimations.NG_GREATSWORD_AIRSLASH, 0.0F);
-                    container.getDataManager().setDataSync(getAirStrikeKey(), 0);
-                    event.setCanceled(true);
-                }
-            }
-        });
+//        container.getExecutor().getEventListener().addEventListener(PlayerEventListener.EventType.SKILL_CAST_EVENT, EVENT_UUID, (event) -> {
+//            if (event.getSkillContainer().getSkill().getCategory() == SkillCategories.WEAPON_INNATE) {
+//                Integer remainingTime = container.getDataManager().getDataValue(getAirStrikeKey());
+//                if (remainingTime != null && remainingTime > 0) {
+//                    PlayerPatch<?> playerPatch = event.getPlayerPatch();
+//                    playerPatch.playAnimationSynchronized(EFNGreatSwordAnimations.NG_GREATSWORD_AIRSLASH, 0.0F);
+//                    container.getDataManager().setDataSync(getAirStrikeKey(), 0);
+//                    event.setCanceled(true);
+//                }
+//            }
+//        });
 
         //移动输入事件监听
         container.getExecutor().getEventListener().addEventListener(
@@ -184,6 +184,9 @@ public class AirStrike extends Skill {
                 event.getDamageSource().addRuntimeTag(EpicFightDamageTypeTags.BYPASS_DODGE);
                 event.getDamageSource().addRuntimeTag(EpicFightDamageTypeTags.UNBLOCKALBE);
                 event.getDamageSource().addRuntimeTag(EpicFightDamageTypeTags.GUARD_PUNCTURE);
+                //增强伤害
+                event.getDamageSource().attachDamageModifier(ValueModifier.multiplier(2.5F));
+
             }
         }
         //设置强化技能时间
@@ -309,10 +312,10 @@ public class AirStrike extends Skill {
                 EVENT_UUID
         );
 //        移除技能施放监听器
-        container.getExecutor().getEventListener().removeListener(
-                PlayerEventListener.EventType.SKILL_CAST_EVENT,
-                EVENT_UUID
-        );
+//        container.getExecutor().getEventListener().removeListener(
+//                PlayerEventListener.EventType.SKILL_CAST_EVENT,
+//                EVENT_UUID
+//        );
 
 
         // 移除二段跳事件监听器

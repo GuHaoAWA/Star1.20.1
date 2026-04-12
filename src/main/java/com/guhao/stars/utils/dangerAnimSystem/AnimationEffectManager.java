@@ -53,7 +53,8 @@ public class AnimationEffectManager {
     // 紫危：不可闪避不可招架不可防御的动画列表
     private static final List<StaticAnimation> NO_DODGE_GUARD_ANIMATIONS = Arrays.asList(
             StarAnimations.MOONVEIL_HORIZONTAL_BOSS.get(),
-            StarAnimations.FALCHION_EX2.get()
+            StarAnimations.FALCHION_EX2.get(),
+            StarAnimations.NF_TACHI_BLOODLUST.get()
     );
 
     //

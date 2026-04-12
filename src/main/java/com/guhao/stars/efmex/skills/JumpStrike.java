@@ -81,10 +81,9 @@ public class JumpStrike extends Skill {
                     if (event.getDamageSource().is(DamageTypeTags.IS_FALL) &&
                             container.getDataManager().getDataValue(SkillDataKeys.PROTECT_NEXT_FALL.get())) {
                         float damage = event.getDamage();
-                        if(damage < 2.5F) {
+                        if(damage > 0.0F) {
                             event.attachValueModifier(ValueModifier.setter(0.0F));
                         }
-
                         container.getDataManager().setData(SkillDataKeys.PROTECT_NEXT_FALL.get(), false);
                     }
                 },

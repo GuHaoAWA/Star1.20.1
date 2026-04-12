@@ -3,18 +3,25 @@ package com.guhao.stars.efmex;
 import com.guhao.stars.StarsMod;
 import com.guhao.stars.regirster.StarsSounds;
 import com.guhao.stars.utils.dangerAnimSystem.AnimationEffectManager;
+import com.hm.efn.EFNClientConfig;
 import com.hm.efn.animations.types.EFNGuardAnimation;
+import com.hm.efn.client.effek.BurstRedEffek;
+import com.hm.efn.entity.EFNVFXManagers;
 import com.hm.efn.gameasset.EFNAnimations;
 import com.hm.efn.gameasset.EFNExtraDamageInstance;
 import com.hm.efn.registries.EFNMobEffectRegistry;
+import com.hm.efn.util.EffectConditionParticleTrail;
 import com.hm.efn.util.EffectEntityInvoker;
+import com.hm.efn.util.EffekUnits;
 import com.merlin204.avalon.epicfight.animations.AvalonAttackAnimation;
 import com.merlin204.avalon.util.AvalonAnimationUtils;
 import com.merlin204.avalon.util.AvalonEventUtils;
 import com.nameless.indestructible.world.capability.AdvancedCustomHumanoidMobPatch;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -30,6 +37,7 @@ import yesman.epicfight.api.animation.types.*;
 import yesman.epicfight.api.collider.Collider;
 import yesman.epicfight.api.utils.TimePairList;
 import yesman.epicfight.api.utils.math.ValueModifier;
+import yesman.epicfight.api.utils.math.Vec3f;
 import yesman.epicfight.gameasset.Animations;
 import yesman.epicfight.gameasset.Armatures;
 import yesman.epicfight.gameasset.EpicFightSounds;
@@ -62,6 +70,7 @@ public class StarAnimations {
     //关刀下段
     public static AnimationManager.AnimationAccessor<AttackAnimation> FALCHION_EX2;
     public static AnimationManager.AnimationAccessor<AvalonAttackAnimation> NF_MEEN_CHARGE2;
+    public static AnimationManager.AnimationAccessor<AvalonAttackAnimation> NF_TACHI_BLOODLUST;
 
     public static StaticAnimation FIRE_BALL;
     public static StaticAnimation AB_FIRE_BALL;
@@ -298,8 +307,17 @@ public class StarAnimations {
 
 
 
-
-
+        NF_TACHI_BLOODLUST = builder.nextAccessor("biped/nf_tachi/nf_tachi_bloodlust", (accessor) ->
+                (
+                        new AvalonAttackAnimation(0.1F, accessor, Armatures.BIPED, 1.0F, 1.0F, new AvalonAttackAnimation.AvalonPhase[]{
+                                AvalonAnimationUtils.createSimplePhase(38, 48, 55, InteractionHand.MAIN_HAND, 1.7F, 1.7F,  Armatures.BIPED.get().rootJoint, StarNewColliderPreset.MOONVEIL_HORIZONTAL_BOSS)
+                        }))
+                        .addProperty(AnimationProperty.AttackPhaseProperty.HIT_SOUND, EpicFightSounds.BLADE_RUSH_FINISHER.get())
+                        .addProperty(AnimationProperty.AttackPhaseProperty.SWING_SOUND, EpicFightSounds.WHOOSH_SHARP.get())
+                        .addProperty(AnimationProperty.AttackPhaseProperty.EXTRA_DAMAGE, Set.of(ExtraDamageInstance.SWEEPING_EDGE_ENCHANTMENT.create(new float[0])))
+                        .addProperty(AnimationProperty.ActionAnimationProperty.CANCELABLE_MOVE, true)
+                        .addProperty(AnimationProperty.StaticAnimationProperty.PLAY_SPEED_MODIFIER, EFNAnimations.ATTACK_SPEED_CAP_TACHI)
+                        .setResourceLocation("efn", "biped/nf_tachi/nf_tachi_bloodlust"));
 
 
 
