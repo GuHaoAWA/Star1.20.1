@@ -104,7 +104,7 @@ dependencies {
 
     // 其他依赖
 //    implementation fg.deobf('libs:wom:20.2.0.1')
-    implementation fg.deobf("curse.maven:epic-fight-mod-405076:7345468")
+    implementation fg.deobf("libs:epic-fight:20.14.15.1-mc1.20.1-forge")
     implementation fg.deobf("libs:indestructible-20.12.1:1.0")
     implementation fg.deobf("libs:TickChanger-1.20.1-1.0:1.0")
     implementation fg.deobf("libs:citadel-2.6.1-1.20.1:1.0")
@@ -123,6 +123,7 @@ dependencies {
     implementation fg.deobf("libs:EpicFight-Nightfall:3.0.2")
     implementation fg.deobf("libs:epicfightx-mc1.20.1:1.0.0-all")
     implementation fg.deobf("libs:tactical_imbuements:2.1_Fix")
+    implementation fg.deobf("libs:impactful:20.14.2")
 
     implementation fg.deobf("curse.maven:epic-fight-invincible-1184379:7445318")
     implementation fg.deobf("curse.maven:shoulder-surfing-reloaded-243190:6993788")

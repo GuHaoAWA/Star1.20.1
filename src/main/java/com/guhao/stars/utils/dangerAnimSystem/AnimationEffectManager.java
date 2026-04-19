@@ -44,6 +44,7 @@ public class AnimationEffectManager {
             Animations.LONGSWORD_DASH.get(),
             Animations.REVELATION_ONEHAND.get(),
             AnimationsX.RUSHING_TEMPO2.get(),
+            AnimationsX.TRIDENT_AUTO1.get(),
             StarAnimations.NF_MEEN_CHARGE2.get()
     );
     // 蓝危:不可闪避的动画列表

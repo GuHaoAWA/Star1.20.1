@@ -62,10 +62,6 @@ public class AirStrike extends Skill {
         this.phantomAnimations.add(StarAnimations.BIPED_PHANTOM_ASCENT_BACKWARD_NEW);
     }
 
-    private static SkillDataKey<Integer> getAirStrikeKey() {
-        return StarSkillDataKeys.AIR_STRIKEKEY.get();
-    }
-
     public static Builder createAirStrikeBuilder() {
         return (new AirStrike.Builder())
                 .setCategory(SkillCategories.MOVER)
@@ -97,18 +93,7 @@ public class AirStrike extends Skill {
                 }, 0
         );
 
-        //空袭技能释放
-//        container.getExecutor().getEventListener().addEventListener(PlayerEventListener.EventType.SKILL_CAST_EVENT, EVENT_UUID, (event) -> {
-//            if (event.getSkillContainer().getSkill().getCategory() == SkillCategories.WEAPON_INNATE) {
-//                Integer remainingTime = container.getDataManager().getDataValue(getAirStrikeKey());
-//                if (remainingTime != null && remainingTime > 0) {
-//                    PlayerPatch<?> playerPatch = event.getPlayerPatch();
-//                    playerPatch.playAnimationSynchronized(EFNGreatSwordAnimations.NG_GREATSWORD_AIRSLASH, 0.0F);
-//                    container.getDataManager().setDataSync(getAirStrikeKey(), 0);
-//                    event.setCanceled(true);
-//                }
-//            }
-//        });
+
 
         //移动输入事件监听
         container.getExecutor().getEventListener().addEventListener(
@@ -126,14 +111,14 @@ public class AirStrike extends Skill {
                 EVENT_UUID,
                 (event) -> {
                     if (event.getDamageSource().is(DamageTypeTags.IS_FALL) &&
-                            container.getDataManager().getDataValue(SkillDataKeys.PROTECT_NEXT_FALL.get())) {
+                            container.getDataManager().getDataValue(StarSkillDataKeys.PROTECT_NEXT_FALL2.get())) {
                         float damage = event.getDamage();
 
                         if (damage < 2.5F) {
                             event.attachValueModifier(ValueModifier.setter(0.0F));
                         }
 
-                        container.getDataManager().setData(SkillDataKeys.PROTECT_NEXT_FALL.get(), false);
+                        container.getDataManager().setData(StarSkillDataKeys.PROTECT_NEXT_FALL2.get(), false);
                     }
                 },
                 -1
@@ -144,19 +129,15 @@ public class AirStrike extends Skill {
                 PlayerEventListener.EventType.FALL_EVENT,
                 EVENT_UUID,
                 (event) -> {
-                    container.getDataManager().setData(SkillDataKeys.JUMP_COUNT.get(), 0);
+                    container.getDataManager().setData(StarSkillDataKeys.JUMP_COUNT2.get(), 0);
 
                     if (event.getPlayerPatch().isLogicalClient()) {
-                        container.getDataManager().setData(SkillDataKeys.JUMP_KEY_PRESSED_LAST_TICK.get(), false);
+                        container.getDataManager().setData(StarSkillDataKeys.JUMP_KEY_PRESSED_LAST_TICK2.get(), false);
                     }
                 },
                 0
         );
 
-        SkillDataManager skillDataManager = container.getDataManager();
-        skillDataManager.registerData(SkillDataKeys.JUMP_COUNT.get());
-        skillDataManager.registerData(SkillDataKeys.PROTECT_NEXT_FALL.get());
-        skillDataManager.registerData(SkillDataKeys.JUMP_KEY_PRESSED_LAST_TICK.get());
 
     }
 
@@ -189,8 +170,7 @@ public class AirStrike extends Skill {
 
             }
         }
-        //设置强化技能时间
-        container.getDataManager().setDataSync(getAirStrikeKey(), EMPOWERED_TIME);
+
 
     }
 
@@ -232,10 +212,10 @@ public class AirStrike extends Skill {
 
 
         boolean jumpPressed = Minecraft.getInstance().options.keyJump.isDown();
-        boolean jumpPressedPrev = container.getDataManager().getDataValue(SkillDataKeys.JUMP_KEY_PRESSED_LAST_TICK.get());
+        boolean jumpPressedPrev = container.getDataManager().getDataValue(StarSkillDataKeys.JUMP_KEY_PRESSED_LAST_TICK2.get());
 
         if (jumpPressed && !jumpPressedPrev) {
-            int jumpCounter = container.getDataManager().getDataValue(SkillDataKeys.JUMP_COUNT.get());
+            int jumpCounter = container.getDataManager().getDataValue(StarSkillDataKeys.JUMP_COUNT2.get());
 
             if (jumpCounter > 0 || event.getPlayerPatch().currentLivingMotion == LivingMotions.FALL) {
                 if (jumpCounter < (this.extraJumps + 1)) {
@@ -250,12 +230,12 @@ public class AirStrike extends Skill {
 
 //                    更新跳跃计数器
                     if (jumpCounter == 0 && event.getPlayerPatch().currentLivingMotion == LivingMotions.FALL) {
-                        container.getDataManager().setData(SkillDataKeys.JUMP_COUNT.get(), 2);
+                        container.getDataManager().setData(StarSkillDataKeys.JUMP_COUNT2.get(), 2);
                     } else {
-                        container.getDataManager().setDataF(SkillDataKeys.JUMP_COUNT.get(), (v) -> v + 1);
+                        container.getDataManager().setDataF(StarSkillDataKeys.JUMP_COUNT2.get(), (v) -> v + 1);
                     }
 
-                    container.getDataManager().setDataSync(SkillDataKeys.PROTECT_NEXT_FALL.get(), true);
+                    container.getDataManager().setDataSync(StarSkillDataKeys.PROTECT_NEXT_FALL2.get(), true);
 
 //                    计算跳跃方向
                     Input input = event.getMovementInput();
@@ -288,12 +268,12 @@ public class AirStrike extends Skill {
                     ClientEngine.getInstance().controlEngine.releaseAllServedKeys();
                 }
             } else {
-                container.getDataManager().setData(SkillDataKeys.JUMP_COUNT.get(), 1);
+                container.getDataManager().setData(StarSkillDataKeys.JUMP_COUNT2.get(), 1);
             }
         }
 
         // 更新上次跳跃键状态
-        container.getDataManager().setData(SkillDataKeys.JUMP_KEY_PRESSED_LAST_TICK.get(), jumpPressed);
+        container.getDataManager().setData(StarSkillDataKeys.JUMP_KEY_PRESSED_LAST_TICK2.get(), jumpPressed);
     }
 
     @Override
@@ -335,10 +315,6 @@ public class AirStrike extends Skill {
         );
 
 
-        container.getDataManager().setData(getAirStrikeKey(), 0);
-        container.getDataManager().setData(SkillDataKeys.JUMP_COUNT.get(), 0);
-        container.getDataManager().setData(SkillDataKeys.PROTECT_NEXT_FALL.get(), false);
-        container.getDataManager().setData(SkillDataKeys.JUMP_KEY_PRESSED_LAST_TICK.get(), false);
 
 
     }
@@ -346,14 +322,6 @@ public class AirStrike extends Skill {
     @Override
     public void updateContainer(SkillContainer container) {
         super.updateContainer(container);
-        Integer remainingTime = container.getDataManager().getDataValue(getAirStrikeKey());
-        if (remainingTime != null && remainingTime > 0) {
-            int newTime = remainingTime - 1;
-            container.getDataManager().setDataSync(getAirStrikeKey(), newTime);
-            if (newTime <= 0) {
-                container.getDataManager().setDataSync(getAirStrikeKey(), 0);
-            }
-        }
     }
 
 

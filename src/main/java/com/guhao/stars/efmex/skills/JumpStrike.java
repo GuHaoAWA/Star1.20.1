@@ -1,6 +1,7 @@
 package com.guhao.stars.efmex.skills;
 
 import com.guhao.stars.efmex.StarAnimations;
+import com.guhao.stars.efmex.StarSkillDataKeys;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.Input;
 import net.minecraft.nbt.CompoundTag;
@@ -62,7 +63,6 @@ public class JumpStrike extends Skill {
     public void onInitiate(SkillContainer container) {
         super.onInitiate(container);
         container.setStack(1);
-
         //移动输入事件监听
         container.getExecutor().getEventListener().addEventListener(
                 PlayerEventListener.EventType.MOVEMENT_INPUT_EVENT,
@@ -79,12 +79,12 @@ public class JumpStrike extends Skill {
                 PHANTOM_ASCENT_UUID,
                 (event) -> {
                     if (event.getDamageSource().is(DamageTypeTags.IS_FALL) &&
-                            container.getDataManager().getDataValue(SkillDataKeys.PROTECT_NEXT_FALL.get())) {
+                            container.getDataManager().getDataValue(StarSkillDataKeys.PROTECT_NEXT_FALL1.get())) {
                         float damage = event.getDamage();
                         if(damage > 0.0F) {
                             event.attachValueModifier(ValueModifier.setter(0.0F));
                         }
-                        container.getDataManager().setData(SkillDataKeys.PROTECT_NEXT_FALL.get(), false);
+                        container.getDataManager().setData(StarSkillDataKeys.PROTECT_NEXT_FALL1.get(), false);
                     }
                 },
                 0
@@ -95,19 +95,15 @@ public class JumpStrike extends Skill {
                 PlayerEventListener.EventType.FALL_EVENT,
                 PHANTOM_ASCENT_UUID,
                 (event) -> {
-                    container.getDataManager().setData(SkillDataKeys.JUMP_COUNT.get(), 0);
+                    container.getDataManager().setData(StarSkillDataKeys.JUMP_COUNT1.get(), 0);
 
                     if (event.getPlayerPatch().isLogicalClient()) {
-                        container.getDataManager().setData(SkillDataKeys.JUMP_KEY_PRESSED_LAST_TICK.get(), false);
+                        container.getDataManager().setData(StarSkillDataKeys.JUMP_KEY_PRESSED_LAST_TICK1.get(), false);
                     }
                 },
                 0
         );
 
-        SkillDataManager skillDataManager = container.getDataManager();
-        skillDataManager.registerData(SkillDataKeys.JUMP_COUNT.get());
-        skillDataManager.registerData(SkillDataKeys.PROTECT_NEXT_FALL.get());
-        skillDataManager.registerData(SkillDataKeys.JUMP_KEY_PRESSED_LAST_TICK.get());
     }
 
 
@@ -123,10 +119,10 @@ public class JumpStrike extends Skill {
         }
 
         boolean jumpPressed = Minecraft.getInstance().options.keyJump.isDown();
-        boolean jumpPressedPrev = container.getDataManager().getDataValue(SkillDataKeys.JUMP_KEY_PRESSED_LAST_TICK.get());
+        boolean jumpPressedPrev = container.getDataManager().getDataValue(StarSkillDataKeys.JUMP_KEY_PRESSED_LAST_TICK1.get());
 
         if (jumpPressed && !jumpPressedPrev) {
-            int jumpCounter = container.getDataManager().getDataValue(SkillDataKeys.JUMP_COUNT.get());
+            int jumpCounter = container.getDataManager().getDataValue(StarSkillDataKeys.JUMP_COUNT1.get());
 
             if (jumpCounter > 0 || event.getPlayerPatch().currentLivingMotion == LivingMotions.FALL) {
                 if (jumpCounter < (this.extraJumps + 1)) {
@@ -141,12 +137,12 @@ public class JumpStrike extends Skill {
 
                     //更新跳跃计数器
                     if (jumpCounter == 0 && event.getPlayerPatch().currentLivingMotion == LivingMotions.FALL) {
-                        container.getDataManager().setData(SkillDataKeys.JUMP_COUNT.get(), 2);
+                        container.getDataManager().setData(StarSkillDataKeys.JUMP_COUNT1.get(), 2);
                     } else {
-                        container.getDataManager().setDataF(SkillDataKeys.JUMP_COUNT.get(), (v) -> v + 1);
+                        container.getDataManager().setDataF(StarSkillDataKeys.JUMP_COUNT1.get(), (v) -> v + 1);
                     }
 
-                    container.getDataManager().setDataSync(SkillDataKeys.PROTECT_NEXT_FALL.get(), true);
+                    container.getDataManager().setDataSync(StarSkillDataKeys.PROTECT_NEXT_FALL1.get(), true);
 
                     //计算跳跃方向
                     Input input = event.getMovementInput();
@@ -179,12 +175,12 @@ public class JumpStrike extends Skill {
                     ClientEngine.getInstance().controlEngine.releaseAllServedKeys();
                 }
             } else {
-                container.getDataManager().setData(SkillDataKeys.JUMP_COUNT.get(), 1);
+                container.getDataManager().setData(StarSkillDataKeys.JUMP_COUNT1.get(), 1);
             }
         }
 
         // 更新上次跳跃键状态
-        container.getDataManager().setData(SkillDataKeys.JUMP_KEY_PRESSED_LAST_TICK.get(), jumpPressed);
+        container.getDataManager().setData(StarSkillDataKeys.JUMP_KEY_PRESSED_LAST_TICK1.get(), jumpPressed);
     }
 
     @Override
@@ -197,24 +193,9 @@ public class JumpStrike extends Skill {
     public void onRemoved(SkillContainer container) {
         super.onRemoved(container);
         //移除二段跳事件监听器
-        container.getExecutor().getEventListener().removeListener(
-                PlayerEventListener.EventType.MOVEMENT_INPUT_EVENT,
-                PHANTOM_ASCENT_UUID
-        );
-
-        container.getExecutor().getEventListener().removeListener(
-                PlayerEventListener.EventType.TAKE_DAMAGE_EVENT_HURT,
-                PHANTOM_ASCENT_UUID
-        );
-
-        container.getExecutor().getEventListener().removeListener(
-                PlayerEventListener.EventType.FALL_EVENT,
-                PHANTOM_ASCENT_UUID
-        );
-
-        container.getDataManager().setData(SkillDataKeys.JUMP_COUNT.get(), 0);
-        container.getDataManager().setData(SkillDataKeys.PROTECT_NEXT_FALL.get(), false);
-        container.getDataManager().setData(SkillDataKeys.JUMP_KEY_PRESSED_LAST_TICK.get(), false);
+        container.getExecutor().getEventListener().removeListener(PlayerEventListener.EventType.MOVEMENT_INPUT_EVENT, PHANTOM_ASCENT_UUID);
+        container.getExecutor().getEventListener().removeListener(PlayerEventListener.EventType.TAKE_DAMAGE_EVENT_HURT, PHANTOM_ASCENT_UUID);
+        container.getExecutor().getEventListener().removeListener(PlayerEventListener.EventType.FALL_EVENT, PHANTOM_ASCENT_UUID);
     }
 
     @Override

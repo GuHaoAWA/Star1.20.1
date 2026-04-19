@@ -30,18 +30,23 @@ public class StarSkillDataKeys {
                     DOTEPassive.class, GuardSkill.class, ParryingSkill.class, ImpactGuardSkill.class
             ));
 
-    public static final RegistryObject<SkillDataKey<Float>> COUNTER_TICK =
-            DATA_KEYS.register("counter_tick", () -> SkillDataKey.createSkillDataKey(
-                    PacketBufferCodec.FLOAT, 0.0f, true,
-                    SeeThrough1.class
-            ));
+    public static final RegistryObject<SkillDataKey<Float>> COUNTER_TICK = DATA_KEYS.register("counter_tick", () -> SkillDataKey.createSkillDataKey(
+                    PacketBufferCodec.FLOAT, 0.0f, true, SeeThrough1.class));
 
-    //紫危高级危反
-    public static final RegistryObject<SkillDataKey<Integer>> AIR_STRIKEKEY =
-            DATA_KEYS.register("air_strike_key", () -> SkillDataKey.createSkillDataKey(
-                    PacketBufferCodec.INTEGER, 0, true,
-                    AirStrike.class
-            ));
+    public static final RegistryObject<SkillDataKey<Integer>> JUMP_COUNT1 = DATA_KEYS.register("jump_count1", () -> SkillDataKey.createSkillDataKey(
+            PacketBufferCodec.INTEGER, 0, false, JumpStrike.class));
+    public static final RegistryObject<SkillDataKey<Boolean>> PROTECT_NEXT_FALL1 = DATA_KEYS.register("protect_next_fall1", () -> SkillDataKey.createSkillDataKey(
+            PacketBufferCodec.BOOLEAN, false, false, JumpStrike.class));
+    public static final RegistryObject<SkillDataKey<Boolean>> JUMP_KEY_PRESSED_LAST_TICK1 = DATA_KEYS.register("jump_key_pressed_last_tick1", () -> SkillDataKey.createSkillDataKey(
+            PacketBufferCodec.BOOLEAN, false, false, JumpStrike.class));
+
+
+    public static final RegistryObject<SkillDataKey<Integer>> JUMP_COUNT2 = DATA_KEYS.register("jump_count2", () -> SkillDataKey.createSkillDataKey(
+            PacketBufferCodec.INTEGER, 0, false, AirStrike.class));
+    public static final RegistryObject<SkillDataKey<Boolean>> PROTECT_NEXT_FALL2 = DATA_KEYS.register("protect_next_fall2", () -> SkillDataKey.createSkillDataKey(
+            PacketBufferCodec.BOOLEAN, false, false, AirStrike.class));
+    public static final RegistryObject<SkillDataKey<Boolean>> JUMP_KEY_PRESSED_LAST_TICK2 = DATA_KEYS.register("jump_key_pressed_last_tick2", () -> SkillDataKey.createSkillDataKey(
+            PacketBufferCodec.BOOLEAN, false, false, AirStrike.class));
 
     //
 

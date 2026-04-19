@@ -9,6 +9,8 @@ import com.guhao.stars.regirster.StarsSounds;
 import com.guhao.stars.utils.dangerAnimSystem.AnimationEffectManager;
 import com.hm.efn.gameasset.animations.EFNSkillAnimations;
 import com.hm.efn.particle.EFNParticles;
+import com.nameless.impactful.network.CPApplyShake;
+import com.nameless.impactful.network.NetWorkManger;
 import com.nameless.indestructible.world.capability.AdvancedCustomMobPatch;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
@@ -159,6 +161,30 @@ public class DOTEPassive extends Skill {
             }
 
         });
+
+
+
+
+        //震屏
+//        container.getExecutor().getEventListener().addEventListener(PlayerEventListener.EventType.DEAL_DAMAGE_EVENT_HURT, EVENT_UUID, (event) -> {
+//            if (container.getExecutor().getOriginal() instanceof ServerPlayer serverPlayer) {
+//                Impactfulhuh(serverPlayer, 0.6, 6, 0.5, 3);
+//            }
+//        });
+
+    }
+
+    //震动效果
+    public static void Impactfulhuh(ServerPlayer serverPlayer, double intensity, int time, double frequency, int time2) {
+        NetWorkManger.sendToPlayer(
+                new CPApplyShake(
+                        time,           // 持续时间
+                        (float) intensity,  // 强度
+                        (float) frequency,  // 频率
+                        time2           // 衰减时间
+                ),
+                serverPlayer
+        );
     }
 
     // 清除武器附魔
@@ -246,6 +272,7 @@ public class DOTEPassive extends Skill {
         container.getExecutor().getEventListener().removeListener(PlayerEventListener.EventType.TAKE_DAMAGE_EVENT_DAMAGE, EVENT_UUID);
         container.getExecutor().getEventListener().removeListener(PlayerEventListener.EventType.SERVER_ITEM_USE_EVENT, EVENT_UUID);
         container.getExecutor().getEventListener().removeListener(PlayerEventListener.EventType.DEAL_DAMAGE_EVENT_ATTACK, EVENT_UUID);
+//        container.getExecutor().getEventListener().removeListener(PlayerEventListener.EventType.DEAL_DAMAGE_EVENT_HURT, EVENT_UUID);
     }
 
     @Override
