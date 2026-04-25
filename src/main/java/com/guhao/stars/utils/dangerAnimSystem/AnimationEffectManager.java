@@ -45,7 +45,9 @@ public class AnimationEffectManager {
             Animations.REVELATION_ONEHAND.get(),
             AnimationsX.RUSHING_TEMPO2.get(),
             AnimationsX.TRIDENT_AUTO1.get(),
-            StarAnimations.NF_MEEN_CHARGE2.get()
+            StarAnimations.NF_MEEN_CHARGE2.get(),
+            StarAnimations.OLD_THRUST.get(),
+            StarAnimations.SWEEPING_EDGE.get()
     );
     // 蓝危:不可闪避的动画列表
     private static final List<StaticAnimation> NO_DODGE_ANIMATIONS = Arrays.asList(

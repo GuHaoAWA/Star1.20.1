@@ -1,5 +1,6 @@
 package com.guhao.stars.efmex;
 
+import com.asanginxst.epicfightx.client.sound.EFXSounds;
 import com.guhao.stars.StarsMod;
 import com.guhao.stars.regirster.StarsSounds;
 import com.guhao.stars.utils.dangerAnimSystem.AnimationEffectManager;
@@ -71,6 +72,12 @@ public class StarAnimations {
     public static AnimationManager.AnimationAccessor<AttackAnimation> FALCHION_EX2;
     public static AnimationManager.AnimationAccessor<AvalonAttackAnimation> NF_MEEN_CHARGE2;
     public static AnimationManager.AnimationAccessor<AvalonAttackAnimation> NF_TACHI_BLOODLUST;
+    //长剑突刺
+    public static AnimationManager.AnimationAccessor<AttackAnimation> SWEEPING_EDGE;
+    //旧突刺
+    public static AnimationManager.AnimationAccessor<AttackAnimation> OLD_THRUST;
+
+
 
     public static StaticAnimation FIRE_BALL;
     public static StaticAnimation AB_FIRE_BALL;
@@ -319,10 +326,31 @@ public class StarAnimations {
                         .addProperty(AnimationProperty.StaticAnimationProperty.PLAY_SPEED_MODIFIER, EFNAnimations.ATTACK_SPEED_CAP_TACHI)
                         .setResourceLocation("efn", "biped/nf_tachi/nf_tachi_bloodlust"));
 
+        SWEEPING_EDGE= builder.nextAccessor("biped/skill/sweeping_edge", (accessor) ->
+                new AttackAnimation(0.05F, 0.0F, 0.15F, 0.6F, 1.0F, null, Armatures.BIPED.get().toolR, accessor, Armatures.BIPED)
+                        .addProperty(AnimationProperty.AttackPhaseProperty.SWING_SOUND, EpicFightSounds.WHOOSH_SHARP.get())
+                        .addProperty(AnimationProperty.AttackPhaseProperty.EXTRA_DAMAGE, Set.of(ExtraDamageInstance.SWEEPING_EDGE_ENCHANTMENT.create()))        //吃横扫之刃
+                        .addProperty(AnimationProperty.AttackPhaseProperty.IMPACT_MODIFIER, ValueModifier.adder(1.0F))          //额外冲击
+                        .addProperty(AnimationProperty.AttackPhaseProperty.DAMAGE_MODIFIER, ValueModifier.multiplier(1.6F))         //伤害倍率
+                        .addProperty(AnimationProperty.AttackPhaseProperty.ARMOR_NEGATION_MODIFIER, ValueModifier.adder(8.0F)) //穿甲
+                        .addProperty(AnimationProperty.AttackPhaseProperty.STUN_TYPE, StunType.HOLD)
 
+                        .addProperty(AnimationProperty.AttackAnimationProperty.BASIS_ATTACK_SPEED, 2.0F)
+                        .addProperty(AnimationProperty.AttackAnimationProperty.EXTRA_COLLIDERS, 2)
+                        .newTimePair(0.0F, 0.6F)
+                        .addStateRemoveOld(EntityState.CAN_BASIC_ATTACK, false));
 
-
-
+        OLD_THRUST = builder.nextAccessor("biped/skill/old_thrust", (accessor) ->
+                new AttackAnimation(0.05F, 0.0F, 0.1F, 0.6F, 1.0F, null, Armatures.BIPED.get().toolR, accessor, Armatures.BIPED)
+                        .addProperty(AnimationProperty.AttackPhaseProperty.SWING_SOUND, EFXSounds.TACHI_SWING_1.get())     //添加挥剑音效
+                        .addProperty(AnimationProperty.AttackPhaseProperty.EXTRA_DAMAGE, Set.of(ExtraDamageInstance.SWEEPING_EDGE_ENCHANTMENT.create()))        //吃横扫之刃
+                        .addProperty(AnimationProperty.AttackPhaseProperty.DAMAGE_MODIFIER, ValueModifier.multiplier(1.8F))         //伤害倍率
+                        .addProperty(AnimationProperty.AttackPhaseProperty.ARMOR_NEGATION_MODIFIER, ValueModifier.multiplier(15.0F)) //穿甲
+                        .addProperty(AnimationProperty.AttackPhaseProperty.STUN_TYPE, StunType.HOLD)
+                        .addProperty(AnimationProperty.AttackAnimationProperty.EXTRA_COLLIDERS, 2)
+                        .addProperty(AnimationProperty.AttackAnimationProperty.BASIS_ATTACK_SPEED, 1.4F)
+                        .newTimePair(0.0F, 0.7F)
+                        .addStateRemoveOld(EntityState.CAN_BASIC_ATTACK, false));
 
 
 

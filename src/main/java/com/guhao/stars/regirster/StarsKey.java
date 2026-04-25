@@ -13,7 +13,7 @@ import org.lwjgl.glfw.GLFW;
 
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD, value = {Dist.CLIENT})
 public class StarsKey {
-    public static final KeyMapping INSPECT = new KeyMapping("key.star.inspect", GLFW.GLFW_KEY_V, "key.categories.star") {
+    public static final KeyMapping INSPECT = new KeyMapping("key.star.inspect", GLFW.GLFW_KEY_F7, "key.categories.star") {
 
         private boolean isDownOld = false;
 
