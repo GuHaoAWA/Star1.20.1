@@ -18,6 +18,7 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
@@ -48,7 +49,6 @@ import java.util.UUID;
 @SuppressWarnings("removal")
 public class DOTEPassive extends Skill {
     private static final UUID EVENT_UUID = UUID.fromString("071dda48-0cdd-4c92-9787-c0efb1524e8b");
-    private static final UUID DAMAGE_EVENT_UUID = UUID.fromString("071dda48-0cdd-4c92-9787-c1efb1524e8b");
 
     public DOTEPassive(DOTEPassive.Builder builder) {
         super(builder);
@@ -73,26 +73,41 @@ public class DOTEPassive extends Skill {
 
 
 
-        container.getExecutor().getEventListener().addEventListener(PlayerEventListener.EventType.TAKE_DAMAGE_EVENT_ATTACK, EVENT_UUID, (e) -> {
-            EpicFightDamageSource efd = AnimationEffectManager.getEpicFightDamageSources(e.getDamageSource());
-            float impact = 0.0f;
-            if (efd != null) impact = efd.getBaseImpact();
-            if (container.getExecutor().getStamina() <= container.getExecutor().getMaxStamina() * 0.25f) {
-                float reduce_stamina = Math.min(Math.max(e.getDamage() * 0.1f, impact * 0.2f), 1.5f);
-                container.getExecutor().setStamina(container.getExecutor().getStamina() - reduce_stamina);
+        container.getExecutor().getEventListener().addEventListener(PlayerEventListener.EventType.TAKE_DAMAGE_EVENT_ATTACK, EVENT_UUID, (event) -> {
+            EpicFightDamageSource efd = AnimationEffectManager.getEpicFightDamageSources(event.getDamageSource());
+            if(efd!=null&&
+                    efd.getStunType()!=StunType.NONE&&
+                    event.getDamageSource().getDirectEntity()!=null&&
+                    event.getDamageSource().getDirectEntity() instanceof AbstractArrow&&
+                    event.getDamage()>=0.01f
+            ) {
+                efd.setStunType(StunType.NONE);
+                Player player=container.getExecutor().getOriginal();
+                player.hurt(efd,event.getDamage());
+                event.setCanceled(true);
+//                float impact = 0.0f;
+//                impact = efd.getBaseImpact();
+//                if (container.getExecutor().getStamina() <= container.getExecutor().getMaxStamina() * 0.25f) {
+//                    float reduce_stamina = Math.min(Math.max(event.getDamage() * 0.1f, impact * 0.2f), 1.5f);
+//                    container.getExecutor().setStamina(container.getExecutor().getStamina() - reduce_stamina);
+//                }
             }
         }, 999);
-        container.getExecutor().getEventListener().addEventListener(PlayerEventListener.EventType.TAKE_DAMAGE_EVENT_DAMAGE, EVENT_UUID, (e) -> {
-            EpicFightDamageSource efd = AnimationEffectManager.getEpicFightDamageSources(e.getDamageSource());
-            float impact = 0.0f;
-            if (efd != null) impact = efd.getBaseImpact();
-            if (container.getExecutor().getStamina() <= container.getExecutor().getMaxStamina() * 0.25f) {
-                float reduce_stamina = Math.min(Math.max(e.getDamage() * 0.1f, impact * 0.2f), 1.5f);
-                if (reduce_stamina > container.getExecutor().getStamina()) {
-                    container.getExecutor().playAnimationSynchronized(Animations.BIPED_COMMON_NEUTRALIZED, 0.0f);
-                    container.getExecutor().applyStun(StunType.NEUTRALIZE, 5.0f);
-                    container.getExecutor().playSound(EpicFightSounds.NEUTRALIZE_MOBS.get(), 1.2f, 1.0f, 1.0f);
-                    breakdown(container);
+
+//        受伤
+        container.getExecutor().getEventListener().addEventListener(PlayerEventListener.EventType.TAKE_DAMAGE_EVENT_DAMAGE, EVENT_UUID, (event) -> {
+            EpicFightDamageSource efd = AnimationEffectManager.getEpicFightDamageSources(event.getDamageSource());
+            if(efd!=null&&efd.getStunType()!=StunType.NONE){
+                float impact = 0.0f;
+                impact = efd.getBaseImpact();
+                if (container.getExecutor().getStamina() <= container.getExecutor().getMaxStamina() * 0.25f) {
+                    float reduce_stamina = Math.min(Math.max(event.getDamage() * 0.1f, impact * 0.2f), 1.5f);
+                    if (reduce_stamina > container.getExecutor().getStamina()) {
+                        container.getExecutor().playAnimationSynchronized(Animations.BIPED_COMMON_NEUTRALIZED, 0.0f);
+                        container.getExecutor().applyStun(StunType.NEUTRALIZE, 5.0f);
+                        container.getExecutor().playSound(EpicFightSounds.NEUTRALIZE_MOBS.get(), 1.2f, 1.0f, 1.0f);
+                        breakdown(container);
+                    }
                 }
             }
         }, 999);
@@ -108,7 +123,7 @@ public class DOTEPassive extends Skill {
                 e.setCanceled(true);
             }
         }, 999);
-//        ATTACK_PHASE_END_EVENT
+
         //对撞
         container.getExecutor().getEventListener().addEventListener(PlayerEventListener.EventType.DEAL_DAMAGE_EVENT_ATTACK, EVENT_UUID, (event) -> {
             if(event.getTarget()!=null) {
@@ -117,7 +132,6 @@ public class DOTEPassive extends Skill {
                 if (livingEntity.hasEffect(StarsEffect.INSTABILITY.get())) {
                     EntityPatch<?> entityPatch = EpicFightCapabilities.getEntityPatch(livingEntity, EntityPatch.class);
                     if (entityPatch != null && entityPatch instanceof LivingEntityPatch<?> livingEntityPatch) {
-//                        System.out.println("4444444444    "+ livingEntityPatch.getEntityState().getLevel());
                         int phaseLevelLiving = livingEntityPatch.getEntityState().getLevel();
                         if(phaseLevelLiving<=3&&phaseLevelLiving>0){
                             event.getPlayerPatch().playSound(StarsSounds.BIGBONG.get(), -0.05F, 0.1F);
@@ -126,11 +140,9 @@ public class DOTEPassive extends Skill {
                             }
 
                             Player player = container.getExecutor().getOriginal();
-                            if(hasImbuement(player.getMainHandItem())){
-                                clearImbuement(player.getMainHandItem());
-                            }
+
                             int level = livingEntity.getEffect(StarsEffect.INSTABILITY.get()).getAmplifier();
-                            if(level>=4){
+                            if(level>=4&&level<8){
                                 level%=4;
                                 String string="";
                                 if(level==0)string="venom";
@@ -141,7 +153,7 @@ public class DOTEPassive extends Skill {
                                 livingEntityPatch.playAnimationSynchronized(StarAnimations.EFN_GUARD_ACTIVE_HIT3, 0);
                                 container.getExecutor().playAnimationSynchronized(StarAnimations.EFN_GUARD_ACTIVE_HIT3, 0);
                             }
-                            else {
+                            else if(level<4){
                                 livingEntityPatch.playAnimationSynchronized(StarAnimations.EFN_GUARD_ACTIVE_HIT3, 0);
                                 container.getExecutor().playAnimationSynchronized(EFNSkillAnimations.EFN_GUARD_ACTIVE_HIT3, 0);
                                 String string="";
@@ -175,17 +187,7 @@ public class DOTEPassive extends Skill {
     }
 
     //震动效果
-    public static void Impactfulhuh(ServerPlayer serverPlayer, double intensity, int time, double frequency, int time2) {
-        NetWorkManger.sendToPlayer(
-                new CPApplyShake(
-                        time,           // 持续时间
-                        (float) intensity,  // 强度
-                        (float) frequency,  // 频率
-                        time2           // 衰减时间
-                ),
-                serverPlayer
-        );
-    }
+
 
     // 清除武器附魔
     public static void clearImbuement(ItemStack weapon) {
@@ -200,6 +202,9 @@ public class DOTEPassive extends Skill {
     public static void setWeaponImbuement(Level world, ItemStack weapon, String imbueType, int durationTicks) {
         if (weapon == null || imbueType == null || imbueType.isEmpty()) {
             return;
+        }
+        if(hasImbuement(weapon)){
+            clearImbuement(weapon);
         }
         weapon.getOrCreateTag().putString("imbueType", imbueType);
         long expireTime = world.getGameTime() + durationTicks;

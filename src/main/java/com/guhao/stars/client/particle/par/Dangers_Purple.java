@@ -16,8 +16,8 @@ public class Dangers_Purple extends TextureSheetParticle {
     protected Dangers_Purple(ClientLevel world, double x, double y, double z, SpriteSet spriteSet) {
         super(world, x, y, z);
         this.setSize(2.5f, 2.5f);
-        this.quadSize *= 2.85f;
-        this.lifetime = 25;
+        this.quadSize *= 2.0f;
+        this.lifetime = 12;
         this.gravity = 0f;
         this.hasPhysics = false;
         this.setSpriteFromAge(spriteSet);

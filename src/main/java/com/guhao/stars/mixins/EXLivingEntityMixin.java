@@ -37,7 +37,7 @@ public abstract class EXLivingEntityMixin {
         // 检查当前是否在处理抗性效果
         LivingEntity self = (LivingEntity) (Object) this;
         if (self.hasEffect(MobEffects.DAMAGE_RESISTANCE)) {
-            return (k / 5);
+            return (k / 2);
         }
         return k;
     }

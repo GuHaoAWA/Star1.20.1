@@ -5,7 +5,6 @@ import yesman.epicfight.skill.SkillCategory;
 public enum StarSkillCategories implements SkillCategory {
     DOTE(true, true, true),
     COUNTER(true, true, true),  //黄危危反
-    COUNTER2(true, true, true), //红危危反
     COUNTERATTACK(true, true, true); //高冲反斩
 
 

@@ -73,7 +73,7 @@ public class AnimationEffectManager {
 
 
     // 黄危：不可格挡的动画列表
-    private static boolean shouldBypassGuard(StaticAnimation animation) {
+    public static boolean shouldBypassGuard(StaticAnimation animation) {
         return animation != null && NO_GUARD_ANIMATIONS.contains(animation);
     }
 

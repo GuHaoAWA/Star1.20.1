@@ -1,16 +1,16 @@
 {
 	"trail_effects": [
 		{
-			"start_time": 0.2,
-			"end_time": 0.55,
+			"start_time": 0.6,
+			"end_time": 3.0,
 			"joint": "Tool_R",
 			"item_skin_hand": "main_hand",
 			"texture_path": "efn:textures/trail/power7.png",
 			"particle_type": "efn:bloom_trail"
 		},
 		{
-			"start_time": 0.2,
-			"end_time": 0.55,
+			"start_time": 0.6,
+			"end_time": 3.0,
 			"joint": "Tool_R",
 			"item_skin_hand": "main_hand",
 			"texture_path": "efn:textures/trail/nds.png",
