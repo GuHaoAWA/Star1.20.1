@@ -2,6 +2,7 @@ package com.guhao.stars.efmex;
 
 import com.asanginxst.epicfightx.client.sound.EFXSounds;
 import com.guhao.stars.StarsMod;
+import com.guhao.stars.regirster.StarsEffect;
 import com.guhao.stars.regirster.StarsSounds;
 import com.guhao.stars.utils.dangerAnimSystem.AnimationEffectManager;
 import com.hm.efn.EFNClientConfig;
@@ -76,7 +77,7 @@ public class StarAnimations {
     public static AnimationManager.AnimationAccessor<AttackAnimation> SWEEPING_EDGE;
     //旧突刺
     public static AnimationManager.AnimationAccessor<AttackAnimation> OLD_THRUST;
-
+    public static AnimationManager.AnimationAccessor<AttackAnimation> LONGSWORD_BACK_TSUNAMI;
 
 
     public static StaticAnimation FIRE_BALL;
@@ -164,29 +165,21 @@ public class StarAnimations {
                                         double dy = entity.getY() - footPos.y;
                                         double dz = entity.getZ() - footPos.z;
                                         double distanceSq = dx * dx + dy * dy + dz * dz;
-                                        if(distanceSq <= radius * radius) {
-                                            //创建史诗战斗伤害源
-                                            EpicFightDamageSource epicFightDamageSource = EpicFightDamageSources
-                                                    .mobAttack(original)
-                                                    .setStunType(StunType.LONG)
-                                                    .setBasicAttack(true)
-                                                    .setBaseImpact(0.1F)
-                                                    .setInitialPosition(original.position())
-                                                    .setAnimation(accessor);
 
-                                            //对实体造成伤害
-//                                            entity.hurt(epicFightDamageSource, 0.1F);
+                                        if(distanceSq <= radius * radius) {
 
                                             LivingEntityPatch<?> livingEntityPatch = EpicFightCapabilities.getEntityPatch(entity, LivingEntityPatch.class);
-
                                             if (livingEntityPatch != null) {
-                                                StaticAnimation currentAnim = Objects.requireNonNull(livingEntityPatch.getAnimator().getPlayerFor(null)).getAnimation().get().getRealAnimation().get();
-                                                if(AnimationEffectManager.shouldBypassAll(currentAnim)) {
+                                                if(entity.hasEffect(StarsEffect.UNSTABLE.get())) {
                                                     if(entity.hasEffect(EpicFightMobEffects.STUN_IMMUNITY.get())){
                                                         entity.removeEffect(EpicFightMobEffects.STUN_IMMUNITY.get());
                                                     }
-                                                    livingEntityPatch.applyStun(StunType.LONG, 10.0f);
+                                                    if(entity.hasEffect(EFNMobEffectRegistry.SIN_STUN_IMMUNITY.get())){
+                                                        entity.removeEffect(EFNMobEffectRegistry.SIN_STUN_IMMUNITY.get());
+                                                    }
                                                     entityPatch.getOriginal().level().playSound(null, entityPatch.getOriginal().blockPosition(), StarsSounds.PENG.get(), SoundSource.BLOCKS, 10.0f, 1.0f);
+                                                    livingEntityPatch.applyStun(StunType.LONG, 10.0f);
+                                                    entity.removeEffect(StarsEffect.UNSTABLE.get());
                                                     AdvancedCustomHumanoidMobPatch<?> attackerPatch = EpicFightCapabilities.getEntityPatch(entity, AdvancedCustomHumanoidMobPatch.class);
                                                     if (attackerPatch != null) {
                                                         float currentStamina = attackerPatch.getStamina();
@@ -219,9 +212,9 @@ public class StarAnimations {
 //                        .addStateRemoveOld(EntityState.MOVEMENT_LOCKED, false)
                         .addProperty(AnimationProperty.ActionAnimationProperty.MOVE_VERTICAL, true)
                         .addStateRemoveOld(EntityState.INACTION, true)
-                        .addProperty(AnimationProperty.ActionAnimationProperty.NO_GRAVITY_TIME, TimePairList.create(0F, 1F))
-                        .addProperty(AnimationProperty.StaticAnimationProperty.PLAY_SPEED_MODIFIER, (animation, entitypatch, speed, prevElapsed, elapsed) -> 2.0F)
-                        .addEvents(AnimationEvent.InTimeEvent.create(0.7F, (entityPatch, animation, params) -> {
+//                        .addProperty(AnimationProperty.ActionAnimationProperty.NO_GRAVITY_TIME, TimePairList.create(0F, 1.37F))
+                        .addProperty(AnimationProperty.StaticAnimationProperty.PLAY_SPEED_MODIFIER, (animation, entitypatch, speed, prevElapsed, elapsed) -> 1.0F)
+                        .addEvents(AnimationEvent.InTimeEvent.create(0.33F, (entityPatch, animation, params) -> {
                                     LivingEntity livingEntity = entityPatch.getOriginal();
                                     Vec3 footPos = livingEntity.position();
                                     double radius = 5.5;
@@ -238,32 +231,23 @@ public class StarAnimations {
                                         double dz = entity.getZ() - footPos.z;
                                         double distanceSq = dx * dx + dy * dy + dz * dz;
                                         if(distanceSq <= radius * radius) {
-                                            //创建史诗战斗伤害源
-                                            EpicFightDamageSource epicFightDamageSource = EpicFightDamageSources
-                                                    .mobAttack(livingEntity)
-                                                    .setStunType(StunType.LONG)
-                                                    .setBasicAttack(true)
-                                                    .setBaseImpact(1.0F)
-                                                    .setInitialPosition(livingEntity.position())
-                                                    .setAnimation(accessor);
-
-                                            //对实体造成伤害
-//                                            entity.hurt(epicFightDamageSource, 1.2F);
                                             LivingEntityPatch<?> livingEntityPatch = EpicFightCapabilities.getEntityPatch(entity, LivingEntityPatch.class);
                                             if (livingEntityPatch != null) {
-                                                StaticAnimation currentAnim = Objects.requireNonNull(livingEntityPatch.getAnimator().getPlayerFor(null)).getAnimation().get().getRealAnimation().get();
-                                                if(AnimationEffectManager.shouldBypassAll(currentAnim)) {
+                                                if(entity.hasEffect(StarsEffect.UNSTABLE.get())) {
                                                     if(entity.hasEffect(EpicFightMobEffects.STUN_IMMUNITY.get())){
                                                         entity.removeEffect(EpicFightMobEffects.STUN_IMMUNITY.get());
                                                     }
+                                                    if(entity.hasEffect(EFNMobEffectRegistry.SIN_STUN_IMMUNITY.get())){
+                                                        entity.removeEffect(EFNMobEffectRegistry.SIN_STUN_IMMUNITY.get());
+                                                    }
                                                     entityPatch.getOriginal().level().playSound(null, entityPatch.getOriginal().blockPosition(), StarsSounds.PENG.get(), SoundSource.BLOCKS, 10.0f, 1.0f);
                                                     livingEntityPatch.applyStun(StunType.LONG, 10.0f);
+                                                    entity.removeEffect(StarsEffect.UNSTABLE.get());
                                                     AdvancedCustomHumanoidMobPatch<?> attackerPatch = EpicFightCapabilities.getEntityPatch(entity, AdvancedCustomHumanoidMobPatch.class);
                                                     if (attackerPatch != null) {
                                                         float currentStamina = attackerPatch.getStamina();
                                                         float maxStamina = attackerPatch.getMaxStamina();
                                                         float staminaDecrease = maxStamina * 0.06F + 8.0F;
-
                                                         attackerPatch.setStamina(Math.max(0.1f, currentStamina - staminaDecrease));
                                                     }
                                                 }
@@ -352,7 +336,17 @@ public class StarAnimations {
                         .newTimePair(0.0F, 0.7F)
                         .addStateRemoveOld(EntityState.CAN_BASIC_ATTACK, false));
 
-
+        LONGSWORD_BACK_TSUNAMI = builder.nextAccessor("biped/skill/longsword_back_tsunami", (accessor) ->
+                new AttackAnimation(0.05F, 0.0F, 0.35F, 0.52F, 1.86F, null, Armatures.BIPED.get().toolR, accessor, Armatures.BIPED)
+                        .addProperty(AnimationProperty.AttackPhaseProperty.SWING_SOUND, EpicFightSounds.WHOOSH_SHARP.get())     //添加挥剑音效
+                        .addProperty(AnimationProperty.AttackPhaseProperty.IMPACT_MODIFIER, ValueModifier.adder(0.5F))
+                        .addProperty(AnimationProperty.AttackPhaseProperty.DAMAGE_MODIFIER, ValueModifier.multiplier(1.6F))
+                        .addProperty(AnimationProperty.AttackPhaseProperty.ARMOR_NEGATION_MODIFIER, ValueModifier.adder(30.0F))
+                        .addProperty(AnimationProperty.AttackPhaseProperty.STUN_TYPE, StunType.HOLD)
+                        .addProperty(AnimationProperty.AttackPhaseProperty.EXTRA_DAMAGE, Set.of(ExtraDamageInstance.SWEEPING_EDGE_ENCHANTMENT.create()))
+                        .addProperty(AnimationProperty.AttackAnimationProperty.BASIS_ATTACK_SPEED, 1.00F)
+                        .newTimePair(0.0F, 1.2F).addStateRemoveOld(EntityState.CAN_BASIC_ATTACK, false)
+        );
 
 
 

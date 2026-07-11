@@ -58,7 +58,7 @@
   "skill.star.jump_strike": "跳跃打击",
   "skill.star.jump_strike.tooltip": "获得二段跳能力，使用二段跳时对周围敌人造成较低伤害。对在使用下段攻击的敌人造成生活时，额外扣除其耐力并造成长硬直。（维吉尔学不会的招式+1）",
   "skill.star.counter_danger1": "识破",
-  "skill.star.counter_danger.tooltip": "成功招架黄危后削减敌人大量耐力值。",
+  "skill.star.counter_danger1.tooltip": "成功招架黄危后削减敌人大量耐力值。",
   "skill.star.counter_danger2": "高级识破",
   "skill.star.counter_danger2.tooltip": "成功招架黄危后削减敌人大量耐力值，并汲取敌人的元素力量。"
 

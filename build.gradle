@@ -124,6 +124,7 @@ dependencies {
     implementation fg.deobf("libs:epicfightx-mc1.20.1:1.0.0-all")
     implementation fg.deobf("libs:tactical_imbuements:2.1_Fix")
     implementation fg.deobf("libs:impactful:20.14.2")
+    implementation fg.deobf("curse.maven:epic-fight-skill-tree-1295882:7129232")
 
     implementation fg.deobf("curse.maven:epic-fight-invincible-1184379:7445318")
     implementation fg.deobf("curse.maven:shoulder-surfing-reloaded-243190:6993788")

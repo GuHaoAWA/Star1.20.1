@@ -3,6 +3,7 @@ package com.guhao.stars.utils.dangerAnimSystem;
 import com.asanginxst.epicfightx.gameassets.animations.AnimationsX;
 import com.guhao.stars.efmex.StarAnimations;
 import com.hm.efn.gameasset.animations.EFNFalchionAnimations;
+import com.hm.efn.gameasset.animations.EFNMurasamaAnimations;
 import com.hm.efn.gameasset.animations.EFNSekiroAnimations;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
@@ -40,6 +41,7 @@ public class AnimationEffectManager {
     private static final List<StaticAnimation> NO_GUARD_ANIMATIONS = Arrays.asList(
             EFNFalchionAnimations.FALCHION_DASHATTACK.get(),
             EFNSekiroAnimations.SHADOW_RUSH.get(),
+            EFNMurasamaAnimations.HF_MURASAMA_DASH_X.get(),
             Animations.SPEAR_DASH.get(),
             Animations.LONGSWORD_DASH.get(),
             Animations.REVELATION_ONEHAND.get(),
@@ -47,7 +49,8 @@ public class AnimationEffectManager {
             AnimationsX.TRIDENT_AUTO1.get(),
             StarAnimations.NF_MEEN_CHARGE2.get(),
             StarAnimations.OLD_THRUST.get(),
-            StarAnimations.SWEEPING_EDGE.get()
+            StarAnimations.SWEEPING_EDGE.get(),
+            StarAnimations.LONGSWORD_BACK_TSUNAMI.get()
     );
     // 蓝危:不可闪避的动画列表
     private static final List<StaticAnimation> NO_DODGE_ANIMATIONS = Arrays.asList(

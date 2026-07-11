@@ -113,11 +113,7 @@ public class DOTEPassive extends Skill {
         }, 999);
 
 
-        container.getExecutor().getEventListener().addEventListener(PlayerEventListener.EventType.DODGE_SUCCESS_EVENT, EVENT_UUID, (event) -> {
-            PlayerPatch<?> playerPatch = container.getExecutor();
-            float maxStamina = playerPatch.getMaxStamina();
-            playerPatch.setStamina(playerPatch.getStamina() +0.05F*maxStamina);
-        });
+
         container.getExecutor().getEventListener().addEventListener(PlayerEventListener.EventType.SERVER_ITEM_USE_EVENT, EVENT_UUID, (e) -> {
             if (container.getDataManager().getDataValue(StarSkillDataKeys.WEAKNESS_COUNT_2.get()) > 0f) {
                 e.setCanceled(true);
@@ -271,7 +267,6 @@ public class DOTEPassive extends Skill {
     @Override
     public void onRemoved(SkillContainer container) {
 
-        container.getExecutor().getEventListener().removeListener(PlayerEventListener.EventType.DODGE_SUCCESS_EVENT, EVENT_UUID);
         container.getExecutor().getEventListener().removeListener(PlayerEventListener.EventType.TAKE_DAMAGE_EVENT_ATTACK, EVENT_UUID);
 //        container.getExecutor().getEventListener().removeListener(PlayerEventListener.EventType.DEAL_DAMAGE_EVENT_ATTACK, DAMAGE_EVENT_UUID);
         container.getExecutor().getEventListener().removeListener(PlayerEventListener.EventType.TAKE_DAMAGE_EVENT_DAMAGE, EVENT_UUID);

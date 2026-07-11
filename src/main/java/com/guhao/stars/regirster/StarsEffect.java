@@ -11,6 +11,7 @@ import static com.guhao.stars.StarsMod.MODID;
 public class StarsEffect {
     public static final DeferredRegister<MobEffect> REGISTRY = DeferredRegister.create(ForgeRegistries.MOB_EFFECTS, MODID);
     public static final RegistryObject<MobEffect> DEFENSE = REGISTRY.register("defense", Defense::new);
+//    不稳（紫危踩头）
     public static final RegistryObject<MobEffect> UNSTABLE = REGISTRY.register("unstable", Unstable::new);
     public static final RegistryObject<MobEffect> EXECUTE = REGISTRY.register("execute", Execute::new);
     public static final RegistryObject<MobEffect> EXECUTED = REGISTRY.register("executed", Executed::new);

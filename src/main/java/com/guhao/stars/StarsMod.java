@@ -3,10 +3,7 @@ package com.guhao.stars;
 import com.guhao.stars.client.model.CosmicRenderProperties;
 import com.guhao.stars.client.model.CosmicRenderingRegistry;
 import com.guhao.stars.client.post.StarShaders;
-import com.guhao.stars.efmex.StarSkillCategories;
-import com.guhao.stars.efmex.StarSkillDataKeys;
-import com.guhao.stars.efmex.StarSkillSlots;
-import com.guhao.stars.efmex.StarWeaponCapabilityPresets;
+import com.guhao.stars.efmex.*;
 import com.guhao.stars.entity.StarAttributes;
 import com.guhao.stars.event.BlockBreakEvent;
 import com.guhao.stars.network.ParticlePacket;
@@ -18,6 +15,7 @@ import com.guhao.stars.units.StarDataUnit;
 import com.guhao.stars.units.TransformUtils;
 import com.guhao.stars.units.data.TimeContext;
 import com.merlin204.avalon.main.AvalonMOD;
+import com.yesman.epicskills.client.gui.screen.CategorySlotTexture;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
@@ -71,6 +69,8 @@ public class StarsMod {
         SkillCategory.ENUM_MANAGER.registerEnumCls("star", StarSkillCategories.class);
         SkillSlot.ENUM_MANAGER.registerEnumCls("star", StarSkillSlots.class);
         StarSkillDataKeys.DATA_KEYS.register(bus);
+        CategorySlotTexture.ENUM_MANAGER.registerEnumCls("star", StarCategorySlotTextures.class);
+
         MinecraftForge.EVENT_BUS.register(this);
         MinecraftForge.EVENT_BUS.register(new BlockBreakEvent());
         if(ModList.get().isLoaded("epic_fight_avalon")) {
