@@ -64,49 +64,30 @@ public class JumpStrike extends Skill {
         super.onInitiate(container);
         container.setStack(1);
         //移动输入事件监听
-        container.getExecutor().getEventListener().addEventListener(
-                PlayerEventListener.EventType.MOVEMENT_INPUT_EVENT,
-                PHANTOM_ASCENT_UUID,
-                (event) -> {
-                    handleJumpStrike(event, container);
-                },
-                0
-        );
+        container.getExecutor().getEventListener().addEventListener(PlayerEventListener.EventType.MOVEMENT_INPUT_EVENT, PHANTOM_ASCENT_UUID, (event) -> {
+            handleJumpStrike(event, container);
+        });
 
         //取消下次坠落伤害
-        container.getExecutor().getEventListener().addEventListener(
-                PlayerEventListener.EventType.TAKE_DAMAGE_EVENT_HURT,
-                PHANTOM_ASCENT_UUID,
-                (event) -> {
-                    if (event.getDamageSource().is(DamageTypeTags.IS_FALL) &&
-                            container.getDataManager().getDataValue(StarSkillDataKeys.PROTECT_NEXT_FALL1.get())) {
-                        float damage = event.getDamage();
-                        if(damage > 0.0F) {
-                            event.attachValueModifier(ValueModifier.setter(0.0F));
-                        }
-                        container.getDataManager().setData(StarSkillDataKeys.PROTECT_NEXT_FALL1.get(), false);
-                    }
-                },
-                0
-        );
+        container.getExecutor().getEventListener().addEventListener(PlayerEventListener.EventType.TAKE_DAMAGE_EVENT_ATTACK, PHANTOM_ASCENT_UUID, (event) -> {
+            if (event.getDamageSource().is(DamageTypeTags.IS_FALL) && container.getDataManager().getDataValue(StarSkillDataKeys.PROTECT_NEXT_FALL1.get())) {
+                float damage = event.getDamage();
+                container.getDataManager().setData(StarSkillDataKeys.PROTECT_NEXT_FALL1.get(), false);
+                if (damage > 0.0F) {
+                    event.setCanceled(true);
+                }
+            }
+        });
 
         //重置跳跃计数器
-        container.getExecutor().getEventListener().addEventListener(
-                PlayerEventListener.EventType.FALL_EVENT,
-                PHANTOM_ASCENT_UUID,
-                (event) -> {
-                    container.getDataManager().setData(StarSkillDataKeys.JUMP_COUNT1.get(), 0);
-
-                    if (event.getPlayerPatch().isLogicalClient()) {
-                        container.getDataManager().setData(StarSkillDataKeys.JUMP_KEY_PRESSED_LAST_TICK1.get(), false);
-                    }
-                },
-                0
-        );
+        container.getExecutor().getEventListener().addEventListener(PlayerEventListener.EventType.FALL_EVENT, PHANTOM_ASCENT_UUID, (event) -> {
+            container.getDataManager().setData(StarSkillDataKeys.JUMP_COUNT1.get(), 0);
+            if (event.getPlayerPatch().isLogicalClient()) {
+                container.getDataManager().setData(StarSkillDataKeys.JUMP_KEY_PRESSED_LAST_TICK1.get(), false);
+            }
+        });
 
     }
-
-
 
     //二段跳
     private void handleJumpStrike(MovementInputEvent event, SkillContainer container) {
@@ -117,7 +98,6 @@ public class JumpStrike extends Skill {
                 event.getPlayerPatch().getEntityState().inaction()) {
             return;
         }
-
         boolean jumpPressed = Minecraft.getInstance().options.keyJump.isDown();
         boolean jumpPressedPrev = container.getDataManager().getDataValue(StarSkillDataKeys.JUMP_KEY_PRESSED_LAST_TICK1.get());
 
@@ -128,20 +108,16 @@ public class JumpStrike extends Skill {
                 if (jumpCounter < (this.extraJumps + 1)) {
                     SkillCastEvent skillexecuteevent = new SkillCastEvent(container.getExecutor(), container, null);
                     container.getExecutor().getEventListener().triggerEvents(PlayerEventListener.EventType.SKILL_CAST_EVENT, skillexecuteevent);
-
                     if (skillexecuteevent.isCanceled()) {
                         return;
                     }
-
                     container.setResource(0.0F);
-
                     //更新跳跃计数器
                     if (jumpCounter == 0 && event.getPlayerPatch().currentLivingMotion == LivingMotions.FALL) {
                         container.getDataManager().setData(StarSkillDataKeys.JUMP_COUNT1.get(), 2);
                     } else {
                         container.getDataManager().setDataF(StarSkillDataKeys.JUMP_COUNT1.get(), (v) -> v + 1);
                     }
-
                     container.getDataManager().setDataSync(StarSkillDataKeys.PROTECT_NEXT_FALL1.get(), true);
 
                     //计算跳跃方向
@@ -168,6 +144,7 @@ public class JumpStrike extends Skill {
                             deltaMove.z + jumpDir.z
                     );
 
+
                     event.getPlayerPatch().setModelYRot(container.getExecutor().getOriginal().getYRot() + degree, true);
                     event.getPlayerPatch().playAnimationSynchronized(this.phantomAnimations.get(vertic < 0 ? 1 : 0), 0.0F);
 
@@ -178,7 +155,6 @@ public class JumpStrike extends Skill {
                 container.getDataManager().setData(StarSkillDataKeys.JUMP_COUNT1.get(), 1);
             }
         }
-
         // 更新上次跳跃键状态
         container.getDataManager().setData(StarSkillDataKeys.JUMP_KEY_PRESSED_LAST_TICK1.get(), jumpPressed);
     }
@@ -194,14 +170,10 @@ public class JumpStrike extends Skill {
         super.onRemoved(container);
         //移除二段跳事件监听器
         container.getExecutor().getEventListener().removeListener(PlayerEventListener.EventType.MOVEMENT_INPUT_EVENT, PHANTOM_ASCENT_UUID);
-        container.getExecutor().getEventListener().removeListener(PlayerEventListener.EventType.TAKE_DAMAGE_EVENT_HURT, PHANTOM_ASCENT_UUID);
+        container.getExecutor().getEventListener().removeListener(PlayerEventListener.EventType.TAKE_DAMAGE_EVENT_ATTACK, PHANTOM_ASCENT_UUID);
         container.getExecutor().getEventListener().removeListener(PlayerEventListener.EventType.FALL_EVENT, PHANTOM_ASCENT_UUID);
     }
 
-    @Override
-    public void updateContainer(SkillContainer container) {
-        super.updateContainer(container);
-    }
 
     @OnlyIn(Dist.CLIENT)
     @Override

@@ -96,47 +96,29 @@ public class AirStrike extends Skill {
 
 
         //移动输入事件监听
-        container.getExecutor().getEventListener().addEventListener(
-                PlayerEventListener.EventType.MOVEMENT_INPUT_EVENT,
-                EVENT_UUID,
-                (event) -> {
-                    handleJumpStrike(event, container);
-                },
-                0
-        );
+        container.getExecutor().getEventListener().addEventListener(PlayerEventListener.EventType.MOVEMENT_INPUT_EVENT, EVENT_UUID, (event) -> {
+            handleJumpStrike(event, container);
+        });
 
         //取消下次坠落伤害
-        container.getExecutor().getEventListener().addEventListener(
-                PlayerEventListener.EventType.TAKE_DAMAGE_EVENT_HURT,
-                EVENT_UUID,
-                (event) -> {
-                    if (event.getDamageSource().is(DamageTypeTags.IS_FALL) &&
-                            container.getDataManager().getDataValue(StarSkillDataKeys.PROTECT_NEXT_FALL2.get())) {
-                        float damage = event.getDamage();
+        container.getExecutor().getEventListener().addEventListener(PlayerEventListener.EventType.TAKE_DAMAGE_EVENT_ATTACK, EVENT_UUID, (event) -> {
+            if (event.getDamageSource().is(DamageTypeTags.IS_FALL) && container.getDataManager().getDataValue(StarSkillDataKeys.PROTECT_NEXT_FALL2.get())) {
+                float damage = event.getDamage();
+                container.getDataManager().setData(StarSkillDataKeys.PROTECT_NEXT_FALL2.get(), false);
+                if (damage > 0.0F) {
+                    event.setCanceled(true);
+                }
 
-                        if (damage < 2.5F) {
-                            event.attachValueModifier(ValueModifier.setter(0.0F));
-                        }
-
-                        container.getDataManager().setData(StarSkillDataKeys.PROTECT_NEXT_FALL2.get(), false);
-                    }
-                },
-                -1
-        );
+            }
+        });
 
 //        重置跳跃计数器
-        container.getExecutor().getEventListener().addEventListener(
-                PlayerEventListener.EventType.FALL_EVENT,
-                EVENT_UUID,
-                (event) -> {
-                    container.getDataManager().setData(StarSkillDataKeys.JUMP_COUNT2.get(), 0);
-
-                    if (event.getPlayerPatch().isLogicalClient()) {
-                        container.getDataManager().setData(StarSkillDataKeys.JUMP_KEY_PRESSED_LAST_TICK2.get(), false);
-                    }
-                },
-                0
-        );
+        container.getExecutor().getEventListener().addEventListener(PlayerEventListener.EventType.FALL_EVENT, EVENT_UUID, (event) -> {
+            container.getDataManager().setData(StarSkillDataKeys.JUMP_COUNT2.get(), 0);
+            if (event.getPlayerPatch().isLogicalClient()) {
+                container.getDataManager().setData(StarSkillDataKeys.JUMP_KEY_PRESSED_LAST_TICK2.get(), false);
+            }
+        });
 
 
     }
@@ -287,10 +269,7 @@ public class AirStrike extends Skill {
     public void onRemoved(SkillContainer container) {
         super.onRemoved(container);
         //移除事件监听器
-        container.getExecutor().getEventListener().removeListener(
-                PlayerEventListener.EventType.DEAL_DAMAGE_EVENT_ATTACK,
-                EVENT_UUID
-        );
+        container.getExecutor().getEventListener().removeListener(PlayerEventListener.EventType.DEAL_DAMAGE_EVENT_ATTACK, EVENT_UUID);
 //        移除技能施放监听器
 //        container.getExecutor().getEventListener().removeListener(
 //                PlayerEventListener.EventType.SKILL_CAST_EVENT,
@@ -299,20 +278,10 @@ public class AirStrike extends Skill {
 
 
         // 移除二段跳事件监听器
-        container.getExecutor().getEventListener().removeListener(
-                PlayerEventListener.EventType.MOVEMENT_INPUT_EVENT,
-                EVENT_UUID
-        );
+        container.getExecutor().getEventListener().removeListener(PlayerEventListener.EventType.MOVEMENT_INPUT_EVENT, EVENT_UUID);
 
-        container.getExecutor().getEventListener().removeListener(
-                PlayerEventListener.EventType.TAKE_DAMAGE_EVENT_HURT,
-                EVENT_UUID, -1
-        );
-
-        container.getExecutor().getEventListener().removeListener(
-                PlayerEventListener.EventType.FALL_EVENT,
-                EVENT_UUID
-        );
+        container.getExecutor().getEventListener().removeListener(PlayerEventListener.EventType.TAKE_DAMAGE_EVENT_HURT, EVENT_UUID);
+        container.getExecutor().getEventListener().removeListener(PlayerEventListener.EventType.FALL_EVENT, EVENT_UUID);
 
 
 

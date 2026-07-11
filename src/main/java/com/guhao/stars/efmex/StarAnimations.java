@@ -2,7 +2,9 @@ package com.guhao.stars.efmex;
 
 import com.asanginxst.epicfightx.client.sound.EFXSounds;
 import com.guhao.stars.StarsMod;
+import com.guhao.stars.regirster.StarSkill;
 import com.guhao.stars.regirster.StarsEffect;
+import com.guhao.stars.regirster.StarsKey;
 import com.guhao.stars.regirster.StarsSounds;
 import com.guhao.stars.utils.dangerAnimSystem.AnimationEffectManager;
 import com.hm.efn.EFNClientConfig;
@@ -33,6 +35,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import yesman.epicfight.api.animation.AnimationManager;
 import yesman.epicfight.api.animation.AnimationManager.AnimationAccessor;
+import yesman.epicfight.api.animation.TransformSheet;
 import yesman.epicfight.api.animation.property.AnimationEvent;
 import yesman.epicfight.api.animation.property.AnimationProperty;
 import yesman.epicfight.api.animation.types.*;
@@ -45,9 +48,12 @@ import yesman.epicfight.gameasset.Armatures;
 import yesman.epicfight.gameasset.EpicFightSounds;
 import yesman.epicfight.model.armature.HumanoidArmature;
 import yesman.epicfight.particle.EpicFightParticles;
+import yesman.epicfight.skill.SkillContainer;
+import yesman.epicfight.skill.SkillSlots;
 import yesman.epicfight.world.capabilities.EpicFightCapabilities;
 import yesman.epicfight.world.capabilities.entitypatch.EntityPatch;
 import yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch;
+import yesman.epicfight.world.capabilities.entitypatch.player.PlayerPatch;
 import yesman.epicfight.world.damagesource.EpicFightDamageSource;
 import yesman.epicfight.world.damagesource.EpicFightDamageSources;
 import yesman.epicfight.world.damagesource.ExtraDamageInstance;
@@ -208,14 +214,16 @@ public class StarAnimations {
 
 
         BIPED_PHANTOM_ASCENT_BACKWARD_NEW = builder.nextAccessor("biped/living/phantom_ascent_backward_new", (accessor) ->
-                new ActionAnimation(0.05F, 2.7F, accessor, Armatures.BIPED)
-//                        .addStateRemoveOld(EntityState.MOVEMENT_LOCKED, false)
+                new ActionAnimation(0.05F, 1.0F, accessor, Armatures.BIPED)
+
                         .addProperty(AnimationProperty.ActionAnimationProperty.MOVE_VERTICAL, true)
-                        .addStateRemoveOld(EntityState.INACTION, true)
-//                        .addProperty(AnimationProperty.ActionAnimationProperty.NO_GRAVITY_TIME, TimePairList.create(0F, 1.37F))
+                        .addProperty(AnimationProperty.ActionAnimationProperty.NO_GRAVITY_TIME, TimePairList.create(0F, 0.75F))
+                        .addStateRemoveOld(EntityState.MOVEMENT_LOCKED, false)
+                        .newTimePair(0.0F, 0.75F).addStateRemoveOld(EntityState.INACTION, true)
                         .addProperty(AnimationProperty.StaticAnimationProperty.PLAY_SPEED_MODIFIER, (animation, entitypatch, speed, prevElapsed, elapsed) -> 1.0F)
                         .addEvents(AnimationEvent.InTimeEvent.create(0.33F, (entityPatch, animation, params) -> {
                                     LivingEntity livingEntity = entityPatch.getOriginal();
+
                                     Vec3 footPos = livingEntity.position();
                                     double radius = 5.5;
                                     AABB boundingBox = new AABB(
@@ -255,7 +263,7 @@ public class StarAnimations {
                                         }
                                     }
                                 }, AnimationEvent.Side.SERVER),
-                                AnimationEvent.InTimeEvent.create(0.7F, (livingEntityPatch, animation, params) -> {
+                                AnimationEvent.InTimeEvent.create(0.33F, (livingEntityPatch, animation, params) -> {
                                     Vec3 pos = livingEntityPatch.getOriginal().position();
                                     livingEntityPatch.playSound(EpicFightSounds.TUMBLE.get(), 0.0F, 0.0F);
                                     livingEntityPatch.getOriginal().level().addAlwaysVisibleParticle(

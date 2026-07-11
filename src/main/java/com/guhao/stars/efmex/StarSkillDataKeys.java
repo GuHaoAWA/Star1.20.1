@@ -2,6 +2,7 @@ package com.guhao.stars.efmex;
 
 import com.guhao.stars.efmex.skills.*;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;
 import yesman.epicfight.api.utils.PacketBufferCodec;
@@ -48,44 +49,7 @@ public class StarSkillDataKeys {
     public static final RegistryObject<SkillDataKey<Boolean>> JUMP_KEY_PRESSED_LAST_TICK2 = DATA_KEYS.register("jump_key_pressed_last_tick2", () -> SkillDataKey.createSkillDataKey(
             PacketBufferCodec.BOOLEAN, false, false, AirStrike.class));
 
-    //
 
-//    public static final RegistryObject<SkillDataKey<Float>> COUNTER_TICK2 =
-//            DATA_KEYS.register("counter_tick2", () -> SkillDataKey.createSkillDataKey(
-//                    PacketBufferCodec.FLOAT, 0.0f, true,
-//                    SeeThrough2.class
-//            ));
-//
-//    public static final RegistryObject<SkillDataKey<Float>> COUNTER_TICK3 =
-//            DATA_KEYS.register("counter_tick3", () -> SkillDataKey.createSkillDataKey(
-//                    PacketBufferCodec.FLOAT, 0.0f, true,
-//                    SeeThrough2.class
-//            ));
-
-//    //雾凇
-//    public static final RegistryObject<SkillDataKey<Boolean>> WUSONG_SHEATH =
-//            DATA_KEYS.register("wusong_sheath", () -> SkillDataKey.createSkillDataKey(
-//                    PacketBufferCodec.BOOLEAN, false, false,
-//                    WuSongPassive.class
-//            ));
-//
-//    public static final RegistryObject<SkillDataKey<Integer>> CHECK1 =
-//            DATA_KEYS.register("check1", () -> SkillDataKey.createSkillDataKey(
-//                    PacketBufferCodec.INTEGER, 0, true,
-//                    WuSongPassive.class
-//            ));
-//
-//    public static final RegistryObject<SkillDataKey<Integer>> CHECK2 =
-//            DATA_KEYS.register("check2", () -> SkillDataKey.createSkillDataKey(
-//                    PacketBufferCodec.INTEGER, 0, true,
-//                    WuSongPassive.class
-//            ));
-//
-//    public static final RegistryObject<SkillDataKey<Integer>> CHECK3 =
-//            DATA_KEYS.register("check3", () -> SkillDataKey.createSkillDataKey(
-//                    PacketBufferCodec.INTEGER, 0, true,
-//                    WuSongPassive.class
-//            ));
 
     //THE WORLD
     public static final RegistryObject<SkillDataKey<Integer>> TIME_TICK =
