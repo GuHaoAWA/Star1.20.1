@@ -112,6 +112,10 @@ public class AirStrike extends Skill {
             }
         });
 
+
+
+
+
 //        重置跳跃计数器
         container.getExecutor().getEventListener().addEventListener(PlayerEventListener.EventType.FALL_EVENT, EVENT_UUID, (event) -> {
             container.getDataManager().setData(StarSkillDataKeys.JUMP_COUNT2.get(), 0);
@@ -279,8 +283,7 @@ public class AirStrike extends Skill {
 
         // 移除二段跳事件监听器
         container.getExecutor().getEventListener().removeListener(PlayerEventListener.EventType.MOVEMENT_INPUT_EVENT, EVENT_UUID);
-
-        container.getExecutor().getEventListener().removeListener(PlayerEventListener.EventType.TAKE_DAMAGE_EVENT_HURT, EVENT_UUID);
+        container.getExecutor().getEventListener().removeListener(PlayerEventListener.EventType.TAKE_DAMAGE_EVENT_ATTACK, EVENT_UUID);
         container.getExecutor().getEventListener().removeListener(PlayerEventListener.EventType.FALL_EVENT, EVENT_UUID);
 
 
