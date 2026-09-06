@@ -6,6 +6,7 @@ import com.hm.efn.gameasset.animations.EFNFalchionAnimations;
 import com.hm.efn.gameasset.animations.EFNMurasamaAnimations;
 import com.hm.efn.gameasset.animations.EFNSekiroAnimations;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.tags.TagKey;
@@ -22,6 +23,9 @@ import java.util.List;
 @SuppressWarnings("removal")
 public class AnimationEffectManager {
 
+    public static final ResourceKey<DamageType> SHARPNESS_TYPE =
+            ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation("star", "sharpness"));
+    public static final TagKey<DamageType> SHARPNESS = create("sharpness");
     public static final TagKey<DamageType> PIERCE_GUARD = create("pierce_guard");     //穿刺
     public static final TagKey<DamageType> BYPASS_GUARD_ONLY = create("star_bypass_guard");     //无视格挡，能招架（黄)
     public static final TagKey<DamageType> BYPASS_PARRY = create("star_bypass_parry");
@@ -50,7 +54,8 @@ public class AnimationEffectManager {
             StarAnimations.NF_MEEN_CHARGE2.get(),
             StarAnimations.OLD_THRUST.get(),
             StarAnimations.SWEEPING_EDGE.get(),
-            StarAnimations.LONGSWORD_BACK_TSUNAMI.get()
+            StarAnimations.LONGSWORD_BACK_TSUNAMI.get(),
+            StarAnimations.THE_INCINERATOR_SWEEP.get()
     );
     // 蓝危:不可闪避的动画列表
     private static final List<StaticAnimation> NO_DODGE_ANIMATIONS = Arrays.asList(

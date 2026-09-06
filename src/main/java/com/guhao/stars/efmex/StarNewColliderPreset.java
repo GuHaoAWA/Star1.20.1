@@ -25,4 +25,12 @@ public class StarNewColliderPreset {
 
     public static final Collider MOONVEIL_HORIZONTAL_BOSS =  new OBBCollider( 2.0, 0.1, 1.8, 0.0, 0.0, -1.8);
     public static final Collider FALCHION_EX2 =  new OBBCollider( 2.5, 0.1, 2.5, 0.0, 0.0, 0.0);
+
+    public static final Collider THE_INCINERATOR_SWEEP = new MultiOBBCollider(
+            new OBBCollider( 1.2, 1.2, 5.8, 0.0, 0.0, -4.7),
+            new OBBCollider( 1.2, 1.2, 5.8, 0.0, 0.0, -4.7),
+            new OBBCollider( 1.2, 1.2, 5.8, 0.0, 0.0, -4.7),
+            new OBBCollider( 1.2, 1.2, 5.8, 0.0, 0.0, -4.7),
+            new OBBCollider( 1.2, 1.2, 5.8, 0.0, 0.0, -4.7)
+    );
 }

@@ -54,10 +54,7 @@ import yesman.epicfight.world.capabilities.EpicFightCapabilities;
 import yesman.epicfight.world.capabilities.entitypatch.EntityPatch;
 import yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch;
 import yesman.epicfight.world.capabilities.entitypatch.player.PlayerPatch;
-import yesman.epicfight.world.damagesource.EpicFightDamageSource;
-import yesman.epicfight.world.damagesource.EpicFightDamageSources;
-import yesman.epicfight.world.damagesource.ExtraDamageInstance;
-import yesman.epicfight.world.damagesource.StunType;
+import yesman.epicfight.world.damagesource.*;
 import yesman.epicfight.world.effect.EpicFightMobEffects;
 
 import java.util.List;
@@ -84,7 +81,7 @@ public class StarAnimations {
     //旧突刺
     public static AnimationManager.AnimationAccessor<AttackAnimation> OLD_THRUST;
     public static AnimationManager.AnimationAccessor<AttackAnimation> LONGSWORD_BACK_TSUNAMI;
-
+    public static AnimationManager.AnimationAccessor<AttackAnimation> THE_INCINERATOR_SWEEP;
 
     public static StaticAnimation FIRE_BALL;
     public static StaticAnimation AB_FIRE_BALL;
@@ -111,6 +108,19 @@ public class StarAnimations {
 
     private static void build(AnimationManager.AnimationBuilder builder) {
 //        HumanoidArmature biped = Armatures.BIPED.get();
+
+        THE_INCINERATOR_SWEEP= builder.nextAccessor("biped/skill/the_incinerator_sweep", (accessor) ->
+                new AttackAnimation(0.05F, 0.0F, 0.83F, 1.09F, 3.95F, StarNewColliderPreset.THE_INCINERATOR_SWEEP, Armatures.BIPED.get().toolR, accessor, Armatures.BIPED)
+                        .addProperty(AnimationProperty.AttackPhaseProperty.EXTRA_DAMAGE, Set.of(ExtraDamageInstance.SWEEPING_EDGE_ENCHANTMENT.create()))
+                        .addProperty(AnimationProperty.AttackPhaseProperty.IMPACT_MODIFIER, ValueModifier.adder(2.0F))
+                        .addProperty(AnimationProperty.AttackPhaseProperty.DAMAGE_MODIFIER, ValueModifier.multiplier(2.0F))
+                        .addProperty(AnimationProperty.AttackPhaseProperty.ARMOR_NEGATION_MODIFIER, ValueModifier.adder(25.0F))
+                        .addProperty(AnimationProperty.AttackPhaseProperty.STUN_TYPE, StunType.HOLD)
+                        .addProperty(AnimationProperty.ActionAnimationProperty.STOP_MOVEMENT, true)
+                        .newTimePair(0.0F, 3.0F).addStateRemoveOld(EntityState.CAN_BASIC_ATTACK, false)
+                        .addEvents(AvalonEventUtils.simpleCameraShake(60, 11, 7.0F, 3.0F, 7.0F))
+                        .addProperty(AnimationProperty.AttackAnimationProperty.BASIS_ATTACK_SPEED, 1.4F));
+
         FALCHION_EX2 = builder.nextAccessor("biped/falchion/falchion_ex2", (accessor) ->
                 new AttackAnimation(0.05F, 0.05F, 0.95F, 1.05F, 1.2F, StarNewColliderPreset.FALCHION_EX2, Armatures.BIPED.get().rootJoint, accessor, Armatures.BIPED)
                         .addProperty(AnimationProperty.AttackPhaseProperty.HIT_SOUND, EpicFightSounds.BLADE_RUSH_FINISHER.get())

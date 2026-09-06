@@ -3,6 +3,7 @@ package com.guhao.stars.mixins.epicfight;
 import com.guhao.stars.entity.StarAttributes;
 import com.guhao.stars.regirster.StarsEffect;
 import com.guhao.stars.utils.dangerAnimSystem.AnimationEffectManager;
+import com.hm.efn.registries.EFNMobEffectRegistry;
 import com.nameless.indestructible.api.animation.types.LivingEntityPatchEvent;
 import com.nameless.indestructible.data.AdvancedMobpatchReloader;
 import com.nameless.indestructible.world.capability.Utils.CapabilityState;
@@ -10,6 +11,7 @@ import com.nameless.indestructible.world.capability.Utils.IAdvancedCapability;
 import com.nameless.indestructible.world.capability.Utils.IAnimationEventCapability;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.At;
@@ -50,6 +52,9 @@ public class CapabilityStateMixin<T extends MobPatch<?>, V extends AdvancedMobpa
      */
     @Overwrite
     public StunType processStun(StunType stunType) {
+
+
+
         if (this.neutralized) {
             stunType = stunType == StunType.KNOCKDOWN ? stunType : StunType.NONE;
         } else if (mobPatch instanceof IAdvancedCapability iac && this.staminaLoseMultiply > 0 && this.lastGetImpact > 0 && mobPatch.getStunShield() <= 0) {
@@ -67,6 +72,7 @@ public class CapabilityStateMixin<T extends MobPatch<?>, V extends AdvancedMobpa
             iac.setStamina((iac.getStamina() - ((this.lastGetImpact * this.staminaLoseMultiply) * reduceX)));
             if (iac.getStamina() < (this.lastGetImpact * this.staminaLoseMultiply) * reduceX) {
                 stunType = StunType.NEUTRALIZE;
+                mobPatch.getOriginal().addEffect(new MobEffectInstance(EFNMobEffectRegistry.SIN_STUN_IMMUNITY.get(),50, 0, false, false));
                 mobPatch.playSound(EpicFightSounds.NEUTRALIZE_MOBS.get(), -0.05F, 0.1F);
                 if (this.lastAttacker != null)
                     EpicFightParticles.AIR_BURST.get().spawnParticleWithArgument((ServerLevel) mobPatch.getOriginal().level(), mobPatch.getOriginal(), lastAttacker);

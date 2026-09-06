@@ -6,7 +6,9 @@ import com.yesman.epicskills.client.gui.screen.CategorySlotTexture;
 public enum StarCategorySlotTextures implements CategorySlotTexture {
 
     COUNTER(3, 6, 38, 46),
-    COUNTERATTACK(3, 6, 38, 46);
+    COUNTERATTACK(3, 6, 38, 46),
+    EFN_SEKIRO(3, 6, 38, 46);
+
 
     private final int offsetX;
     private final int offsetY;

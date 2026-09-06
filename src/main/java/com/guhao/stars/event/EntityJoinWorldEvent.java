@@ -16,7 +16,6 @@ import javax.annotation.Nullable;
 
 
 @Mod.EventBusSubscriber(modid = StarsMod.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
-
 public class EntityJoinWorldEvent {
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void onEntityJoin(EntityJoinLevelEvent event) {
