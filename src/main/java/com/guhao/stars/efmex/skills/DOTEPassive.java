@@ -7,6 +7,9 @@ import com.guhao.stars.regirster.StarSkill;
 import com.guhao.stars.regirster.StarsEffect;
 import com.guhao.stars.regirster.StarsSounds;
 import com.guhao.stars.utils.dangerAnimSystem.AnimationEffectManager;
+import com.hm.efn.gameasset.animations.EFNDualSwordAnimations;
+import com.hm.efn.gameasset.animations.EFNGreatSwordAnimations;
+import com.hm.efn.gameasset.animations.EFNSekiroAnimations;
 import com.hm.efn.gameasset.animations.EFNSkillAnimations;
 import com.hm.efn.particle.EFNParticles;
 import com.nameless.impactful.network.CPApplyShake;
@@ -24,6 +27,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Vector3d;
 import yesman.epicfight.api.utils.AttackResult;
+import yesman.epicfight.api.utils.math.ValueModifier;
 import yesman.epicfight.gameasset.Animations;
 import yesman.epicfight.gameasset.EpicFightSounds;
 import yesman.epicfight.particle.HitParticleType;
@@ -73,6 +77,7 @@ public class DOTEPassive extends Skill {
 
 
 
+        //受伤
         container.getExecutor().getEventListener().addEventListener(PlayerEventListener.EventType.TAKE_DAMAGE_EVENT_ATTACK, EVENT_UUID, (event) -> {
             EpicFightDamageSource efd = AnimationEffectManager.getEpicFightDamageSources(event.getDamageSource());
             if(efd!=null&&
@@ -100,7 +105,7 @@ public class DOTEPassive extends Skill {
             if(efd!=null&&efd.getStunType()!=StunType.NONE){
                 float impact = 0.0f;
                 impact = efd.getBaseImpact();
-                if (container.getExecutor().getStamina() <= container.getExecutor().getMaxStamina() * 0.25f) {
+                if (container.getExecutor().getOriginal().getMaxHealth() >= container.getExecutor().getOriginal().getHealth()*4) {
                     float reduce_stamina = Math.min(Math.max(event.getDamage() * 0.1f, impact * 0.2f), 1.5f);
                     if (reduce_stamina > container.getExecutor().getStamina()) {
                         container.getExecutor().playAnimationSynchronized(Animations.BIPED_COMMON_NEUTRALIZED, 0.0f);
@@ -122,6 +127,22 @@ public class DOTEPassive extends Skill {
 
         //对撞
         container.getExecutor().getEventListener().addEventListener(PlayerEventListener.EventType.DEAL_DAMAGE_EVENT_ATTACK, EVENT_UUID, (event) -> {
+            //狮子斩
+            if (event.getDamageSource().getAnimation().equals(EFNGreatSwordAnimations.NG_GREATSWORD_AIRSLASH)) {
+                event.getDamageSource().setBaseImpact(event.getDamageSource().getBaseImpact()*0.7f);
+                event.getDamageSource().setBaseArmorNegation(event.getDamageSource().getBaseArmorNegation()*0.7f);
+                event.getDamageSource().attachDamageModifier(ValueModifier.multiplier(0.7f));
+            }
+            if (event.getDamageSource().getAnimation().equals(EFNGreatSwordAnimations.NG_GREATSWORD_CHARG1MAX_SECOND)||event.getDamageSource().getAnimation().equals(EFNGreatSwordAnimations.NG_GREATSWORD_SKILL_CLASH_HIT)) {
+                event.getDamageSource().setBaseImpact(event.getDamageSource().getBaseImpact()*0.5f);
+                event.getDamageSource().setBaseArmorNegation(event.getDamageSource().getBaseArmorNegation()*0.5f);
+                event.getDamageSource().attachDamageModifier(ValueModifier.multiplier(0.2f));
+                event.getDamageSource().setStunType(StunType.LONG);
+                event.getDamageSource().setBasicAttack(false);
+            }
+            if(event.getDamageSource().getAnimation().equals(EFNDualSwordAnimations.NF_DUAL_DODGE)){
+                event.getDamageSource().attachDamageModifier(ValueModifier.setter(1.0F));
+            }
             if(event.getTarget()!=null) {
                 LivingEntity livingEntity=event.getTarget();
                 //有失稳buff
@@ -172,7 +193,6 @@ public class DOTEPassive extends Skill {
 
 
 
-
         //震屏
 //        container.getExecutor().getEventListener().addEventListener(PlayerEventListener.EventType.DEAL_DAMAGE_EVENT_HURT, EVENT_UUID, (event) -> {
 //            if (container.getExecutor().getOriginal() instanceof ServerPlayer serverPlayer) {
@@ -200,12 +220,20 @@ public class DOTEPassive extends Skill {
             return;
         }
         if(hasImbuement(weapon)){
-            clearImbuement(weapon);
+            if(hasImbuement(weapon,imbueType)){
+                clearImbuement(weapon);
+                weapon.getOrCreateTag().putString("imbueType", imbueType);
+                long expireTime = world.getGameTime() + durationTicks;
+                weapon.getOrCreateTag().putLong("imbueExpire", expireTime);
+                weapon.getOrCreateTag().putInt("maxImbueTime", durationTicks);
+            }
         }
-        weapon.getOrCreateTag().putString("imbueType", imbueType);
-        long expireTime = world.getGameTime() + durationTicks;
-        weapon.getOrCreateTag().putLong("imbueExpire", expireTime);
-        weapon.getOrCreateTag().putInt("maxImbueTime", durationTicks);
+        else {
+            weapon.getOrCreateTag().putString("imbueType", imbueType);
+            long expireTime = world.getGameTime() + durationTicks;
+            weapon.getOrCreateTag().putLong("imbueExpire", expireTime);
+            weapon.getOrCreateTag().putInt("maxImbueTime", durationTicks);
+        }
     }
 
     // 检查武器是否有附魔
@@ -217,7 +245,13 @@ public class DOTEPassive extends Skill {
                 !weapon.getOrCreateTag().getString("imbueType").isEmpty();
     }
 
-
+    public static boolean hasImbuement(ItemStack weapon, String imbueType) {
+        if (weapon == null || weapon.isEmpty()) {
+            return false;
+        }
+        return weapon.getOrCreateTag().contains("imbueType") &&
+                weapon.getOrCreateTag().getString("imbueType").equals(imbueType);
+    }
 
 
     public static void executeBossStunEvent(AdvancedCustomMobPatch<?> advancedCustomMobPatch, StunType stunType, float stunTime) {
@@ -268,11 +302,10 @@ public class DOTEPassive extends Skill {
     public void onRemoved(SkillContainer container) {
 
         container.getExecutor().getEventListener().removeListener(PlayerEventListener.EventType.TAKE_DAMAGE_EVENT_ATTACK, EVENT_UUID);
-//        container.getExecutor().getEventListener().removeListener(PlayerEventListener.EventType.DEAL_DAMAGE_EVENT_ATTACK, DAMAGE_EVENT_UUID);
+
         container.getExecutor().getEventListener().removeListener(PlayerEventListener.EventType.TAKE_DAMAGE_EVENT_DAMAGE, EVENT_UUID);
         container.getExecutor().getEventListener().removeListener(PlayerEventListener.EventType.SERVER_ITEM_USE_EVENT, EVENT_UUID);
         container.getExecutor().getEventListener().removeListener(PlayerEventListener.EventType.DEAL_DAMAGE_EVENT_ATTACK, EVENT_UUID);
-//        container.getExecutor().getEventListener().removeListener(PlayerEventListener.EventType.DEAL_DAMAGE_EVENT_HURT, EVENT_UUID);
     }
 
     @Override

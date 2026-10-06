@@ -56,7 +56,7 @@ public class StarGuardSkillMixin extends Skill {
         if (damageSource != null && damageSource.getAnimation() != null) {
             StaticAnimation animation = damageSource.getAnimation().get();
 
-            if (AnimationEffectManager.isNoGuardParryAnimation(animation)||AnimationEffectManager.isNoGuardAnimation(animation)) {
+            if (AnimationEffectManager.isNoGuardParryAnimation(animation)||AnimationEffectManager.isNoGuardAnimation(animation)||damageSource.is(AnimationEffectManager.BYPASS_GUARD_ONLY)) {
                 event.setParried(false);
                 event.setResult(AttackResult.ResultType.SUCCESS);
                 ci.cancel();

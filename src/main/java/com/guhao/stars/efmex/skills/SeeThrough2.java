@@ -70,19 +70,10 @@ public class SeeThrough2 extends Skill {
                                     Player player=container.getExecutor().getOriginal();
                                     level%=4;
                                     String string="";
-                                    if(level==0){
-                                        string="venom";
-                                    }
-                                    if(level==1){
-                                        string="flame";
-                                    }
-                                    if(level==2){
-                                        string="freeze";
-                                    }
-                                    if(level==3){
-                                        string="spark";
-                                    }
-
+                                    if(level==0)string="venom";
+                                    if(level==1)string="flame";
+                                    if(level==2) string="freeze";
+                                    if(level==3) string="spark";
                                     DOTEPassive.setWeaponImbuement(player.level(), player.getMainHandItem(), string, 300);
                                     livingEntity.removeEffect(StarsEffect.INSTABILITY.get());
                                 }

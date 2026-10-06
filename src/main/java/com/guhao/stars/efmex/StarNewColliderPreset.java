@@ -27,10 +27,10 @@ public class StarNewColliderPreset {
     public static final Collider FALCHION_EX2 =  new OBBCollider( 2.5, 0.1, 2.5, 0.0, 0.0, 0.0);
 
     public static final Collider THE_INCINERATOR_SWEEP = new MultiOBBCollider(
-            new OBBCollider( 1.2, 1.2, 5.8, 0.0, 0.0, -4.7),
-            new OBBCollider( 1.2, 1.2, 5.8, 0.0, 0.0, -4.7),
-            new OBBCollider( 1.2, 1.2, 5.8, 0.0, 0.0, -4.7),
-            new OBBCollider( 1.2, 1.2, 5.8, 0.0, 0.0, -4.7),
-            new OBBCollider( 1.2, 1.2, 5.8, 0.0, 0.0, -4.7)
+            new OBBCollider( 1.2, 1.2, 5.0, 0.0, 0.0, -5.8),
+            new OBBCollider( 1.2, 1.2, 5.0, 0.0, 0.0, -5.8),
+            new OBBCollider( 1.2, 1.2, 5.0, 0.0, 0.0, -5.8),
+            new OBBCollider( 1.2, 1.2, 5.0, 0.0, 0.0, -5.8),
+            new OBBCollider( 1.2, 1.2, 5.0, 0.0, 0.0, -5.8)
     );
 }
