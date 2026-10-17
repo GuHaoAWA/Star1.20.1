@@ -46,7 +46,8 @@
   "attribute.name.star.fortune.desc": "描述：增加矿物掉落数量",
   "attribute.name.star.burden": "负重",
   "attribute.name.star.burden.desc": "描述：减少重量惩罚",
-
+  "attribute.name.star.skill_charge_efficiency": "技能额外充能",
+  "attribute.name.star.skill_charge_efficiency.desc": "描述：加快武器特殊技能充能速度",
 
   "epicfight.skill_slot.dote": "加护",
   "epicfight.skill_slot.counter": "识破",

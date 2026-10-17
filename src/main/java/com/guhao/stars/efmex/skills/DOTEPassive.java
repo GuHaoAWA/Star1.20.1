@@ -18,6 +18,7 @@ import com.nameless.indestructible.world.capability.AdvancedCustomMobPatch;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -34,6 +35,7 @@ import yesman.epicfight.particle.HitParticleType;
 import yesman.epicfight.skill.Skill;
 import yesman.epicfight.skill.SkillBuilder;
 import yesman.epicfight.skill.SkillContainer;
+import yesman.epicfight.skill.SkillSlots;
 import yesman.epicfight.world.capabilities.EpicFightCapabilities;
 import yesman.epicfight.world.capabilities.entitypatch.EntityPatch;
 import yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch;
@@ -125,8 +127,20 @@ public class DOTEPassive extends Skill {
             }
         }, 999);
 
-        //对撞
+        //造成伤害
         container.getExecutor().getEventListener().addEventListener(PlayerEventListener.EventType.DEAL_DAMAGE_EVENT_ATTACK, EVENT_UUID, (event) -> {
+            if(event.getDamageSource().isBasicAttack()) {
+                PlayerPatch<?> playerPatch = container.getExecutor();
+                SkillContainer skillContainer = playerPatch.getSkill(SkillSlots.WEAPON_INNATE);
+                if (skillContainer != null) {
+                    float skill_charge_efficiency=(float)playerPatch.getOriginal().getAttributeValue(StarAttributes.SKILL_CHARGE_EFFICIENCY.get());
+                    if(skill_charge_efficiency>0){
+                        float currentCharge = skillContainer.getResource();
+                        Skill.setSkillConsumptionSynchronize(skillContainer, currentCharge + skill_charge_efficiency);
+                    }
+                }
+            }
+
             //狮子斩
             if (event.getDamageSource().getAnimation().equals(EFNGreatSwordAnimations.NG_GREATSWORD_AIRSLASH)) {
                 event.getDamageSource().setBaseImpact(event.getDamageSource().getBaseImpact()*0.7f);
@@ -140,8 +154,11 @@ public class DOTEPassive extends Skill {
                 event.getDamageSource().setStunType(StunType.LONG);
                 event.getDamageSource().setBasicAttack(false);
             }
+            //对刀
             if(event.getDamageSource().getAnimation().equals(EFNDualSwordAnimations.NF_DUAL_DODGE)){
-                event.getDamageSource().attachDamageModifier(ValueModifier.setter(1.0F));
+                event.getDamageSource().attachDamageModifier(ValueModifier.setter(0.1F));
+                event.getTarget().addEffect(new MobEffectInstance(EpicFightMobEffects.STUN_IMMUNITY.get(), 80, 0));
+                container.getExecutor().getOriginal().addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 80, 0));
             }
             if(event.getTarget()!=null) {
                 LivingEntity livingEntity=event.getTarget();

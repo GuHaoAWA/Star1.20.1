@@ -16,7 +16,10 @@ import net.minecraftforge.registries.RegistryObject;
         bus = Mod.EventBusSubscriber.Bus.MOD
 )
 public class StarAttributes {
+
     public static final DeferredRegister<Attribute> ATTRIBUTES = DeferredRegister.create(ForgeRegistries.ATTRIBUTES, "star");
+    //充能效率
+    public static final RegistryObject<Attribute> SKILL_CHARGE_EFFICIENCY = ATTRIBUTES.register("skill_charge_efficiency", () -> (new RangedAttribute("attribute.name.star.skill_charge_efficiency", 0.0, 0.0, 1024.0)).setSyncable(true));
     //招架削耐
     public static final RegistryObject<Attribute> PARRY_STAMINA_LOSE = ATTRIBUTES.register("parry_stamina_lose", () -> (new RangedAttribute("attribute.name.star.parry_stamina_lose", 2.0, 0.0, 1024.0)).setSyncable(true));
     //坚韧
@@ -42,6 +45,7 @@ public class StarAttributes {
             event.add(entityType, BLOCK_RATE.get());
 //            event.add(entityType, BURDEN.get());
             event.add(entityType, SHARPNESS.get());
+            event.add(entityType, SKILL_CHARGE_EFFICIENCY.get());
         }
     }
 }
